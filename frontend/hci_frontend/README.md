@@ -1,3 +1,3 @@
 # hci_frontend
 
-A new Flutter project.
+This is the front-end for our application, built with Flutter.
