@@ -73,45 +73,36 @@ Future<Map<String, String>> toDict(List<String> matches) async {
   return res;
 }
 
-Future<Map<String, Map<String, String>>> fetchBtps() async {
-  int page = 1;
-  int rawCount = 0;
+Future<Map<String, Map<String, String>>> fetchBtps([int page = 1]) async {
   Map<String, Map<String, String>> isinDict = {};
 
-  while (true) {
-    List<String> tIsinList = [];
-    var url = Uri.parse('https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
-    var startTime = DateTime.now();
-    var response = await http.get(url);
-    String text = response.body;
-    print('Page $page (${DateTime.now().difference(startTime).inMilliseconds}ms): ');
+  List<String> tIsinList = [];
+  var url = Uri.parse('https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
+  var startTime = DateTime.now();
+  var response = await http.get(url);
+  String text = response.body;
+  print('Page $page (${DateTime.now().difference(startTime).inMilliseconds}ms): ');
 
-    int start = 0;
-    while ((start = text.indexOf('IT000', start)) != -1) {
-      String isin = text.substring(start, start + 12);
-      if (!tIsinList.contains(isin)) {
-        tIsinList.add(isin);
-      }
-      start += 12;
+  int start = 0;
+  while ((start = text.indexOf('IT000', start)) != -1) {
+    String isin = text.substring(start, start + 12);
+    if (!tIsinList.contains(isin)) {
+      tIsinList.add(isin);
     }
-
-    print('found ${tIsinList.length} ISINs');
-    rawCount += tIsinList.length;
-
-    for (int i = 0; i < tIsinList.length; i++) {
-      int isinStart = text.indexOf(tIsinList[i]);
-      int end = (i + 1 < tIsinList.length) ? text.indexOf(tIsinList[i + 1]) : text.length;
-      String subtext = text.substring(isinStart, end);
-      RegExp exp = RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
-      var matches = exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
-      isinDict[tIsinList[i]] = await toDict(matches);
-    }
-
-    if (tIsinList.isEmpty) break;
-
-    page++;
+    start += 12;
   }
 
-  print('Total ISINs: ${isinDict.length} (raw: $rawCount)');
+  print('found ${tIsinList.length} ISINs');
+
+  for (int i = 0; i < tIsinList.length; i++) {
+    int isinStart = text.indexOf(tIsinList[i]);
+    int end = (i + 1 < tIsinList.length) ? text.indexOf(tIsinList[i + 1]) : text.length;
+    String subtext = text.substring(isinStart, end);
+    RegExp exp = RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
+    var matches = exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
+    isinDict[tIsinList[i]] = await toDict(matches);
+  }
+
+  print('Total ISINs: ${isinDict.length} (raw: ${tIsinList.length})');
   return isinDict;
 }
