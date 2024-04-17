@@ -28,7 +28,7 @@ class BalanceComponent extends StatelessWidget {
               ]),
           width: 0.9 * MediaQuery.of(context).size.width,
           child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+            padding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
             child: Column(
               // align text to the left
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,7 @@ class BalanceComponent extends StatelessWidget {
                     children: [
                       const Text(
                         "Il tuo investimento",
-                        style: TextStyle(color: textColor, fontSize: 24),
+                        style: TextStyle(color: textColor, fontSize: 22),
                       ),
                       Text(
                         "${variation > 0 ? "▲" : "▼"}$variation%",
@@ -51,10 +51,11 @@ class BalanceComponent extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 17.0, right: 17.0),
+                  padding:
+                      const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
                   child: Text(
                     "€${balance.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
-                    style: const TextStyle(color: textColor, fontSize: 36),
+                    style: const TextStyle(color: textColor, fontSize: 34),
                   ),
                 )
               ],
