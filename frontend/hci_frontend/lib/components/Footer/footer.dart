@@ -1,5 +1,6 @@
 // create a bottom navigation bar component
 import 'package:flutter/material.dart';
+import 'package:hci_frontend/ExplorePage/explorepage.dart';
 import 'package:hci_frontend/HomePage/homepage.dart';
 import 'package:hci_frontend/WalletPage/walletpage.dart';
 import 'package:hci_frontend/assets/colors.dart';
@@ -7,6 +8,14 @@ import 'package:hci_frontend/assets/colors.dart';
 class Footer extends StatelessWidget {
   // create a variable to store the current page
   late String currentPage;
+
+  ButtonStyle footerButtonStyle = ButtonStyle(
+    overlayColor: MaterialStateProperty.all(Colors.transparent),
+    backgroundColor: MaterialStateProperty.all(Colors.transparent),
+    shadowColor: MaterialStateProperty.all(Colors.transparent),
+    elevation: MaterialStateProperty.all(0),
+    padding: MaterialStateProperty.all(EdgeInsets.zero),
+  );
 
   Footer(this.currentPage, {super.key});
 
@@ -28,17 +37,10 @@ class Footer extends StatelessWidget {
             onPressed: () {
               navigateTo(context, const HomePage());
             },
-            style: ButtonStyle(
-              // remove all style
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              elevation: MaterialStateProperty.all(0),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-            ),
+            style: footerButtonStyle,
             child: Column(
               children: [
-                Icon(Icons.home,
+                Icon(Icons.home_outlined,
                     color: currentPage == 'home' ? primaryColor : textColor),
                 Text('Home',
                     style: TextStyle(
@@ -52,14 +54,7 @@ class Footer extends StatelessWidget {
             onPressed: () {
               navigateTo(context, const WalletPage());
             },
-            style: ButtonStyle(
-              // remove all style
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              elevation: MaterialStateProperty.all(0),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-            ),
+            style: footerButtonStyle,
             child: Column(
               children: [
                 Icon(Icons.account_balance_wallet_outlined,
@@ -74,16 +69,9 @@ class Footer extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              navigateTo(context, const HomePage());
+              navigateTo(context, const ExplorePage());
             },
-            style: ButtonStyle(
-              // remove all style
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              elevation: MaterialStateProperty.all(0),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-            ),
+            style: footerButtonStyle,
             child: Column(
               children: [
                 Icon(Icons.explore_outlined,
@@ -100,14 +88,7 @@ class Footer extends StatelessWidget {
             onPressed: () {
               navigateTo(context, const HomePage());
             },
-            style: ButtonStyle(
-              // remove all style
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              elevation: MaterialStateProperty.all(0),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-            ),
+            style: footerButtonStyle,
             child: Column(
               children: [
                 Icon(Icons.settings_outlined,
