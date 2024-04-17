@@ -92,8 +92,6 @@ Future<Map<String, Map<String, String>>> fetchBtps([int page = 1]) async {
     start += 12;
   }
 
-  print('found ${tIsinList.length} ISINs');
-
   for (int i = 0; i < tIsinList.length; i++) {
     int isinStart = text.indexOf(tIsinList[i]);
     int end = (i + 1 < tIsinList.length) ? text.indexOf(tIsinList[i + 1]) : text.length;
