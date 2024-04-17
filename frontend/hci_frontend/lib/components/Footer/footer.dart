@@ -1,5 +1,6 @@
 // create a bottom navigation bar component
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hci_frontend/ExplorePage/explorepage.dart';
 import 'package:hci_frontend/HomePage/homepage.dart';
 import 'package:hci_frontend/WalletPage/walletpage.dart';
@@ -41,8 +42,18 @@ class Footer extends StatelessWidget {
             style: footerButtonStyle,
             child: Column(
               children: [
-                Icon(Icons.home_outlined,
-                    color: currentPage == 'home' ? primaryColor : textColor),
+                SvgPicture.asset(
+                  'lib/assets/icons/home.svg', // Path to the SVG asset
+                  colorFilter: ColorFilter.mode(
+                      currentPage == 'home'
+                          ? primaryColor
+                          : textColor, // Apply dynamic coloring
+                      BlendMode
+                          .srcIn // This blend mode is typically used for tinting icons
+                      ),
+                  width: 24, // You can specify the size as needed
+                  height: 24,
+                ),
                 Text('Home',
                     style: TextStyle(
                         color:
@@ -58,8 +69,18 @@ class Footer extends StatelessWidget {
             style: footerButtonStyle,
             child: Column(
               children: [
-                Icon(Icons.account_balance_wallet_outlined,
-                    color: currentPage == 'wallet' ? primaryColor : textColor),
+                SvgPicture.asset(
+                  'lib/assets/icons/wallet.svg', // Path to the SVG asset
+                  colorFilter: ColorFilter.mode(
+                      currentPage == 'wallet'
+                          ? primaryColor
+                          : textColor, // Apply dynamic coloring
+                      BlendMode
+                          .srcIn // This blend mode is typically used for tinting icons
+                      ),
+                  width: 24, // You can specify the size as needed
+                  height: 24,
+                ),
                 Text('Portafoglio',
                     style: TextStyle(
                         color: currentPage == 'wallet'
@@ -75,8 +96,18 @@ class Footer extends StatelessWidget {
             style: footerButtonStyle,
             child: Column(
               children: [
-                Icon(Icons.explore_outlined,
-                    color: currentPage == 'explore' ? primaryColor : textColor),
+                SvgPicture.asset(
+                  'lib/assets/icons/explore.svg', // Path to the SVG asset
+                  colorFilter: ColorFilter.mode(
+                      currentPage == 'explore'
+                          ? primaryColor
+                          : textColor, // Apply dynamic coloring
+                      BlendMode
+                          .srcIn // This blend mode is typically used for tinting icons
+                      ),
+                  width: 24, // You can specify the size as needed
+                  height: 24,
+                ),
                 Text('Esplora',
                     style: TextStyle(
                         color: currentPage == 'explore'
@@ -92,9 +123,18 @@ class Footer extends StatelessWidget {
             style: footerButtonStyle,
             child: Column(
               children: [
-                Icon(Icons.settings_outlined,
-                    color:
-                        currentPage == 'settings' ? primaryColor : textColor),
+                SvgPicture.asset(
+                  'lib/assets/icons/settings.svg', // Path to the SVG asset
+                  colorFilter: ColorFilter.mode(
+                      currentPage == 'settings'
+                          ? primaryColor
+                          : textColor, // Apply dynamic coloring
+                      BlendMode
+                          .srcIn // This blend mode is typically used for tinting icons
+                      ),
+                  width: 24, // You can specify the size as needed
+                  height: 24,
+                ),
                 Text('Impostazioni',
                     style: TextStyle(
                         color: currentPage == 'settings'
