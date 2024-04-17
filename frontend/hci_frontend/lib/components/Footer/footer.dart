@@ -20,10 +20,11 @@ class Footer extends StatelessWidget {
   Footer(this.currentPage, {super.key});
 
   void navigateTo(BuildContext context, Widget page) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
+    // push the new page removing all history
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => page),
+        (Route<dynamic> route) => false);
   }
 
   @override
