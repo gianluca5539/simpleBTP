@@ -1,5 +1,54 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+enum TimeWindow {
+  oneDayCurrent,
+  oneWeek,
+  oneMonth,
+  threeMonths,
+  sixMonths,
+  oneYear,
+  fiveYears,
+  tenYears,
+}
+
+// Convert TimeWindow enum to string for URL parameters
+String timeWindowToString(TimeWindow timeWindow) {
+  switch (timeWindow) {
+    case TimeWindow.oneDayCurrent:
+      return "OneDayCurrent";
+    case TimeWindow.oneWeek:
+      return "OneWeek";
+    case TimeWindow.oneMonth:
+      return "OneMonth";
+    case TimeWindow.threeMonths:
+      return "TreeMonths";
+    case TimeWindow.sixMonths:
+      return "SixMonths";
+    case TimeWindow.oneYear:
+      return "OneYear";
+    case TimeWindow.fiveYears:
+      return "FiveYears";
+    case TimeWindow.tenYears:
+      return "TenYears";
+    default:
+      return "OneDayCurrent";
+  }
+}
+
+Future<Map<String, dynamic>> fetchBtpPrices(String isin, [TimeWindow timeWindow = TimeWindow.oneDayCurrent]) async {
+  String timeWindowStr = timeWindowToString(timeWindow);
+  String url = 'https://mercatiwdg.ilsole24ore.com/FinanzaMercati/api/TimeSeries/GetTimeSeries/$isin.MOT?timeWindow=$timeWindowStr&';
+  var response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    print(data);
+    return data;
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
 
 Future<Map<String, String>> toDict(List<String> matches) async {
   Map<String, String> res = {};
@@ -24,7 +73,7 @@ Future<Map<String, String>> toDict(List<String> matches) async {
   return res;
 }
 
-Future<Map<String, Map<String, String>>> fetchBtp() async {
+Future<Map<String, Map<String, String>>> fetchBtps() async {
   int page = 1;
   int rawCount = 0;
   Map<String, Map<String, String>> isinDict = {};
