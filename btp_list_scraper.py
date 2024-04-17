@@ -50,7 +50,7 @@ while True:
     for i in range(len(t_isin_list)):
         isin_start = text.find(t_isin_list[i])  # find first occurrence
         end = text.find(t_isin_list[i + 1]) if i + 1 < len(t_isin_list) else len(text)  # find next isin
-        subtext = text[text.find(t_isin_list[i]):end]  # get text between the first isin and the next isin
+        subtext = text[isin_start:end]  # get text between the first isin and the next isin
         matches = [match.group(1).strip() for match in re.finditer(r'<span class="t-text[^"]*">(.*?)</span>', subtext, re.DOTALL)]
         isin_dict[t_isin_list[i]] = to_dict(matches)
 
