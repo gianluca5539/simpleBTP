@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hci_frontend/HomePage/balancecomponent.dart';
 import 'package:hci_frontend/WalletPage/walletpage.dart';
+import 'package:hci_frontend/assets/colors.dart';
 import 'package:hci_frontend/components/AppTopBar/apptopbar.dart';
 import 'package:hci_frontend/components/Footer/footer.dart';
 
@@ -10,8 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // off white background
-      backgroundColor: Color.fromARGB(255, 248, 248, 248),
+      backgroundColor: offWhiteColor,
       appBar: AppTopBar('BTP Genius'),
       // add a body and a footer
       body: Column(

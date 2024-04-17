@@ -19,8 +19,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => testBtpScraper()); // Fetch data after the frame is rendered
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      // use DIN Alternate as the default font
+      theme: ThemeData(fontFamily: 'DIN Alternate'),
+      home: const HomePage(),
     );
   }
 }
