@@ -14,6 +14,8 @@ dependencies:
   http: ^1.1.0
   flutter_svg: any
   path_provider: ^2.0.13
+  build_runner: ^2.4.9
+  hive_generator: ^2.0.1
 
 dev_dependencies:
   flutter_test:
