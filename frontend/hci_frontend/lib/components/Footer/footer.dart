@@ -31,6 +31,7 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      padding: const EdgeInsets.only(top: 17),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[

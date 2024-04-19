@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:core';
 
 enum TimeWindow {
   oneDayCurrent,
@@ -37,9 +37,41 @@ String timeWindowToString(TimeWindow timeWindow) {
   }
 }
 
-Future<Map<String, dynamic>> fetchBtpPrices(String isin, [TimeWindow timeWindow = TimeWindow.oneDayCurrent]) async {
+List<String?> processString(String inputString) {
+  // Define the regex pattern to find the percentage
+  RegExp percentagePattern = RegExp(r"\b\d+(?:\.\d+)?%");
+
+  // Patterns to remove specific substrings
+  List<String> substringsToRemove = ["btpi-", "btpi", "btp-", "btp "];
+
+  // Replace comma with dot for standard percentage format
+  inputString = inputString.replaceAll(",", ".");
+
+  // Find the percentage using the regex pattern
+  String? percentage = percentagePattern.firstMatch(inputString)?.group(0);
+
+  // Erase the found percentage from the original string
+  String withBtp = inputString.replaceAll(percentagePattern, '');
+  withBtp = withBtp.replaceAll(RegExp(' +'), ' ').trim();
+
+  String btpless = withBtp;
+
+  // Remove specific substrings
+  for (String pattern in substringsToRemove) {
+    btpless = btpless.replaceAll(RegExp(pattern), '');
+  }
+
+  // Collapse double spaces
+  btpless = btpless.replaceAll(RegExp(' +'), ' ').trim();
+
+  return [percentage, withBtp, btpless];
+}
+
+Future<Map<String, dynamic>> fetchBtpPrices(String isin,
+    [TimeWindow timeWindow = TimeWindow.oneDayCurrent]) async {
   String timeWindowStr = timeWindowToString(timeWindow);
-  String url = 'https://mercatiwdg.ilsole24ore.com/FinanzaMercati/api/TimeSeries/GetTimeSeries/$isin.MOT?timeWindow=$timeWindowStr&';
+  String url =
+      'https://mercatiwdg.ilsole24ore.com/FinanzaMercati/api/TimeSeries/GetTimeSeries/$isin.MOT?timeWindow=$timeWindowStr&';
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body);
@@ -77,11 +109,13 @@ Future<Map<String, Map<String, String>>> fetchBtps([int page = 1]) async {
   Map<String, Map<String, String>> isinDict = {};
 
   List<String> tIsinList = [];
-  var url = Uri.parse('https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
+  var url = Uri.parse(
+      'https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
   var startTime = DateTime.now();
   var response = await http.get(url);
   String text = response.body;
-  print('Page $page (${DateTime.now().difference(startTime).inMilliseconds}ms): ');
+  print(
+      'Page $page (${DateTime.now().difference(startTime).inMilliseconds}ms): ');
 
   int start = 0;
   while ((start = text.indexOf('IT000', start)) != -1) {
@@ -94,10 +128,14 @@ Future<Map<String, Map<String, String>>> fetchBtps([int page = 1]) async {
 
   for (int i = 0; i < tIsinList.length; i++) {
     int isinStart = text.indexOf(tIsinList[i]);
-    int end = (i + 1 < tIsinList.length) ? text.indexOf(tIsinList[i + 1]) : text.length;
+    int end = (i + 1 < tIsinList.length)
+        ? text.indexOf(tIsinList[i + 1])
+        : text.length;
     String subtext = text.substring(isinStart, end);
-    RegExp exp = RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
-    var matches = exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
+    RegExp exp =
+        RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
+    var matches =
+        exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
     isinDict[tIsinList[i]] = await toDict(matches);
   }
 
