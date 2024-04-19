@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hci_frontend/WalletPage/walletpage.dart';
+import 'package:hci_frontend/ExplorePage/explorepage.dart';
 import 'package:hci_frontend/assets/colors.dart';
 
-class HomeMyAssetsComponent extends StatelessWidget {
-  const HomeMyAssetsComponent({Key? key}) : super(key: key);
+class HomeBestBTPsComponent extends StatelessWidget {
+  const HomeBestBTPsComponent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class HomeMyAssetsComponent extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(left: 22.0),
                   child: Text(
-                    "I tuoi migliori BTP",
+                    "I migliori BTP",
                     style: TextStyle(color: textColor, fontSize: 24),
                   ),
                 ),
@@ -38,7 +38,7 @@ class HomeMyAssetsComponent extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const WalletPage(),
+                            builder: (context) => const ExplorePage(),
                           ));
                     },
                     child: const Text("Visualizza tutto",
