@@ -6,6 +6,7 @@ import 'package:hci_frontend/assets/colors.dart';
 import 'package:hci_frontend/btp_scraper.dart';
 import 'package:hci_frontend/components/AppTopBar/apptopbar.dart';
 import 'package:hci_frontend/components/Footer/footer.dart';
+import 'package:hci_frontend/db/db.dart';
 
 import 'btp_component.dart';
 
@@ -22,8 +23,8 @@ class HomePage extends StatelessWidget {
           children: [
             BalanceComponent(balance: 131231.22, variation: 1.12),
             const HomeMyAssetsComponent(),
-            FutureBuilder<Map<String, Map<String, String>>>(
-              future: fetchBtps(),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: getHomePageMyBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator(); // Show loading indicator
@@ -31,28 +32,23 @@ class HomePage extends StatelessWidget {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
                   final assets = snapshot.data!;
-                  final investmentList = assets.keys.map((key) {
-                    final asset = assets[key]!;
-                    final name = processString(asset['btp'] ?? 'N/A');
+                  final investmentList = assets.map((asset) {
+                    final name = processString(asset['name'] ?? 'N/A');
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    var ultimo = asset['ultimo'] ?? '0';
-                    var cedola = asset['cedola'] ?? '0';
-                    ultimo = ultimo.replaceAll(',', '.');
-                    cedola = cedola.replaceAll(',', '.');
-                    final double ultimoDouble = double.tryParse(ultimo) ?? 0.0;
-                    final double cedolaDouble = double.tryParse(cedola) ?? 0.0;
-                    var variation = (ultimoDouble - 100);
-                    // make it have 3 decimal places
+                    final double value = asset['value'];
+                    final double cedola = asset['cedola'];
+                    double variation = asset['variation'];
+                    // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
                       investmentName: btpLess ??
                           "Unknown", // Replace with actual key if exists
                       investmentDetail:
-                          "$withBtp\n${cedolaDouble * 2}%", // Replace with actual keys if exists
-                      investmentValue: ultimoDouble,
+                          "$withBtp\n${cedola * 2}%", // Replace with actual keys if exists
+                      investmentValue: value,
                       variation: variation,
                     );
                   }).toList();
@@ -63,8 +59,8 @@ class HomePage extends StatelessWidget {
               },
             ),
             const HomeBestBTPsComponent(),
-            FutureBuilder<Map<String, Map<String, String>>>(
-              future: fetchBtps(),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: getHomePageBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator(); // Show loading indicator
@@ -72,26 +68,22 @@ class HomePage extends StatelessWidget {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
                   final assets = snapshot.data!;
-                  final investmentList = assets.keys.map((key) {
-                    final asset = assets[key]!;
-                    final name = processString(asset['btp'] ?? 'N/A');
+                  final investmentList = assets.map((asset) {
+                    final name = processString(asset['name'] ?? 'N/A');
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    var ultimo = asset['ultimo'] ?? '0';
-                    var cedola = asset['cedola'] ?? '0';
-                    ultimo = ultimo.replaceAll(',', '.');
-                    cedola = cedola.replaceAll(',', '.');
-                    final double ultimoDouble = double.tryParse(ultimo) ?? 0.0;
-                    final double cedolaDouble = double.tryParse(cedola) ?? 0.0;
-                    var variation = (ultimoDouble - 100);
+                    final double value = asset['value'];
+                    final double cedola = asset['cedola'];
+                    var variation = (value - 100);
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
                       investmentName: btpLess ?? "Unknown", // Replace with actual key if exists
-                      investmentDetail: "$withBtp\n${cedolaDouble*2}%", // Replace with actual keys if exists
-                      investmentValue: ultimoDouble,
+                      investmentDetail:
+                          "$withBtp\n${cedola * 2}%", // Replace with actual keys if exists
+                      investmentValue: value,
                       variation: variation,
                     );
                   }).toList();

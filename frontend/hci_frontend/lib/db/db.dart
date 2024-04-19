@@ -1,41 +1,90 @@
 // import hive
+import 'dart:math';
+
 import 'package:hci_frontend/db/hivemodels.dart';
 import 'package:hive/hive.dart';
 
-// create object MyBTP with attributes buy date, buy price
-// class MyBTP {
-//   late DateTime buyDate;
-//   late double buyPrice;
-//   late String isin;
+bool databaseInitialized = false;
 
-//   MyBTP({required this.buyDate, required this.buyPrice, required this.isin});
-// }
-
-void saveBTPsToDB(Map<String, Map<String, String>> btps) {
+void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
-  box.clear();
+
+  // ================== MyBTPs ==================
+  await Hive.deleteBoxFromDisk('mybtps');
+  await Hive.openBox('mybtps');
+  var mybtpsBox = Hive.box('mybtps');
+  // ================== MyBTPs ==================
+
   btps.forEach((key, value) {
-    BTP btp = BTP(key, value['btp']!, value['ultimo']!, value['cedola']!,
-        value['scadenza']!);
+    // ================== MyBTPs ==================
+    // delete all this
+    if (value['btp'] != null && value['ultimo'] != null) {
+      if (Random().nextInt(10) == 0) {
+        MyBTP mybtp =
+            MyBTP.fromData(key, Random().nextDouble() * 100000, "01/01/2021");
+        mybtpsBox.put(key, mybtp);
+      }
+    }
+    // delete all this
+    // ================== MyBTPs ==================
+
+    BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0",
+        value['cedola'] ?? "0", value['scadenza']!);
     box.put(key, btp);
   });
+
+  databaseInitialized = true;
+}
+
+Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var mybtpsBox = Hive.box('mybtps');
+  var btpsBox = Hive.box('btps');
+
+  // get all btps that have an isin in mybtps
+  var mybtps = mybtpsBox.values.toList();
+  var btps = btpsBox.values.toList();
+
+  // merge the two lists by isin and retrieve only the attributes we need
+  List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
+    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    return {
+      'name': btp.name,
+      'value': mybtp.investment * btp.value / 100,
+      'cedola': btp.cedola,
+      'variation': btp.value - 100,
+    };
+  }).toList();
+
+  // sort by buy price
+  merged.sort((a, b) => b['variation'].compareTo(a['variation']));
+
+  // get the first 5 elements
+  List<Map<String, dynamic>> mergedList =
+      merged.length > 5 ? merged.sublist(0, 5) : merged;
+  return mergedList;
 }
 
 Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
-  // while loop that waits for box to be non empty
-  while (Hive.box('btps').isEmpty) {
-    await Future.delayed(const Duration(seconds: 1));
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
   }
+
   var box = Hive.box('btps');
+
   var btps = box.values.toList();
   btps.sort((a, b) => b.value.compareTo(a.value));
-  return btps.sublist(0, 5).map((btp) {
-    double variation = btp.value - 100;
+
+  List btpslist = btps.length > 5 ? btps.sublist(0, 5) : btps;
+
+  return btpslist.map((btp) {
     return {
       'name': btp.name,
       'value': btp.value,
       'cedola': btp.cedola,
-      'variation': double.parse(variation.toStringAsFixed(3)),
     };
   }).toList();
 }

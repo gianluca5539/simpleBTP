@@ -9,12 +9,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(BTPAdapter());
+  Hive.registerAdapter(MyBTPAdapter());
   loadData();
   runApp(const MainApp());
 }
 
-void loadData() async {
+Future<void> loadData() async {
+  await Hive.deleteBoxFromDisk('btps');
   await Hive.openBox('btps');
+  await Hive.openBox('mybtps');
   fetchBtps().then((value) => saveBTPsToDB(value));
 }
 
@@ -24,7 +27,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // use DIN Alternate as the default font
       theme: ThemeData(fontFamily: 'DIN Alternate'),
       home: const HomePage(),
     );
