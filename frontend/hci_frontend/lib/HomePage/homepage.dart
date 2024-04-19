@@ -32,26 +32,26 @@ class HomePage extends StatelessWidget {
                 } else if (snapshot.hasData) {
                   final assets = snapshot.data!;
                   final investmentList = assets.keys.map((key) {
-                    // Assuming your asset data structure allows to extract these details
                     final asset = assets[key]!;
                     final name = processString(asset['btp'] ?? 'N/A');
-                    final percentage = name[0];
+                    // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
                     var ultimo = asset['ultimo'] ?? '0';
                     var cedola = asset['cedola'] ?? '0';
-                    // substitute commas with dots
                     ultimo = ultimo.replaceAll(',', '.');
                     cedola = cedola.replaceAll(',', '.');
-                    // parse to double
                     final double ultimoDouble = double.tryParse(ultimo) ?? 0.0;
                     final double cedolaDouble = double.tryParse(cedola) ?? 0.0;
+                    var variation = (ultimoDouble - 100) / 100;
+                    // make it have 3 decimal places
+                    variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
                       investmentName: btpLess ?? "Unknown", // Replace with actual key if exists
                       investmentDetail: "$withBtp\n${cedolaDouble*2}%", // Replace with actual keys if exists
                       investmentValue: ultimoDouble,
-                      variation: 10.0,
+                      variation: variation,
                     );
                   }).toList();
                   return Column(children: investmentList);
