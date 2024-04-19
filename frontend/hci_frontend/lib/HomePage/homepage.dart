@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                     cedola = cedola.replaceAll(',', '.');
                     final double ultimoDouble = double.tryParse(ultimo) ?? 0.0;
                     final double cedolaDouble = double.tryParse(cedola) ?? 0.0;
-                    var variation = (ultimoDouble - 100) / 100;
+                    var variation = (ultimoDouble - 100);
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
