@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hci_frontend/HomePage/balancecomponent.dart';
 import 'package:hci_frontend/HomePage/homebestbtpscomponent.dart';
 import 'package:hci_frontend/HomePage/homemyassetscomponent.dart';
+import 'package:hci_frontend/HomePage/investmentcomponent.dart';
 import 'package:hci_frontend/assets/colors.dart';
 import 'package:hci_frontend/btp_scraper.dart';
 import 'package:hci_frontend/components/AppTopBar/apptopbar.dart';
 import 'package:hci_frontend/components/Footer/footer.dart';
 import 'package:hci_frontend/db/db.dart';
-
-import 'btp_component.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,7 +43,16 @@ class HomePage extends StatelessWidget {
               future: getHomePageMyBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // Show loading indicator
+                  return Column(
+                    children: List.generate(
+                        2,
+                        (index) => const InvestmentComponent(
+                            investmentName: null,
+                            investmentDetail: null,
+                            cedola: null,
+                            investmentValue: null,
+                            variation: null)),
+                  );
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
@@ -61,10 +69,9 @@ class HomePage extends StatelessWidget {
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
-                      investmentName: btpLess ??
-                          "Unknown", // Replace with actual key if exists
-                      investmentDetail:
-                          "$withBtp\n${cedola * 2}%", // Replace with actual keys if exists
+                      investmentName: btpLess ?? "Unknown",
+                      investmentDetail: "$withBtp",
+                      cedola: "${cedola * 2}%",
                       investmentValue: value,
                       variation: variation,
                     );
@@ -80,7 +87,15 @@ class HomePage extends StatelessWidget {
               future: getHomePageBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // Show loading indicator
+                  return Column(
+                      children: List.generate(
+                          5,
+                          (index) => const InvestmentComponent(
+                              investmentName: null,
+                              investmentDetail: null,
+                              cedola: null,
+                              investmentValue: null,
+                              variation: null)));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
@@ -97,10 +112,9 @@ class HomePage extends StatelessWidget {
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
-                      investmentName: btpLess ??
-                          "Unknown", // Replace with actual key if exists
-                      investmentDetail:
-                          "$withBtp\n${cedola * 2}%", // Replace with actual keys if exists
+                      investmentName: btpLess ?? "Unknown",
+                      investmentDetail: "$withBtp",
+                      cedola: "${cedola * 2}%",
                       investmentValue: value,
                       variation: variation,
                     );

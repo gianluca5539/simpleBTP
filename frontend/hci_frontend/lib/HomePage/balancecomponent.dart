@@ -62,7 +62,7 @@ class BalanceComponent extends StatelessWidget {
                   child: Skeletonizer(
                       enabled: balance == null,
                       child: Text(
-                        "€${balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                        "€${balance == null ? '----' : ''}${balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
                     style: const TextStyle(color: textColor, fontSize: 34),
                       )),
                       

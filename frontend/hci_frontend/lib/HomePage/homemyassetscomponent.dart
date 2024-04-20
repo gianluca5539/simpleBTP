@@ -41,7 +41,7 @@ class HomeMyAssetsComponent extends StatelessWidget {
                             builder: (context) => const WalletPage(),
                           ));
                     },
-                    child: const Text("Visualizza tutto",
+                    child: const Text("Vedi tutti",
                         style: TextStyle(color: primaryColor, fontSize: 16)),
                   ),
                 ),

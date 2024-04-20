@@ -41,7 +41,7 @@ class HomeBestBTPsComponent extends StatelessWidget {
                             builder: (context) => const ExplorePage(),
                           ));
                     },
-                    child: const Text("Visualizza tutto",
+                    child: const Text("Vedi tutti",
                         style: TextStyle(color: primaryColor, fontSize: 16)),
                   ),
                 ),
