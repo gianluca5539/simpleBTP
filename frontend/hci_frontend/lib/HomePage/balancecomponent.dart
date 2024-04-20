@@ -2,10 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:hci_frontend/assets/colors.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BalanceComponent extends StatelessWidget {
-  late double balance;
-  late double variation;
+  late double? balance;
+  late double? variation;
 
   BalanceComponent({super.key, required this.balance, required this.variation});
 
@@ -42,21 +43,29 @@ class BalanceComponent extends StatelessWidget {
                         "Il tuo investimento",
                         style: TextStyle(color: textColor, fontSize: 22),
                       ),
-                      Text(
-                        "${variation > 0 ? "▲" : "▼"}$variation%",
-                        style:
-                            const TextStyle(color: primaryColor, fontSize: 18),
-                      ),
+                      Skeletonizer(
+                          enabled: variation == null,
+                          child: Text(
+                            "${variation?.toStringAsFixed(2)}%",
+                            style: TextStyle(
+                                color: (variation ?? 0) > 0
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontSize: 22),
+                          )),
                     ],
                   ),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
-                  child: Text(
-                    "€${balance.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                  child: Skeletonizer(
+                      enabled: balance == null,
+                      child: Text(
+                        "€${balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
                     style: const TextStyle(color: textColor, fontSize: 34),
-                  ),
+                      )),
+                      
                 )
               ],
             ),

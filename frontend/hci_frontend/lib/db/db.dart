@@ -1,4 +1,5 @@
 // import hive
+import 'dart:async';
 import 'dart:math';
 
 import 'package:hci_frontend/db/hivemodels.dart';
@@ -34,6 +35,32 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   });
 
   databaseInitialized = true;
+}
+
+Future<Map<String, double>> getWalletStats() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var mybtpsBox = Hive.box('mybtps');
+  var btpsBox = Hive.box('btps');
+
+  var mybtps = mybtpsBox.values.toList();
+  var btps = btpsBox.values.toList();
+
+  double balance = 0.0;
+  double initialBalance = 0.0;
+
+  for (var mybtp in mybtps) {
+    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    balance += mybtp.investment * btp.value / 100;
+    initialBalance += mybtp.investment;
+  }
+
+  return {
+    "balance": balance,
+    "variation": (balance - initialBalance) / initialBalance * 100,
+  };
 }
 
 Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {

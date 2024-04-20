@@ -18,10 +18,27 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: offWhiteColor,
       appBar: AppTopBar('simpleBTP'),
-      body: SingleChildScrollView( // To ensure the list is scrollable
+      body: SingleChildScrollView(
+        // To ensure the list is scrollable
         child: Column(
           children: [
-            BalanceComponent(balance: 131231.22, variation: 1.12),
+            FutureBuilder<Map<String, double>>(
+                future: getWalletStats(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return BalanceComponent(balance: null, variation: null);
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}'); // Handle errors
+                  } else if (snapshot.hasData) {
+                    double balance = snapshot.data!['balance']!;
+                    double variation = snapshot.data!['variation']!;
+                    // limit variation to 3 decimal places
+                    variation = double.parse(variation.toStringAsFixed(2));
+                    return BalanceComponent(
+                        balance: balance, variation: variation);
+                  }
+                  return const Text('No data'); // Handle the case of no data
+                }),
             const HomeMyAssetsComponent(),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: getHomePageMyBestBTPs(),
@@ -80,7 +97,8 @@ class HomePage extends StatelessWidget {
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return InvestmentComponent(
-                      investmentName: btpLess ?? "Unknown", // Replace with actual key if exists
+                      investmentName: btpLess ??
+                          "Unknown", // Replace with actual key if exists
                       investmentDetail:
                           "$withBtp\n${cedola * 2}%", // Replace with actual keys if exists
                       investmentValue: value,
