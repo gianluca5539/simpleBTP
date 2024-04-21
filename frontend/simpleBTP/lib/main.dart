@@ -15,10 +15,27 @@ void main() async {
 }
 
 Future<void> loadData() async {
-  await Hive.deleteBoxFromDisk('btps');
-  await Hive.openBox('btps');
+  await Hive.openBox('utils');
+
+  var utilsBox = Hive.box('utils');
+  var lastFetch = utilsBox.get('lastFetch');
+
+  if (lastFetch == null) {
+    lastFetch = DateTime.now().subtract(const Duration(hours: 3));
+    utilsBox.put('lastFetch', lastFetch);
+  }
+
   await Hive.openBox('mybtps');
-  fetchBtps().then((value) => saveBTPsToDB(value));
+
+  if (DateTime.now().difference(lastFetch) > const Duration(hours: 3)) {
+    utilsBox.put('lastFetch', DateTime.now());
+    await Hive.deleteBoxFromDisk('btps');
+    await Hive.openBox('btps');
+    fetchBtps().then((value) => saveBTPsToDB(value));
+  } else {
+    await Hive.openBox('btps');
+    databaseInitialized = true;
+  }
 }
 
 class MainApp extends StatelessWidget {
