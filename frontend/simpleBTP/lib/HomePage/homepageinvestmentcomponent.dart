@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class InvestmentComponent extends StatelessWidget {
+class HomePageInvestmentComponent extends StatelessWidget {
   final String? investmentName;
   final String? investmentDetail;
   final String? cedola;
   final double? investmentValue;
   final double? variation;
 
-  const InvestmentComponent({
+  const HomePageInvestmentComponent({
     super.key,
     required this.investmentName,
     required this.investmentDetail,

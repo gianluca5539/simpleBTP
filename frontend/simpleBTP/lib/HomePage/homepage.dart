@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simpleBTP/HomePage/homepagebalancecomponent.dart';
 import 'package:simpleBTP/HomePage/homebestbtpscomponent.dart';
 import 'package:simpleBTP/HomePage/homemyassetscomponent.dart';
-import 'package:simpleBTP/HomePage/investmentcomponent.dart';
+import 'package:simpleBTP/HomePage/homepageinvestmentcomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                   return Column(
                     children: List.generate(
                         2,
-                        (index) => const InvestmentComponent(
+                        (index) => const HomePageInvestmentComponent(
                             investmentName: null,
                             investmentDetail: null,
                             cedola: null,
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                     // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
-                    return InvestmentComponent(
+                    return HomePageInvestmentComponent(
                       investmentName: btpLess ?? "Unknown",
                       investmentDetail: "$withBtp",
                       cedola: "${cedola * 2}%",
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
                   return Column(
                       children: List.generate(
                           5,
-                          (index) => const InvestmentComponent(
+                          (index) => const HomePageInvestmentComponent(
                               investmentName: null,
                               investmentDetail: null,
                               cedola: null,
@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
-                    return InvestmentComponent(
+                    return HomePageInvestmentComponent(
                       investmentName: btpLess ?? "Unknown",
                       investmentDetail: "$withBtp",
                       cedola: "${cedola * 2}%",

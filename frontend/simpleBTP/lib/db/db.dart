@@ -96,6 +96,40 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
   return mergedList;
 }
 
+Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var mybtpsBox = Hive.box('mybtps');
+  var btpsBox = Hive.box('btps');
+
+  // get all btps that have an isin in mybtps
+  var mybtps = mybtpsBox.values.toList();
+  var btps = btpsBox.values.toList();
+
+  // merge the two lists by isin and retrieve only the attributes we need
+  List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
+    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    return {
+      'name': btp.name,
+      'value': mybtp.investment * btp.value / 100,
+      'cedola': btp.cedola,
+      'variation': btp.value - 100,
+      'buyDate': mybtp.buyDate,
+    };
+  }).toList();
+
+  // sort by buy price
+  merged.sort((a, b) => b['variation'].compareTo(a['variation']));
+
+  // get the first 5 elements
+  List<Map<String, dynamic>> mergedList =
+      merged.length > 3 ? merged.sublist(0, 3) : merged;
+  return mergedList;
+}
+
+
 Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
