@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simpleBTP/HomePage/balancecomponent.dart';
+import 'package:simpleBTP/HomePage/homepagebalancecomponent.dart';
 import 'package:simpleBTP/HomePage/homebestbtpscomponent.dart';
 import 'package:simpleBTP/HomePage/homemyassetscomponent.dart';
 import 'package:simpleBTP/HomePage/investmentcomponent.dart';
@@ -25,7 +25,8 @@ class HomePage extends StatelessWidget {
                 future: getWalletStats(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return BalanceComponent(balance: null, variation: null);
+                    return HomePageBalanceComponent(
+                        balance: null, variation: null);
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}'); // Handle errors
                   } else if (snapshot.hasData) {
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
                     double variation = snapshot.data!['variation']!;
                     // limit variation to 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(2));
-                    return BalanceComponent(
+                    return HomePageBalanceComponent(
                         balance: balance, variation: variation);
                   }
                   return const Text('No data'); // Handle the case of no data

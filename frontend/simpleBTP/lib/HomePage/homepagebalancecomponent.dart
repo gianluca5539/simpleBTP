@@ -1,14 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class BalanceComponent extends StatelessWidget {
+class HomePageBalanceComponent extends StatelessWidget {
   late double? balance;
   late double? variation;
 
-  BalanceComponent({super.key, required this.balance, required this.variation});
+  HomePageBalanceComponent(
+      {super.key, required this.balance, required this.variation});
 
   @override
   Widget build(BuildContext context) {
