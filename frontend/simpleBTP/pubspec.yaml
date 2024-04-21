@@ -1,0 +1,32 @@
+name: simpleBTP
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  http: ^1.1.0
+  flutter_svg: any
+  path_provider: ^2.0.13
+  build_runner: ^2.4.9
+  hive_generator: ^2.0.1
+  skeletonizer: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+  - lib/assets/icons/wallet.svg
+  - lib/assets/icons/explore.svg
+  - lib/assets/icons/settings.svg
+  - lib/assets/icons/home.svg
