@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 PreferredSizeWidget AppTopBar(title) {
   return AppBar(
     title: Text(title, style: const TextStyle(color: Colors.white)),
-    // add a gradient background
+    iconTheme: const IconThemeData(color: Colors.white),
     flexibleSpace: Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(

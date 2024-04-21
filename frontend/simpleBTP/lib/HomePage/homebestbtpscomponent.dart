@@ -17,7 +17,7 @@ class HomeBestBTPsComponent extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(left: 22.0),
                   child: Text(
-                    "I migliori BTP",
+                    "I BTP più costosi",
                     style: TextStyle(color: textColor, fontSize: 24),
                   ),
                 ),

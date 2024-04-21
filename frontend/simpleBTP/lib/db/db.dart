@@ -91,7 +91,7 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
 
   // get the first 5 elements
   List<Map<String, dynamic>> mergedList =
-      merged.length > 5 ? merged.sublist(0, 5) : merged;
+      merged.length > 3 ? merged.sublist(0, 3) : merged;
   return mergedList;
 }
 

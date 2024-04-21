@@ -8,7 +8,9 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppTopBar('Esplora'),
+      appBar: AppTopBar(
+        'Esplora',
+      ),
       // add a body and a footer
       body: const Center(child: Icon(Icons.explore)),
       bottomNavigationBar: Footer('explore'),
