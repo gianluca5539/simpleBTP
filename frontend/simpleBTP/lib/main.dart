@@ -27,12 +27,13 @@ Future<void> loadData() async {
 
   await Hive.openBox('mybtps');
 
-  if (DateTime.now().difference(lastFetch) > const Duration(hours: 3)) {
+  if (DateTime.now().difference(lastFetch) > const Duration(hours: 3) || true) {
     utilsBox.put('lastFetch', DateTime.now());
     await Hive.deleteBoxFromDisk('btps');
     await Hive.openBox('btps');
     fetchBtps().then((value) => saveBTPsToDB(value));
   } else {
+    // for debugging purposes caching is disabled
     await Hive.openBox('btps');
     databaseInitialized = true;
   }

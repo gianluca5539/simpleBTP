@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
 import 'package:hive/hive.dart';
 
@@ -114,4 +115,30 @@ Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
       'cedola': btp.cedola,
     };
   }).toList();
+}
+
+Future<List<Map<String, dynamic>>> getMyBTPs() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var mybtpsBox = Hive.box('mybtps');
+  var btpsBox = Hive.box('btps');
+
+  var mybtps = mybtpsBox.values.toList();
+  var btps = btpsBox.values.toList();
+
+  List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
+    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    return {
+      'name': btp.name,
+      'value': btp.value,
+      'cedola': btp.cedola,
+      'isin': mybtp.isin,
+      'investment': mybtp.investment,
+      'buyDate': mybtp.buyDate,
+    };
+  }).toList();
+
+  return merged;
 }
