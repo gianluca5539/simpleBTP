@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
@@ -59,7 +61,10 @@ class WalletPage extends StatelessWidget {
                             investmentDetail: null,
                             cedola: null,
                             investmentValue: null,
-                            variation: null)),
+                        variation: null,
+                        buyDate: null,
+                      ),
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
@@ -75,13 +80,15 @@ class WalletPage extends StatelessWidget {
                     double variation = asset['variation'];
                     // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
+                    final date = asset['buyDate'];
 
                     return WalletPageInvestmentComponent(
                       investmentName: btpLess ?? "Unknown",
                       investmentDetail: "$withBtp",
-                      cedola: "${cedola * 2}%",
+                      cedola: "$cedola%",
                       investmentValue: value,
                       variation: variation,
+                      buyDate: date,
                     );
                   }).toList();
                   return Column(children: investmentList);

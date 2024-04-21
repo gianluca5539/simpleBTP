@@ -8,6 +8,7 @@ class WalletPageInvestmentComponent extends StatelessWidget {
   final String? cedola;
   final double? investmentValue;
   final double? variation;
+  final DateTime? buyDate;
 
   const WalletPageInvestmentComponent({
     super.key,
@@ -16,7 +17,47 @@ class WalletPageInvestmentComponent extends StatelessWidget {
     required this.cedola,
     required this.investmentValue,
     required this.variation,
+    required this.buyDate,
   });
+
+  String get cedolaRemainingDays {
+    if (buyDate == null) {
+      return '----';
+    }
+    final DateTime now = DateTime.now();
+
+    // bring the buy date to this year
+    final DateTime buyDateThisYear =
+        DateTime(now.year, buyDate!.month, buyDate!.day);
+
+    // subtract 6 months from the buy date
+    final DateTime buyDateThisYearMinus6Months =
+        buyDateThisYear.subtract(const Duration(days: 180));
+
+    // add 6 months to the buy date
+    final DateTime buyDateThisYearPlus6Months =
+        buyDateThisYear.add(const Duration(days: 180));
+
+    if (now.isBefore(buyDateThisYearMinus6Months)) {
+      return formatRemainingTime(buyDateThisYearMinus6Months.difference(now));
+    } else if (now.isAfter(buyDateThisYearMinus6Months) &&
+        now.isBefore(buyDateThisYear)) {
+      return formatRemainingTime(buyDateThisYear.difference(now));
+    } else if (now.isAfter(buyDateThisYear) &&
+        now.isBefore(buyDateThisYearPlus6Months)) {
+      return formatRemainingTime(buyDateThisYearPlus6Months.difference(now));
+    } else {
+      return '----';
+    }
+  }
+
+  String formatRemainingTime(Duration remainingTime) {
+    int diffMonths = remainingTime.inDays ~/ 30;
+    int diffDays = remainingTime.inDays % 30;
+    return diffMonths > 0
+        ? '$diffMonths mesi e $diffDays giorni'
+        : '$diffDays giorni';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +107,11 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                       padding: EdgeInsets.only(top: 4.0),
                     ),
                     Text(
-                      investmentDetail ?? '----------',
+                      cedola != null ? 'Paga il $cedola tra:' : '----',
                       style: const TextStyle(color: textColor, fontSize: 16),
                     ),
                     Text(
-                      cedola ?? '----',
+                      cedolaRemainingDays,
                       style: const TextStyle(color: textColor, fontSize: 16),
                     ),
                   ],
