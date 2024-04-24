@@ -2,11 +2,15 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
 import 'package:hive/hive.dart';
 
 bool databaseInitialized = false;
+
+double minBTPVal = 999999;
+double maxBTPVal = 0;
+double minBTPCedola = 999999;
+double maxBTPCedola = 0;
 
 void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
@@ -32,7 +36,24 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
 
     BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0",
         value['cedola'] ?? "0", value['scadenza']!);
-    box.put(key, btp);
+
+    if (btp.value != 0) {
+      // update min and max values
+      if (btp.value < minBTPVal) {
+        minBTPVal = btp.value;
+      }
+      if (btp.value > maxBTPVal) {
+        maxBTPVal = btp.value;
+      }
+      if (btp.cedola < minBTPCedola) {
+        minBTPCedola = btp.cedola;
+      }
+      if (btp.cedola > maxBTPCedola) {
+        maxBTPCedola = btp.cedola;
+      }
+      
+      box.put(key, btp);
+    }
   });
 
   databaseInitialized = true;
@@ -131,7 +152,6 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   return mergedList;
 }
 
-
 Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -189,15 +209,61 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters) async {
 
   var btps = box.values.toList();
 
+  // apply search
   if (search != null && search != "") {
     btps = btps
         .where((btp) => btp.name.toLowerCase().contains(search.toLowerCase()))
         .toList();
   }
-  btps.sort((a, b) =>
-      b.value.compareTo(a.value)); // todo change sorting based on filters
 
-  return btps.map((btp) {
+  // apply filters
+  List<BTP> btpsFiltered = [];
+  for (var btp in btps) {
+    if (filters['minValue'] != null && btp.value < filters['minValue']) {
+      continue;
+    }
+    if (filters['maxValue'] != null && btp.value > filters['maxValue']) {
+      continue;
+    }
+    if (filters['minCedola'] != null && btp.cedola * 2 < filters['minCedola']) {
+      continue;
+    }
+    if (filters['maxCedola'] != null && btp.cedola * 2 > filters['maxCedola']) {
+      continue;
+    }
+    if (filters['minExpiration'] != null &&
+        btp.expirationDate.isBefore(filters['minExpiration'])) {
+      continue;
+    }
+    if (filters['maxExpiration'] != null &&
+        btp.expirationDate.isAfter(filters['maxExpiration'])) {
+      continue;
+    }
+    btpsFiltered.add(btp);
+  }
+
+  // sort
+  if (filters['orderBy'] == 'value') {
+    if (filters['order'] == 'desc') {
+      btpsFiltered.sort((a, b) => b.value.compareTo(a.value));
+    } else {
+      btpsFiltered.sort((a, b) => a.value.compareTo(b.value));
+    }
+  } else if (filters['orderBy'] == 'cedola') {
+    if (filters['order'] == 'desc') {
+      btpsFiltered.sort((a, b) => b.cedola.compareTo(a.cedola));
+    } else {
+      btpsFiltered.sort((a, b) => a.cedola.compareTo(b.cedola));
+    }
+  } else if (filters['orderBy'] == 'expirationDate') {
+    if (filters['order'] == 'desc') {
+      btpsFiltered.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+    } else {
+      btpsFiltered.sort((a, b) => b.expirationDate.compareTo(a.expirationDate));
+    }
+  }
+
+  return btpsFiltered.map((btp) {
     return {
       'name': btp.name,
       'value': btp.value,

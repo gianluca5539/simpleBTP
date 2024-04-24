@@ -57,7 +57,7 @@ class HomePageInvestmentComponent extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        investmentName ?? "",
+                        investmentName?.toUpperCase() ?? "",
                         style:
                             const TextStyle(color: Colors.white, fontSize: 14),
                       ),
@@ -66,7 +66,7 @@ class HomePageInvestmentComponent extends StatelessWidget {
                       padding: EdgeInsets.only(top: 4.0),
                     ),
                     Text(
-                      investmentDetail ?? '----------',
+                      investmentDetail?.toUpperCase() ?? '----------',
                       style: const TextStyle(color: textColor, fontSize: 16),
                     ),
                     Text(

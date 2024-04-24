@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/ExplorePage/explorepageinvestmentcomponent.dart';
 import 'package:simpleBTP/ExplorePage/explorepagesearchandfiltercomponent.dart';
+import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 
 class ExplorePage extends StatefulWidget {
-  
   ExplorePage({Key? key}) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage> {
   String search = '';
 
-  Map<String, dynamic> filters = {};
+  Map<String, dynamic> filters = defaultExploreFilters;
 
   void searchWithFilters(String search, Map<String, dynamic> filters) {
     // update the state with the new search and filters
@@ -26,7 +26,6 @@ class _ExplorePageState extends State<ExplorePage> {
       this.filters = filters;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +36,8 @@ class _ExplorePageState extends State<ExplorePage> {
       // add a body and a footer
       body: SingleChildScrollView(
         child: Column(
-        children: [
-          ExplorePageSearchAndFilterComponent(searchWithFilters),
+          children: [
+            ExplorePageSearchAndFilterComponent(searchWithFilters),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: getExplorePageBTPs(search, filters),
               builder: (context, snapshot) {
@@ -81,7 +80,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 }
               },
             ),
-        ],
+          ],
         ),
       ),
       bottomNavigationBar: Footer('explore'),

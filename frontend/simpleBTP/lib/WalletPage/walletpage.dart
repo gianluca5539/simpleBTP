@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
@@ -7,7 +5,6 @@ import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:simpleBTP/db/db.dart';
 
 class WalletPage extends StatelessWidget {
