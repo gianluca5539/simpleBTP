@@ -32,3 +32,4 @@ flutter:
   - lib/assets/icons/explore.svg
   - lib/assets/icons/settings.svg
   - lib/assets/icons/home.svg
+  - lib/assets/icons/filter.svg
