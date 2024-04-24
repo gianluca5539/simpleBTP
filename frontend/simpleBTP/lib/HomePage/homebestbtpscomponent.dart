@@ -38,7 +38,7 @@ class HomeBestBTPsComponent extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ExplorePage(),
+                            builder: (context) => ExplorePage(),
                           ));
                     },
                     child: const Text("Vedi tutti",

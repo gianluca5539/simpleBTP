@@ -63,8 +63,6 @@ class ExplorePageSearchAndFilterComponent extends StatelessWidget {
               child: TextField(
                 onChanged: (value) {
                   search = value;
-                },
-                onSubmitted: (value) {
                   searchWithFilters(search, filters);
                 },
                 style: const TextStyle(fontSize: 18),

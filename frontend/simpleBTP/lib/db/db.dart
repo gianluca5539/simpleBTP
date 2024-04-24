@@ -83,6 +83,7 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
       'name': btp.name,
       'value': mybtp.investment * btp.value / 100,
       'cedola': btp.cedola,
+      'isin': btp.isin,
       'variation': btp.value - 100,
     };
   }).toList();
@@ -115,6 +116,7 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
       'name': btp.name,
       'value': mybtp.investment * btp.value / 100,
       'cedola': btp.cedola,
+      'isin': btp.isin,
       'variation': btp.value - 100,
       'buyDate': mybtp.buyDate,
     };
@@ -146,6 +148,7 @@ Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
     return {
       'name': btp.name,
       'value': btp.value,
+      'isin': btp.isin,
       'cedola': btp.cedola,
     };
   }).toList();
@@ -175,4 +178,31 @@ Future<List<Map<String, dynamic>>> getMyBTPs() async {
   }).toList();
 
   return merged;
+}
+
+Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters) async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var box = Hive.box('btps');
+
+  var btps = box.values.toList();
+
+  if (search != null && search != "") {
+    btps = btps
+        .where((btp) => btp.name.toLowerCase().contains(search.toLowerCase()))
+        .toList();
+  }
+  btps.sort((a, b) =>
+      b.value.compareTo(a.value)); // todo change sorting based on filters
+
+  return btps.map((btp) {
+    return {
+      'name': btp.name,
+      'value': btp.value,
+      'isin': btp.isin,
+      'cedola': btp.cedola,
+    };
+  }).toList();
 }

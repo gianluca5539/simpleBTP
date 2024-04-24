@@ -92,7 +92,7 @@ class Footer extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              navigateTo(context, const ExplorePage());
+              navigateTo(context, ExplorePage());
             },
             style: footerButtonStyle,
             child: Column(
