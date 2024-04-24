@@ -109,7 +109,7 @@ class _ExplorePageSearchAndFilterComponentState
                                     TextStyle(fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
-                                '€${(filters['minCedola'] ?? minBTPCedolaYearly)} - €${(filters['maxCedola'] ?? maxBTPCedolaYearly)}',
+                                '${(filters['minCedola'] ?? minBTPCedolaYearly)}% - ${(filters['maxCedola'] ?? maxBTPCedolaYearly)}%',
                                 style: const TextStyle(
                                     fontSize: 15, color: primaryColor)),
                           ],
