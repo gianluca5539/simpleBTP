@@ -15,7 +15,11 @@ void main() async {
   // load settings
   await Hive.openBox('settings');
   // set the default language to italian
-  selectedLang = Hive.box('settings').get('language', defaultValue: 'en');
+  selectedLang = Hive.box('settings').get('language');
+  if (selectedLang == null) {
+    Hive.box('settings').put('language', 'en');
+    selectedLang = 'en';
+  }
 
   loadData();
   runApp(const MainApp());

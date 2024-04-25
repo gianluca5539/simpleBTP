@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:simpleBTP/SettingsPage/picklanguagepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
@@ -28,6 +29,14 @@ class _SettingsPageState extends State<SettingsPage> {
       Box settings = Hive.box('settings');
       settings.put('darkMode', value);
     });
+  }
+
+  void openPickLanguagePage(BuildContext context) {
+    Navigator.push(
+        context,
+        (MaterialPageRoute(builder: (context) {
+          return const PickLanguagePage();
+        }))).then((value) => setState(() {}));
   }
 
   @override
@@ -203,7 +212,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     color: Colors.grey[300],
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      openPickLanguagePage(context);
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),

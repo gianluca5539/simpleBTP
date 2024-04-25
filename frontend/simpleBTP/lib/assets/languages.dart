@@ -1,6 +1,6 @@
 export 'languages.dart';
 
-String selectedLang = '';
+String? selectedLang = '';
 
 String getString(String key) {
   if (selectedLang == 'it') {
@@ -15,6 +15,12 @@ String getString(String key) {
   return ''; // actually this should never happen
 }
 
+Map<String, String> availableLanguages = {
+  'it': 'Italiano',
+  'en': 'English',
+  'hi': 'हिन्दी',
+};
+
 Map<String, String> italianLang = {
   // misc
   'months': 'mesi',
@@ -26,6 +32,7 @@ Map<String, String> italianLang = {
   'appTopBarExplore': 'Esplora',
   'appTopBarWallet': 'Portafoglio',
   'appTopBarSettings': 'Impostazioni',
+  'appTopBarPickLanguage': 'Seleziona lingua',
   // footer
   'appBottomBarHome': 'Home',
   'appBottomBarExplore': 'Esplora',
@@ -78,6 +85,7 @@ Map<String, String> englishLang = {
   'appTopBarExplore': 'Explore',
   'appTopBarWallet': 'Wallet',
   'appTopBarSettings': 'Settings',
+  'appTopBarPickLanguage': 'Select language',
   // footer
   'appBottomBarHome': 'Home',
   'appBottomBarExplore': 'Explore',
