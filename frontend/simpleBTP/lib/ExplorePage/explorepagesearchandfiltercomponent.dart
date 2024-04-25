@@ -72,7 +72,7 @@ class _ExplorePageSearchAndFilterComponentState
                                     TextStyle(fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
-                                '€${filters['minVal'] ?? minBTPVal} - €${filters['maxVal'] ?? maxBTPVal}',
+                                '€${filters['minVal']?.toStringAsFixed(2) ?? minBTPVal} - €${filters['maxVal']?.toStringAsFixed(2) ?? maxBTPVal}',
                                 style: const TextStyle(
                                     fontSize: 15, color: primaryColor)),
                           ],
@@ -87,10 +87,10 @@ class _ExplorePageSearchAndFilterComponentState
                             max: maxBTPVal,
                             divisions: 100,
                             labels: RangeLabels(
-                                filters['minValue']?.toString() ??
-                                    minBTPVal.toString(),
-                                filters['maxValue']?.toString() ??
-                                    maxBTPVal.toString()),
+                                filters['minValue']?.toStringAsFixed(2) ??
+                                    minBTPVal.toStringAsFixed(2),
+                                filters['maxValue']?.toStringAsFixed(2) ??
+                                    maxBTPVal.toStringAsFixed(2)),
                             onChanged: (RangeValues values) {
                               setState(() {
                                 filters['minValue'] = values.start;
@@ -112,7 +112,7 @@ class _ExplorePageSearchAndFilterComponentState
                                     TextStyle(fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
-                                '${(filters['minCedola'] ?? minBTPCedolaYearly)}% - ${(filters['maxCedola'] ?? maxBTPCedolaYearly)}%',
+                                '${(filters['minCedola']?.toStringAsFixed(2) ?? minBTPCedolaYearly)}% - ${(filters['maxCedola']?.toStringAsFixed(2) ?? maxBTPCedolaYearly)}%',
                                 style: const TextStyle(
                                     fontSize: 15, color: primaryColor)),
                           ],
@@ -127,10 +127,10 @@ class _ExplorePageSearchAndFilterComponentState
                             max: (maxBTPCedolaYearly),
                             divisions: 50,
                             labels: RangeLabels(
-                                filters['minCedola']?.toString() ??
-                                    (minBTPCedolaYearly).toString(),
-                                filters['maxCedola']?.toString() ??
-                                    (maxBTPCedolaYearly).toString()),
+                                filters['minCedola']?.toStringAsFixed(2) ??
+                                    (minBTPCedolaYearly).toStringAsFixed(2),
+                                filters['maxCedola']?.toStringAsFixed(2) ??
+                                    (maxBTPCedolaYearly).toStringAsFixed(2)),
                             onChanged: (RangeValues values) {
                               setState(() {
                                 filters['minCedola'] = values.start;
@@ -173,7 +173,7 @@ class _ExplorePageSearchAndFilterComponentState
               child: TextField(
                 onChanged: (value) {
                   search = value;
-                  widget.searchWithFilters(search, filters);
+                  widget.searchWithFilters(search, filters, ordering);
                 },
                 style: const TextStyle(fontSize: 18),
                 textCapitalization: TextCapitalization.characters,
