@@ -49,7 +49,10 @@ class HomeBestBTPsComponent extends StatelessWidget {
                     },
                     child: Text(getString('homeBestBTPsViewAllButton'),
                         style:
-                            const TextStyle(color: primaryColor, fontSize: 16)),
+                             TextStyle(
+                            color:
+                                isDarkMode ? primaryColorLight : primaryColor,
+                            fontSize: 16)),
                   ),
                 ),
               ],
