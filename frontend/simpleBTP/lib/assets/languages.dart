@@ -12,6 +12,9 @@ String getString(String key) {
   if (selectedLang == 'hi') {
     return hindiLang[key] ?? key;
   }
+  if (selectedLang == 'ro') {
+    return romanianLang[key] ?? key;
+  }
   return ''; // actually this should never happen
 }
 
@@ -19,6 +22,7 @@ Map<String, String> availableLanguages = {
   'it': 'Italiano',
   'en': 'English',
   'hi': 'हिन्दी',
+  'ro': 'Română',
 };
 
 Map<String, String> italianLang = {
@@ -177,4 +181,58 @@ Map<String, String> hindiLang = {
   'settingsPagePersonalizationTitle': 'व्यक्तिगतीकरण',
   'settingsPageDarkModeButton': 'डार्क मोड',
   'settingsPageLanguageButton': 'भाषा चुनें',
+};
+
+
+Map<String, String> romanianLang = {
+  // misc
+  'months': 'luni',
+  'and': 'și',
+  'days': 'zile',
+  'cancel': 'Anulează',
+  // header
+  'appTopBarHome': 'simpleBTP',
+  'appTopBarExplore': 'Explorează',
+  'appTopBarWallet': 'Portofel',
+  'appTopBarSettings': 'Setări',
+  'appTopBarPickLanguage': 'Selectează limba',
+  // footer
+  'appBottomBarHome': 'Acasă',
+  'appBottomBarExplore': 'Explorează',
+  'appBottomBarWallet': 'Portofel',
+  'appBottomBarSettings': 'Setări',
+  // homepage
+  'homeBalanceText': 'Investiția ta',
+  'homeMyAssets': 'Cele mai bune BTP-uri',
+  'homeMyAssetsViewAllButton': 'Vezi toate',
+  'homeBestBTPs': 'Top BTP-uri',
+  'homeBestBTPsViewAllButton': 'Vezi toate',
+  // walletpage
+  'walletBalanceText': 'Investiția ta',
+  'walletMyAssets': 'Activele tale',
+  'walletPaysWhat': 'Câștig de',
+  'walletPaysIn': 'în',
+  // explorepage
+  'exploreSearchPlaceholder': 'Caută un BTP...',
+  'explorePageResults': 'Rezultate',
+  'explorePageOrder': 'Ordine',
+  'explorePageOrderByValue': 'Preț',
+  'explorePageOrderByCedola': 'Cupon',
+  'explorePageOrderByExpirationDate': 'Expirare',
+  'explorePageOrderByValueButton': 'Preț de piață',
+  'explorePageOrderByCedolaButton': 'Cupon anual',
+  'explorePageOrderByExpirationDateButton': 'Dată de expirare',
+  'explorePageFilterTitle': 'Personalizează-ți căutarea',
+  'explorePageValueFilterTitle': 'Preț de piață',
+  'explorePageCedolaFilterTitle': 'Cupon anual',
+  'explorePageExpirationDateFilterTitle': 'Dată de expirare',
+  'explorePageApplyFiltersButton': 'Aplică',
+  // settingspage
+  'settingsPageAccountTitle': 'Cont',
+  'settingsPageWalletBackupButton': 'Backup portofel',
+  'settingsPageWalletBackupRestoreButton': 'Restaurează backup portofel',
+  'settingsPageWalletDeleteButton': 'Șterge portofel',
+  'settingsPagePersonalizationTitle': 'Personalizare',
+  'settingsPageDarkModeButton': 'Mod întunecat',
+  'settingsPageLanguageButton': 'Selectează limba',
 };
