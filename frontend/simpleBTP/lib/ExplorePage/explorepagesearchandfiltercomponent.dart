@@ -24,6 +24,8 @@ class _ExplorePageSearchAndFilterComponentState
 
   Map<String, dynamic> filters = defaultExploreFilters;
 
+  Map<String, dynamic> ordering = defaultExploreOrdering;
+
   @override
   Widget build(BuildContext context) {
     void openFilterModal() {
@@ -96,7 +98,8 @@ class _ExplorePageSearchAndFilterComponentState
                               });
                             },
                             onChangeEnd: (RangeValues values) {
-                              widget.searchWithFilters(search, filters);
+                              widget.searchWithFilters(
+                                  search, filters, ordering);
                             },
                             activeColor: primaryColor,
                           ),
@@ -135,7 +138,8 @@ class _ExplorePageSearchAndFilterComponentState
                               });
                             },
                             onChangeEnd: (RangeValues values) {
-                              widget.searchWithFilters(search, filters);
+                              widget.searchWithFilters(
+                                  search, filters, ordering);
                             },
                             activeColor: primaryColor,
                           ),

@@ -200,7 +200,8 @@ Future<List<Map<String, dynamic>>> getMyBTPs() async {
   return merged;
 }
 
-Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters) async {
+Future<List<Map<String, dynamic>>> getExplorePageBTPs(
+    search, filters, ordering) async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
   }
@@ -243,20 +244,20 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters) async {
   }
 
   // sort
-  if (filters['orderBy'] == 'value') {
-    if (filters['order'] == 'desc') {
+  if (ordering['orderBy'] == 'value') {
+    if (ordering['order'] == 'desc') {
       btpsFiltered.sort((a, b) => b.value.compareTo(a.value));
     } else {
       btpsFiltered.sort((a, b) => a.value.compareTo(b.value));
     }
-  } else if (filters['orderBy'] == 'cedola') {
-    if (filters['order'] == 'desc') {
+  } else if (ordering['orderBy'] == 'cedola') {
+    if (ordering['order'] == 'desc') {
       btpsFiltered.sort((a, b) => b.cedola.compareTo(a.cedola));
     } else {
       btpsFiltered.sort((a, b) => a.cedola.compareTo(b.cedola));
     }
-  } else if (filters['orderBy'] == 'expirationDate') {
-    if (filters['order'] == 'desc') {
+  } else if (ordering['orderBy'] == 'expirationDate') {
+    if (ordering['order'] == 'desc') {
       btpsFiltered.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
     } else {
       btpsFiltered.sort((a, b) => b.expirationDate.compareTo(a.expirationDate));

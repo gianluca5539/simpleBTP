@@ -19,11 +19,15 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Map<String, dynamic> filters = defaultExploreFilters;
 
-  void searchWithFilters(String search, Map<String, dynamic> filters) {
+  Map<String, dynamic> ordering = defaultExploreOrdering;
+
+  void searchWithFilters(String search, Map<String, dynamic> filters,
+      Map<String, dynamic> ordering) {
     // update the state with the new search and filters
     setState(() {
       this.search = search;
       this.filters = filters;
+      this.ordering = ordering;
     });
   }
 
@@ -39,7 +43,7 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             ExplorePageSearchAndFilterComponent(searchWithFilters),
             FutureBuilder<List<Map<String, dynamic>>>(
-              future: getExplorePageBTPs(search, filters),
+              future: getExplorePageBTPs(search, filters, ordering),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
