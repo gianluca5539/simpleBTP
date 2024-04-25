@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simpleBTP/ExplorePage/explorepage.dart';
 import 'package:simpleBTP/HomePage/homepage.dart';
+import 'package:simpleBTP/SettingsPage/settingspage.dart';
 import 'package:simpleBTP/WalletPage/walletpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -120,7 +121,7 @@ class Footer extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              navigateTo(context, const HomePage());
+              navigateTo(context, const SettingsPage());
             },
             style: footerButtonStyle,
             child: Column(

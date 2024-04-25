@@ -12,12 +12,6 @@ String getString(String key) {
   if (selectedLang == 'hi') {
     return hindiLang[key] ?? key;
   }
-  if (selectedLang == 'ro') {
-    return romanianLang[key] ?? key;
-  }
-  if (selectedLang == 'es') {
-    return spanishLang[key] ?? key;
-  }
   return ''; // actually this should never happen
 }
 
@@ -31,6 +25,7 @@ Map<String, String> italianLang = {
   'appTopBarHome': 'simpleBTP',
   'appTopBarExplore': 'Esplora',
   'appTopBarWallet': 'Portafoglio',
+  'appTopBarSettings': 'Impostazioni',
   // footer
   'appBottomBarHome': 'Home',
   'appBottomBarExplore': 'Esplora',
@@ -62,6 +57,14 @@ Map<String, String> italianLang = {
   'explorePageCedolaFilterTitle': 'Cedola annuale',
   'explorePageExpirationDateFilterTitle': 'Data di scadenza',
   'explorePageApplyFiltersButton': 'Applica',
+  // settingspage
+  'settingsPageAccountTitle': 'Account',
+  'settingsPageWalletBackupButton': 'Backup del portafoglio',
+  'settingsPageWalletBackupRestoreButton': 'Ripristino backup portafoglio',
+  'settingsPageWalletDeleteButton': 'Elimina dati portafoglio',
+  'settingsPagePersonalizationTitle': 'Personalizzazione',
+  'settingsPageDarkModeButton': 'Modalità scura',
+  'settingsPageLanguageButton': 'Seleziona lingua',
 };
 
 Map<String, String> englishLang = {
@@ -74,6 +77,7 @@ Map<String, String> englishLang = {
   'appTopBarHome': 'simpleBTP',
   'appTopBarExplore': 'Explore',
   'appTopBarWallet': 'Wallet',
+  'appTopBarSettings': 'Settings',
   // footer
   'appBottomBarHome': 'Home',
   'appBottomBarExplore': 'Explore',
@@ -105,6 +109,13 @@ Map<String, String> englishLang = {
   'explorePageCedolaFilterTitle': 'Yearly coupon',
   'explorePageExpirationDateFilterTitle': 'Expiration date',
   'explorePageApplyFiltersButton': 'Apply',
+  'settingsPageAccountTitle': 'Account',
+  'settingsPageWalletBackupButton': 'Backup wallet',
+  'settingsPageWalletBackupRestoreButton': 'Restore wallet backup',
+  'settingsPageWalletDeleteButton': 'Delete wallet',
+  'settingsPagePersonalizationTitle': 'Personalization',
+  'settingsPageDarkModeButton': 'Dark mode',
+  'settingsPageLanguageButton': 'Select language',
 };
 
 Map<String, String> hindiLang = {
@@ -117,6 +128,7 @@ Map<String, String> hindiLang = {
   'appTopBarHome': 'होम',
   'appTopBarExplore': 'अन्वेषण',
   'appTopBarWallet': 'बटुआ',
+  'appTopBarSettings': 'सेटिंग्स',
   // footer
   'appBottomBarHome': 'होम',
   'appBottomBarExplore': 'अन्वेषण',
@@ -148,88 +160,4 @@ Map<String, String> hindiLang = {
   'explorePageCedolaFilterTitle': 'वार्षिक सेडोला',
   'explorePageExpirationDateFilterTitle': 'समाप्ति तिथि',
   'explorePageApplyFiltersButton': 'लागू करें',
-};
-
-Map<String, String> romanianLang = {
-  // misc
-  'months': 'mesi',
-  'and': 'e',
-  'days': 'giorni',
-  // header
-  'appTopBarHome': 'simpleBTP',
-  'appTopBarExplore': 'Esplora',
-  'appTopBarWallet': 'Portafoglio',
-  // footer
-  'appBottomBarHome': 'Home',
-  'appBottomBarExplore': 'Esplora',
-  'appBottomBarWallet': 'Portafoglio',
-  'appBottomBarSettings': 'Impostazioni',
-  // homepage
-  'homeBalanceText': 'Il tuo investimento',
-  'homeMyAssets': 'I tuoi migliori BTP',
-  'homeMyAssetsViewAllButton': 'Vedi tutti',
-  'homeBestBTPs': 'I BTP più performanti',
-  'homeBestBTPsViewAllButton': 'Vedi tutti',
-  // walletpage
-  'walletBalanceText': 'Il tuo investimento',
-  'walletMyAssets': 'I tuoi asset',
-  'walletPaysWhat': 'Paga',
-  'walletPaysIn': 'tra',
-  // explorepage
-  'exploreSearchPlaceholder': 'Cerca uno strumento...',
-  'explorePageResults': 'Risultati',
-  'explorePageOrder': 'Ordine',
-  'explorePageOrderByValue': 'Valore',
-  'explorePageOrderByCedola': 'Cedola',
-  'explorePageOrderByExpirationDate': 'Scadenza',
-  'explorePageOrderByValueButton': 'Valore di mercato',
-  'explorePageOrderByCedolaButton': 'Cedola annuale',
-  'explorePageOrderByExpirationDateButton': 'Data di scadenza',
-  'explorePageFilterTitle': 'Personalizza la ricerca',
-  'explorePageValueFilterTitle': 'Valore di mercato',
-  'explorePageCedolaFilterTitle': 'Cedola annuale',
-  'explorePageExpirationDateFilterTitle': 'Data di scadenza',
-  'explorePageApplyFiltersButton': 'Applica',
-};
-
-Map<String, String> spanishLang = {
-  // misc
-  'months': 'mesi',
-  'and': 'e',
-  'days': 'giorni',
-  // header
-  'appTopBarHome': 'simpleBTP',
-  'appTopBarExplore': 'Esplora',
-  'appTopBarWallet': 'Portafoglio',
-  // footer
-  'appBottomBarHome': 'Home',
-  'appBottomBarExplore': 'Esplora',
-  'appBottomBarWallet': 'Portafoglio',
-  'appBottomBarSettings': 'Impostazioni',
-  // homepage
-  'homeBalanceText': 'Il tuo investimento',
-  'homeMyAssets': 'I tuoi migliori BTP',
-  'homeMyAssetsViewAllButton': 'Vedi tutti',
-  'homeBestBTPs': 'I BTP più performanti',
-  'homeBestBTPsViewAllButton': 'Vedi tutti',
-  // walletpage
-  'walletBalanceText': 'Il tuo investimento',
-  'walletMyAssets': 'I tuoi asset',
-  'walletPaysWhat': 'Paga',
-  'walletPaysIn': 'tra',
-  // explorepage
-  'exploreSearchPlaceholder': 'Cerca uno strumento...',
-  'explorePageResults': 'Risultati',
-  'explorePageOrder': 'Ordine',
-  'explorePageOrderByValue': 'Valore',
-  'explorePageOrderByCedola': 'Cedola',
-  'explorePageOrderByExpirationDate': 'Scadenza',
-  'explorePageOrderByValueButton': 'Valore di mercato',
-  'explorePageOrderByCedolaButton': 'Cedola annuale',
-  'explorePageOrderByExpirationDateButton': 'Data di scadenza',
-  'explorePageFilterTitle': 'Personalizza la ricerca',
-  'explorePageValueFilterTitle': 'Valore di mercato',
-  'explorePageCedolaFilterTitle': 'Cedola annuale',
-  'explorePageExpirationDateFilterTitle': 'Data di scadenza',
-  'explorePageApplyFiltersButton': 'Applica',
 };
