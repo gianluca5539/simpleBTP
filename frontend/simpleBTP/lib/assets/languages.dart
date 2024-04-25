@@ -137,6 +137,7 @@ Map<String, String> hindiLang = {
   'appTopBarExplore': 'अन्वेषण',
   'appTopBarWallet': 'बटुआ',
   'appTopBarSettings': 'सेटिंग्स',
+  'appTopBarPickLanguage': "यह बदलें",
   // footer
   'appBottomBarHome': 'होम',
   'appBottomBarExplore': 'अन्वेषण',
@@ -168,4 +169,12 @@ Map<String, String> hindiLang = {
   'explorePageCedolaFilterTitle': 'वार्षिक सेडोला',
   'explorePageExpirationDateFilterTitle': 'समाप्ति तिथि',
   'explorePageApplyFiltersButton': 'लागू करें',
+  // settingspage
+  'settingsPageAccountTitle': 'खाता',
+  'settingsPageWalletBackupButton': 'बटुआ बैकअप',
+  'settingsPageWalletBackupRestoreButton': 'बटुआ बैकअप बहाल करें',
+  'settingsPageWalletDeleteButton': 'बटुआ हटाएं',
+  'settingsPagePersonalizationTitle': 'व्यक्तिगतीकरण',
+  'settingsPageDarkModeButton': 'डार्क मोड',
+  'settingsPageLanguageButton': 'भाषा चुनें',
 };
