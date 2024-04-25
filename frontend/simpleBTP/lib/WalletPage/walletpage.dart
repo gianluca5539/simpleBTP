@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
@@ -13,7 +14,7 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppTopBar('Portafoglio'),
+      appBar: AppTopBar(getString('appTopBarWallet')),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,11 +40,11 @@ class WalletPage extends StatelessWidget {
                   }),
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
-                'I tuoi asset',
-                style: TextStyle(fontSize: 24, color: textColor),
+                getString('walletMyAssets'),
+                style: const TextStyle(fontSize: 24, color: textColor),
               ),
             ),
             FutureBuilder<List<Map<String, dynamic>>>(

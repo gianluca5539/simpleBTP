@@ -4,6 +4,7 @@ import 'package:simpleBTP/HomePage/homebestbtpscomponent.dart';
 import 'package:simpleBTP/HomePage/homemyassetscomponent.dart';
 import 'package:simpleBTP/HomePage/homepageinvestmentcomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: offWhiteColor,
-      appBar: AppTopBar('simpleBTP'),
+      appBar: AppTopBar(getString('appTopBarHome')),
       body: SingleChildScrollView(
         // To ensure the list is scrollable
         child: Column(

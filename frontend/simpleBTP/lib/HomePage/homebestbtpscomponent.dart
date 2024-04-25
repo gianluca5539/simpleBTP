@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/ExplorePage/explorepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 
 class HomeBestBTPsComponent extends StatelessWidget {
   const HomeBestBTPsComponent({Key? key}) : super(key: key);
@@ -14,11 +15,11 @@ class HomeBestBTPsComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 22.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 22.0),
                   child: Text(
-                    "I BTP più costosi",
-                    style: TextStyle(color: textColor, fontSize: 24),
+                    getString('homeBestBTPs'),
+                    style: const TextStyle(color: textColor, fontSize: 24),
                   ),
                 ),
                 Padding(
@@ -41,8 +42,9 @@ class HomeBestBTPsComponent extends StatelessWidget {
                             builder: (context) => ExplorePage(),
                           ));
                     },
-                    child: const Text("Vedi tutti",
-                        style: TextStyle(color: primaryColor, fontSize: 16)),
+                    child: Text(getString('homeBestBTPsViewAllButton'),
+                        style:
+                            const TextStyle(color: primaryColor, fontSize: 16)),
                   ),
                 ),
               ],

@@ -5,6 +5,7 @@ import 'package:simpleBTP/ExplorePage/explorepage.dart';
 import 'package:simpleBTP/HomePage/homepage.dart';
 import 'package:simpleBTP/WalletPage/walletpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 
 class Footer extends StatelessWidget {
   // create a variable to store the current page
@@ -55,7 +56,7 @@ class Footer extends StatelessWidget {
                   width: 24, // You can specify the size as needed
                   height: 24,
                 ),
-                Text('Home',
+                Text(getString('appBottomBarHome'),
                     style: TextStyle(
                         color:
                             currentPage == 'home' ? primaryColor : textColor)),
@@ -82,7 +83,7 @@ class Footer extends StatelessWidget {
                   width: 24, // You can specify the size as needed
                   height: 24,
                 ),
-                Text('Portafoglio',
+                Text(getString('appBottomBarWallet'),
                     style: TextStyle(
                         color: currentPage == 'wallet'
                             ? primaryColor
@@ -109,7 +110,7 @@ class Footer extends StatelessWidget {
                   width: 24, // You can specify the size as needed
                   height: 24,
                 ),
-                Text('Esplora',
+                Text(getString('appBottomBarExplore'),
                     style: TextStyle(
                         color: currentPage == 'explore'
                             ? primaryColor
@@ -136,7 +137,7 @@ class Footer extends StatelessWidget {
                   width: 24, // You can specify the size as needed
                   height: 24,
                 ),
-                Text('Impostazioni',
+                Text(getString('appBottomBarSettings'),
                     style: TextStyle(
                         color: currentPage == 'settings'
                             ? primaryColor

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class WalletPageInvestmentComponent extends StatelessWidget {
@@ -55,8 +56,10 @@ class WalletPageInvestmentComponent extends StatelessWidget {
     int diffMonths = remainingTime.inDays ~/ 30;
     int diffDays = remainingTime.inDays % 30;
     return diffMonths > 0
-        ? '$diffMonths mesi e $diffDays giorni'
-        : '$diffDays giorni';
+        ? '$diffMonths ${getString(
+            'months',
+          )} ${getString('and')} $diffDays ${getString('days')}'
+        : '$diffDays ${getString('days')}';
   }
 
   @override
@@ -107,7 +110,9 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                       padding: EdgeInsets.only(top: 4.0),
                     ),
                     Text(
-                      cedola != null ? 'Paga il $cedola tra:' : '----',
+                      cedola != null
+                          ? '${getString('walletPaysWhat')} $cedola ${getString('walletPaysIn')}:'
+                          : '----',
                       style: const TextStyle(color: textColor, fontSize: 16),
                     ),
                     Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simpleBTP/ExplorePage/explorepageinvestmentcomponent.dart';
 import 'package:simpleBTP/ExplorePage/explorepagesearchandfiltercomponent.dart';
 import 'package:simpleBTP/assets/defaults.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
@@ -35,7 +36,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppTopBar(
-        'Esplora',
+        getString('appTopBarExplore'),
       ),
       // add a body and a footer
       body: SingleChildScrollView(

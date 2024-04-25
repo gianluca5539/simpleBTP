@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePageBalanceComponent extends StatelessWidget {
@@ -38,9 +39,9 @@ class HomePageBalanceComponent extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Il tuo investimento",
-                        style: TextStyle(color: textColor, fontSize: 22),
+                      Text(
+                        getString('homeBalanceText'),
+                        style: const TextStyle(color: textColor, fontSize: 22),
                       ),
                       Skeletonizer(
                           enabled: variation == null,

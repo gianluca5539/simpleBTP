@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/db/db.dart';
 
 class ExplorePageSearchAndFilterComponent extends StatefulWidget {
@@ -49,11 +51,11 @@ class _ExplorePageSearchAndFilterComponentState
     String order = ordering['order'];
     String orderText = '';
     if (orderBy == 'value') {
-      orderText = 'Valore ';
+      orderText = '${getString('explorePageOrderByValue')} ';
     } else if (orderBy == 'cedola') {
-      orderText = 'Cedola ';
+      orderText = '${getString('explorePageOrderByCedola')} ';
     } else if (orderBy == 'expirationDate') {
-      orderText = 'Scadenza ';
+      orderText = '${getString('explorePageOrderByExpirationDate')} ';
     }
     if (order == 'asc') {
       orderText += '↑';
@@ -104,9 +106,9 @@ class _ExplorePageSearchAndFilterComponentState
                           ),
                         ),
                         const SizedBox(height: 15),
-                        const Center(
-                          child: Text('Personalizza la ricerca',
-                              style: TextStyle(
+                        Center(
+                          child: Text(getString('explorePageFilterTitle'),
+                              style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                   color: textColor)),
@@ -114,9 +116,10 @@ class _ExplorePageSearchAndFilterComponentState
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            const Text('Valore di mercato',
+                            Text(getString('explorePageValueFilterTitle'),
                                 style:
-                                    TextStyle(fontSize: 18, color: textColor)),
+                                    const TextStyle(
+                                    fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
                                 '€${filters['minVal']?.toStringAsFixed(2) ?? minBTPVal} - €${filters['maxVal']?.toStringAsFixed(2) ?? maxBTPVal}',
@@ -154,9 +157,10 @@ class _ExplorePageSearchAndFilterComponentState
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            const Text('Cedola annuale',
+                            Text(getString('explorePageCedolaFilterTitle'),
                                 style:
-                                    TextStyle(fontSize: 18, color: textColor)),
+                                    const TextStyle(
+                                    fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
                                 '${(filters['minCedola']?.toStringAsFixed(2) ?? minBTPCedolaYearly)}% - ${(filters['maxCedola']?.toStringAsFixed(2) ?? maxBTPCedolaYearly)}%',
@@ -194,9 +198,12 @@ class _ExplorePageSearchAndFilterComponentState
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            const Text('Data di scadenza',
+                            Text(
+                                getString(
+                                    'explorePageExpirationDateFilterTitle'),
                                 style:
-                                    TextStyle(fontSize: 18, color: textColor)),
+                                    const TextStyle(
+                                    fontSize: 18, color: textColor)),
                             const Spacer(),
                             Text(
                                 '${filters['minExpirationDate']?.year ?? minBTPExpirationDate.year} - ${filters['maxExpirationDate']?.year ?? maxBTPExpirationDate.year}',
@@ -258,8 +265,9 @@ class _ExplorePageSearchAndFilterComponentState
                                     horizontal: 30, vertical: 15),
                                 textStyle: const TextStyle(fontSize: 18),
                               ),
-                              child: const Text('Applica',
-                                  style: TextStyle(
+                              child: Text(
+                                  getString('explorePageApplyFiltersButton'),
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       color: primaryColor)),
@@ -346,9 +354,9 @@ class _ExplorePageSearchAndFilterComponentState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Risultati',
-                  style: TextStyle(fontSize: 20),
+                Text(
+                  getString('explorePageResults'),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 // show a cupertino picker
                 GestureDetector(
@@ -357,14 +365,10 @@ class _ExplorePageSearchAndFilterComponentState
                       context: context,
                       builder: (BuildContext context) {
                         return CupertinoActionSheet(
-                          title: const Text(
-                            'Ordina i risultati per:',
-                            style: TextStyle(fontSize: 20, color: textColor),
-                          ),
                           actions: <Widget>[
                             CupertinoActionSheetAction(
                               child: Text(
-                                'Valore di mercato ↑',
+                                '${getString('explorePageOrderByValueButton')} ↑',
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: primaryColor,
@@ -376,7 +380,8 @@ class _ExplorePageSearchAndFilterComponentState
                               },
                             ),
                             CupertinoActionSheetAction(
-                              child: Text('Valore di mercato ↓',
+                              child: Text(
+                                  '${getString('explorePageOrderByValueButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: primaryColor,
@@ -387,7 +392,8 @@ class _ExplorePageSearchAndFilterComponentState
                               },
                             ),
                             CupertinoActionSheetAction(
-                              child: Text('Cedola annuale ↑',
+                              child: Text(
+                                  '${getString('explorePageOrderByCedolaButton')} ↑',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: primaryColor,
@@ -398,7 +404,8 @@ class _ExplorePageSearchAndFilterComponentState
                               },
                             ),
                             CupertinoActionSheetAction(
-                              child: Text('Cedola annuale ↓',
+                              child: Text(
+                                  '${getString('explorePageOrderByCedolaButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: primaryColor,
@@ -409,7 +416,8 @@ class _ExplorePageSearchAndFilterComponentState
                               },
                             ),
                             CupertinoActionSheetAction(
-                              child: Text('Data di scadenza ↑',
+                              child: Text(
+                                  '${getString('explorePageOrderByExpirationDateButton')} ↑',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: primaryColor,
@@ -421,7 +429,8 @@ class _ExplorePageSearchAndFilterComponentState
                               },
                             ),
                             CupertinoActionSheetAction(
-                              child: Text('Data di scadenza ↓',
+                              child: Text(
+                                  '${getString('explorePageOrderByExpirationDateButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: primaryColor,
@@ -447,7 +456,7 @@ class _ExplorePageSearchAndFilterComponentState
                     );
                   },
                   child: Text(
-                    "Ordine: ${getOrderByButtonText()}",
+                    "${getString('explorePageOrder')}: ${getOrderByButtonText()}",
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

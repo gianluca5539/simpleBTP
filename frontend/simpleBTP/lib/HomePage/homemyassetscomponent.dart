@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/WalletPage/walletpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 
 class HomeMyAssetsComponent extends StatelessWidget {
   const HomeMyAssetsComponent({Key? key}) : super(key: key);
@@ -14,11 +15,11 @@ class HomeMyAssetsComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 22.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 22.0),
                   child: Text(
-                    "I tuoi migliori BTP",
-                    style: TextStyle(color: textColor, fontSize: 24),
+                    getString('homeMyAssets'),
+                    style: const TextStyle(color: textColor, fontSize: 24),
                   ),
                 ),
                 Padding(
@@ -41,8 +42,9 @@ class HomeMyAssetsComponent extends StatelessWidget {
                             builder: (context) => const WalletPage(),
                           ));
                     },
-                    child: const Text("Vedi tutti",
-                        style: TextStyle(color: primaryColor, fontSize: 16)),
+                    child: Text(getString('homeMyAssetsViewAllButton'),
+                        style:
+                            const TextStyle(color: primaryColor, fontSize: 16)),
                   ),
                 ),
               ],

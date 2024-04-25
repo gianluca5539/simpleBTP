@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -42,9 +43,9 @@ class WalletPageBalanceComponent extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Il tuo investimento",
-                        style: TextStyle(color: textColor, fontSize: 22),
+                      Text(
+                        getString('walletBalanceText'),
+                        style: const TextStyle(color: textColor, fontSize: 22),
                       ),
                       Skeletonizer(
                           enabled: variation == null,

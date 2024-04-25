@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/HomePage/homepage.dart';
+import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
@@ -16,6 +17,10 @@ void main() async {
 
 Future<void> loadData() async {
   await Hive.openBox('utils');
+  await Hive.openBox('settings');
+
+  // set the default language to italian
+  selectedLang = Hive.box('settings').get('language', defaultValue: 'it');
 
   var utilsBox = Hive.box('utils');
   var lastFetch = utilsBox.get('lastFetch');
