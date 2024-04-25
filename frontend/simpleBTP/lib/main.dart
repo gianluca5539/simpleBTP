@@ -11,16 +11,18 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BTPAdapter());
   Hive.registerAdapter(MyBTPAdapter());
+
+  // load settings
+  await Hive.openBox('settings');
+  // set the default language to italian
+  selectedLang = Hive.box('settings').get('language', defaultValue: 'en');
+
   loadData();
   runApp(const MainApp());
 }
 
 Future<void> loadData() async {
   await Hive.openBox('utils');
-  await Hive.openBox('settings');
-
-  // set the default language to italian
-  selectedLang = Hive.box('settings').get('language', defaultValue: 'it');
 
   var utilsBox = Hive.box('utils');
   var lastFetch = utilsBox.get('lastFetch');

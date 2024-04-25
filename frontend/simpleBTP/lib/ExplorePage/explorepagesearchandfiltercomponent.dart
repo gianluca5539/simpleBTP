@@ -309,21 +309,22 @@ class _ExplorePageSearchAndFilterComponentState
                     },
                     style: const TextStyle(fontSize: 18),
                     textCapitalization: TextCapitalization.characters,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      hintText: 'Cerca uno strumento...',
-                      hintStyle: TextStyle(fontSize: 18),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                      border: OutlineInputBorder(
+                      hintText: getString('exploreSearchPlaceholder'),
+                      hintStyle: const TextStyle(fontSize: 18),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 15),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
                     ),
@@ -447,9 +448,10 @@ class _ExplorePageSearchAndFilterComponentState
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('Annulla',
+                            child: Text(getString('cancel'),
                                 style:
-                                    TextStyle(fontSize: 18, color: Colors.red)),
+                                    const TextStyle(
+                                    fontSize: 18, color: Colors.red)),
                           ),
                         );
                       },
