@@ -77,9 +77,16 @@ class _ExplorePageSearchAndFilterComponentState
           builder: (BuildContext ctx) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
-              return SizedBox(
+              return Container(
                 height: 500,
                 width: double.infinity,
+                // set background color
+                decoration: const BoxDecoration(
+                    color: offWhiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    )),
                 child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 2),
                     child: Column(
@@ -96,12 +103,15 @@ class _ExplorePageSearchAndFilterComponentState
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
                         const Center(
                           child: Text('Personalizza la ricerca',
-                              style: TextStyle(fontSize: 22, color: textColor)),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor)),
                         ),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
                             const Text('Valore di mercato',
@@ -141,7 +151,7 @@ class _ExplorePageSearchAndFilterComponentState
                             activeColor: primaryColor,
                           ),
                         ),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
                             const Text('Cedola annuale',
@@ -181,7 +191,7 @@ class _ExplorePageSearchAndFilterComponentState
                             activeColor: primaryColor,
                           ),
                         ),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
                             const Text('Data di scadenza',
@@ -228,6 +238,34 @@ class _ExplorePageSearchAndFilterComponentState
                           },
                           activeColor: primaryColor,
                         )),
+                        const SizedBox(height: 25),
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // actually already searched
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 3,
+                                // set white background color
+                                surfaceTintColor: Colors.white,
+                                shadowColor: Colors.grey.withOpacity(0.3),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 15),
+                                textStyle: const TextStyle(fontSize: 18),
+                              ),
+                              child: const Text('Applica',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: primaryColor)),
+                            ),
+                          ),
+                        ),
                       ],
                     )),
               );
