@@ -1,7 +1,7 @@
 // create a dart widget
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
@@ -25,6 +25,40 @@ class _ExplorePageSearchAndFilterComponentState
   Map<String, dynamic> filters = defaultExploreFilters;
 
   Map<String, dynamic> ordering = defaultExploreOrdering;
+
+  void executeOrdering(String orderby, String order, BuildContext context) {
+    setState(() {
+      ordering = {'orderBy': orderby, 'order': order};
+    });
+    widget.searchWithFilters(search, filters, ordering);
+    Navigator.pop(context);
+  }
+
+  FontWeight getFontWeightForItem(String orderBy, String order) {
+    if (ordering['orderBy'] == orderBy && ordering['order'] == order) {
+      return FontWeight.bold;
+    }
+    return FontWeight.normal;
+  }
+
+  String getOrderByButtonText() {
+    String orderBy = ordering['orderBy'];
+    String order = ordering['order'];
+    String orderText = '';
+    if (orderBy == 'value') {
+      orderText = 'Valore ';
+    } else if (orderBy == 'cedola') {
+      orderText = 'Cedola ';
+    } else if (orderBy == 'expirationDate') {
+      orderText = 'Scadenza ';
+    }
+    if (order == 'asc') {
+      orderText += '↑';
+    } else {
+      orderText += '↓';
+    }
+    return orderText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,68 +186,189 @@ class _ExplorePageSearchAndFilterComponentState
     }
 
     return Container(
-      padding: const EdgeInsets.all(18),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              height: 45,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
+      padding: const EdgeInsets.only(top: 18, left: 18, right: 18, bottom: 10),
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: TextField(
-                onChanged: (value) {
-                  search = value;
-                  widget.searchWithFilters(search, filters, ordering);
-                },
-                style: const TextStyle(fontSize: 18),
-                textCapitalization: TextCapitalization.characters,
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: 'Cerca uno strumento...',
-                  hintStyle: TextStyle(fontSize: 18),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  child: TextField(
+                    onChanged: (value) {
+                      search = value;
+                      widget.searchWithFilters(search, filters, ordering);
+                    },
+                    style: const TextStyle(fontSize: 18),
+                    textCapitalization: TextCapitalization.characters,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      hintText: 'Cerca uno strumento...',
+                      hintStyle: TextStyle(fontSize: 18),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+              const SizedBox(width: 10),
+              // add an icon button
+              IconButton(
+                onPressed: () => openFilterModal(),
+                icon: SvgPicture.asset(
+                  'lib/assets/icons/filter.svg', // Path to the SVG asset
+                  colorFilter: const ColorFilter.mode(
+                      primaryColor,
+                      BlendMode
+                          .srcIn // This blend mode is typically used for tinting icons
+                      ),
+                  width: 38, // You can specify the size as needed
+                  height: 38,
+                ),
+                padding: const EdgeInsets.all(0),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          // add an icon button
-          IconButton(
-            onPressed: () => openFilterModal(),
-            icon: SvgPicture.asset(
-              'lib/assets/icons/filter.svg', // Path to the SVG asset
-              colorFilter: const ColorFilter.mode(
-                  primaryColor,
-                  BlendMode
-                      .srcIn // This blend mode is typically used for tinting icons
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Risultati',
+                  style: TextStyle(fontSize: 20),
+                ),
+                // show a cupertino picker
+                GestureDetector(
+                  onTap: () {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoActionSheet(
+                          title: const Text(
+                            'Ordina i risultati per:',
+                            style: TextStyle(fontSize: 20, color: textColor),
+                          ),
+                          actions: <Widget>[
+                            CupertinoActionSheetAction(
+                              child: Text(
+                                'Valore di mercato ↑',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: primaryColor,
+                                    fontWeight:
+                                        getFontWeightForItem('value', 'asc')),
+                              ),
+                              onPressed: () {
+                                executeOrdering('value', 'asc', context);
+                              },
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text('Valore di mercato ↓',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: getFontWeightForItem(
+                                          'value', 'desc'))),
+                              onPressed: () {
+                                executeOrdering('value', 'desc', context);
+                              },
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text('Cedola annuale ↑',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: getFontWeightForItem(
+                                          'cedola', 'asc'))),
+                              onPressed: () {
+                                executeOrdering('cedola', 'asc', context);
+                              },
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text('Cedola annuale ↓',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: getFontWeightForItem(
+                                          'cedola', 'desc'))),
+                              onPressed: () {
+                                executeOrdering('cedola', 'desc', context);
+                              },
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text('Data di scadenza ↑',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: getFontWeightForItem(
+                                          'expirationDate', 'asc'))),
+                              onPressed: () {
+                                executeOrdering(
+                                    'expirationDate', 'asc', context);
+                              },
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text('Data di scadenza ↓',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: primaryColor,
+                                      fontWeight: getFontWeightForItem(
+                                          'expirationDate', 'desc'))),
+                              onPressed: () {
+                                executeOrdering(
+                                    'expirationDate', 'desc', context);
+                              },
+                            ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Annulla',
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.red)),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    "Ordine: ${getOrderByButtonText()}",
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor),
                   ),
-              width: 38, // You can specify the size as needed
-              height: 38,
+                ),
+              ],
             ),
-            padding: const EdgeInsets.all(0),
-          ),
+          )
         ],
       ),
     );

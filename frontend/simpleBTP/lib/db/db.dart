@@ -257,7 +257,8 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(
       btpsFiltered.sort((a, b) => a.cedola.compareTo(b.cedola));
     }
   } else if (ordering['orderBy'] == 'expirationDate') {
-    if (ordering['order'] == 'desc') {
+    if (ordering['order'] == 'asc') {
+      // works the other way around
       btpsFiltered.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
     } else {
       btpsFiltered.sort((a, b) => b.expirationDate.compareTo(a.expirationDate));
