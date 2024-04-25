@@ -11,6 +11,8 @@ double minBTPVal = 999999;
 double maxBTPVal = 0;
 double minBTPCedola = 999999;
 double maxBTPCedola = 0;
+DateTime minBTPExpirationDate = DateTime(9999);
+DateTime maxBTPExpirationDate = DateTime.now();
 
 void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
@@ -51,7 +53,13 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
       if (btp.cedola > maxBTPCedola) {
         maxBTPCedola = btp.cedola;
       }
-      
+      if (btp.expirationDate.isBefore(minBTPExpirationDate)) {
+        minBTPExpirationDate = btp.expirationDate;
+      }
+      if (btp.expirationDate.isAfter(maxBTPExpirationDate)) {
+        maxBTPExpirationDate = btp.expirationDate;
+      }
+
       box.put(key, btp);
     }
   });
@@ -232,12 +240,12 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(
     if (filters['maxCedola'] != null && btp.cedola * 2 > filters['maxCedola']) {
       continue;
     }
-    if (filters['minExpiration'] != null &&
-        btp.expirationDate.isBefore(filters['minExpiration'])) {
+    if (filters['minExpirationDate'] != null &&
+        btp.expirationDate.isBefore(filters['minExpirationDate'])) {
       continue;
     }
-    if (filters['maxExpiration'] != null &&
-        btp.expirationDate.isAfter(filters['maxExpiration'])) {
+    if (filters['maxExpirationDate'] != null &&
+        btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
       continue;
     }
     btpsFiltered.add(btp);

@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
@@ -25,6 +26,8 @@ class _ExplorePageSearchAndFilterComponentState
   Map<String, dynamic> filters = defaultExploreFilters;
 
   Map<String, dynamic> ordering = defaultExploreOrdering;
+
+  double maxYear = maxBTPExpirationDate.year.toDouble(); // need these to work
 
   void executeOrdering(String orderby, String order, BuildContext context) {
     setState(() {
@@ -178,6 +181,53 @@ class _ExplorePageSearchAndFilterComponentState
                             activeColor: primaryColor,
                           ),
                         ),
+                        const SizedBox(height: 25),
+                        Row(
+                          children: [
+                            const Text('Data di scadenza',
+                                style:
+                                    TextStyle(fontSize: 18, color: textColor)),
+                            const Spacer(),
+                            Text(
+                                '${filters['minExpirationDate']?.year ?? minBTPExpirationDate.year} - ${filters['maxExpirationDate']?.year ?? maxBTPExpirationDate.year}',
+                                style: const TextStyle(
+                                    fontSize: 15, color: primaryColor)),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Center(
+                            child: RangeSlider(
+                          values: RangeValues(
+                              (filters['minExpirationDate']?.year ??
+                                      minBTPExpirationDate.year)
+                                  .toDouble(),
+                              (filters['maxExpirationDate']?.year ??
+                                      maxBTPExpirationDate.year)
+                                  .toDouble()),
+                          min: minBTPExpirationDate.year.toDouble(),
+                          max: maxBTPExpirationDate.year.toDouble(),
+                          divisions: maxBTPExpirationDate.year -
+                              minBTPExpirationDate.year,
+                          labels: RangeLabels(
+                              (filters['minExpirationDate']?.year ??
+                                      minBTPExpirationDate.year)
+                                  .toString(),
+                              (filters['maxExpirationDate']?.year ??
+                                      maxBTPExpirationDate.year)
+                                  .toString()),
+                          onChanged: (RangeValues values) {
+                            setState(() {
+                              filters['minExpirationDate'] =
+                                  DateTime(values.start.toInt(), 1, 1);
+                              filters['maxExpirationDate'] =
+                                  DateTime(values.end.toInt(), 12, 31);
+                            });
+                          },
+                          onChangeEnd: (RangeValues values) {
+                            widget.searchWithFilters(search, filters, ordering);
+                          },
+                          activeColor: primaryColor,
+                        )),
                       ],
                     )),
               );

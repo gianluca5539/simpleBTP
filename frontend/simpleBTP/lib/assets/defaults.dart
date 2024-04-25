@@ -5,8 +5,8 @@ final Map<String, dynamic> defaultExploreFilters = {
   'maxValue': null, // double
   'minCedola': null, // double
   'maxCedola': null, // double
-  'minExpiration': null, // DateTime
-  'maxExpiration': null, // DateTime
+  'minExpirationDate': null, // DateTime
+  'maxExpirationDate': null, // DateTime
 };
 
 final Map<String, dynamic> defaultExploreOrdering = {
