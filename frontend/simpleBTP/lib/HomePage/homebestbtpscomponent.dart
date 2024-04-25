@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/ExplorePage/explorepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -8,6 +9,8 @@ class HomeBestBTPsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Padding(
         padding: const EdgeInsets.only(top: 25.0),
         child: Column(
@@ -19,7 +22,9 @@ class HomeBestBTPsComponent extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 22.0),
                   child: Text(
                     getString('homeBestBTPs'),
-                    style: const TextStyle(color: textColor, fontSize: 24),
+                    style: TextStyle(
+                        color: isDarkMode ? lightTextColor : textColor,
+                        fontSize: 24),
                   ),
                 ),
                 Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/HomePage/homepagebalancecomponent.dart';
 import 'package:simpleBTP/HomePage/homebestbtpscomponent.dart';
 import 'package:simpleBTP/HomePage/homemyassetscomponent.dart';
@@ -13,10 +14,14 @@ import 'package:simpleBTP/db/db.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
-      backgroundColor: offWhiteColor,
+      backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
       appBar: AppTopBar(getString('appTopBarHome')),
       body: SingleChildScrollView(
         // To ensure the list is scrollable

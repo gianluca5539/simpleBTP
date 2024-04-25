@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
@@ -13,7 +14,10 @@ class WalletPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
+      backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
       appBar: AppTopBar(getString('appTopBarWallet')),
       body: SingleChildScrollView(
         child: Column(
@@ -44,7 +48,9 @@ class WalletPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 getString('walletMyAssets'),
-                style: const TextStyle(fontSize: 24, color: textColor),
+                style: TextStyle(
+                    fontSize: 24,
+                    color: isDarkMode ? lightTextColor : textColor),
               ),
             ),
             FutureBuilder<List<Map<String, dynamic>>>(

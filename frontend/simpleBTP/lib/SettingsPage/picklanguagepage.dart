@@ -14,7 +14,10 @@ class PickLanguagePage extends StatefulWidget {
 class _PickLanguagePageState extends State<PickLanguagePage> {
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
+      backgroundColor: isDarkMode ? offBlackColor : Colors.white,
       appBar: AppTopBar(getString('appTopBarPickLanguage')),
       body: Column(
         children: [
@@ -36,13 +39,17 @@ class _PickLanguagePageState extends State<PickLanguagePage> {
                       backgroundColor: MaterialStateProperty.all<Color>(
                           selectedLang ==
                                   availableLanguages.keys.elementAt(index)
-                              ? secondaryColor
-                              : Colors.white),
+                              ? primaryColorLight
+                              : isDarkMode
+                                  ? darkModeColor
+                                  : Colors.white),
                       foregroundColor: MaterialStateProperty.all<Color>(
                           selectedLang ==
                                   availableLanguages.keys.elementAt(index)
                               ? Colors.white
-                              : textColor),
+                              : isDarkMode
+                                  ? lightTextColor
+                                  : textColor),
                     ),
                     child: Text(
                         availableLanguages[

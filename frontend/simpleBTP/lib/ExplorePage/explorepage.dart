@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/ExplorePage/explorepageinvestmentcomponent.dart';
 import 'package:simpleBTP/ExplorePage/explorepagesearchandfiltercomponent.dart';
+import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
@@ -34,7 +36,10 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
+      backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
       appBar: AppTopBar(
         getString('appTopBarExplore'),
       ),

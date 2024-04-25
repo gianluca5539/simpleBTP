@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
@@ -16,16 +17,20 @@ class WalletPageBalanceComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Padding(
       padding: const EdgeInsets.only(top: 40.0),
       child: Center(
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
+              color: isDarkMode ? darkModeColor : Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: isDarkMode
+                      ? Colors.transparent
+                      : Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 3,
                   offset: const Offset(0, 3),
@@ -45,7 +50,9 @@ class WalletPageBalanceComponent extends StatelessWidget {
                     children: [
                       Text(
                         getString('walletBalanceText'),
-                        style: const TextStyle(color: textColor, fontSize: 22),
+                        style: TextStyle(
+                            color: isDarkMode ? lightTextColor : textColor,
+                            fontSize: 22),
                       ),
                       Skeletonizer(
                           enabled: variation == null,
@@ -67,7 +74,9 @@ class WalletPageBalanceComponent extends StatelessWidget {
                       enabled: balance == null,
                       child: Text(
                         "€${balance == null ? '----' : ''}${balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
-                        style: const TextStyle(color: textColor, fontSize: 34),
+                        style: TextStyle(
+                            color: isDarkMode ? lightTextColor : textColor,
+                            fontSize: 34),
                       )),
                 ),
                 FutureBuilder<List<Map<String, dynamic>>>(

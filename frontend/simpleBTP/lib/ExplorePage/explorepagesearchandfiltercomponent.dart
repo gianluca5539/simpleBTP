@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
@@ -41,9 +42,18 @@ class _ExplorePageSearchAndFilterComponentState
 
   FontWeight getFontWeightForItem(String orderBy, String order) {
     if (ordering['orderBy'] == orderBy && ordering['order'] == order) {
-      return FontWeight.bold;
+      return FontWeight.w800;
     }
     return FontWeight.normal;
+  }
+
+  Color getColorForItem(String orderBy, String order) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
+    if (ordering['orderBy'] == orderBy && ordering['order'] == order) {
+      return isDarkMode ? primaryColorLight : primaryColor;
+    }
+    return isDarkMode ? primaryColorLight : primaryColor;
   }
 
   String getOrderByButtonText() {
@@ -67,6 +77,8 @@ class _ExplorePageSearchAndFilterComponentState
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     void openFilterModal() {
       if (minBTPCedola > maxBTPCedola) {
         return;
@@ -83,11 +95,11 @@ class _ExplorePageSearchAndFilterComponentState
                 height: 500,
                 width: double.infinity,
                 // set background color
-                decoration: const BoxDecoration(
-                    color: offWhiteColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
+                decoration: BoxDecoration(
+                    color: isDarkMode ? offBlackColor : Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
                     )),
                 child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 2),
@@ -100,7 +112,8 @@ class _ExplorePageSearchAndFilterComponentState
                             width: 80,
                             height: 5,
                             decoration: BoxDecoration(
-                              color: Colors.grey[400],
+                              color:
+                                  isDarkMode ? darkModeColor : Colors.grey[400],
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -108,23 +121,30 @@ class _ExplorePageSearchAndFilterComponentState
                         const SizedBox(height: 15),
                         Center(
                           child: Text(getString('explorePageFilterTitle'),
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
-                                  color: textColor)),
+                                  color:
+                                      isDarkMode ? lightTextColor : textColor)),
                         ),
                         const SizedBox(height: 15),
                         Row(
                           children: [
                             Text(getString('explorePageValueFilterTitle'),
                                 style:
-                                    const TextStyle(
-                                    fontSize: 18, color: textColor)),
+                                     TextStyle(
+                                    fontSize: 18,
+                                    color: isDarkMode
+                                        ? lightTextColor
+                                        : textColor)),
                             const Spacer(),
                             Text(
                                 '€${filters['minVal']?.toStringAsFixed(2) ?? minBTPVal} - €${filters['maxVal']?.toStringAsFixed(2) ?? maxBTPVal}',
-                                style: const TextStyle(
-                                    fontSize: 15, color: primaryColor)),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: isDarkMode
+                                        ? primaryColorLight
+                                        : primaryColor)),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -151,7 +171,8 @@ class _ExplorePageSearchAndFilterComponentState
                               widget.searchWithFilters(
                                   search, filters, ordering);
                             },
-                            activeColor: primaryColor,
+                            activeColor:
+                                isDarkMode ? primaryColorLight : primaryColor,
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -159,13 +180,19 @@ class _ExplorePageSearchAndFilterComponentState
                           children: [
                             Text(getString('explorePageCedolaFilterTitle'),
                                 style:
-                                    const TextStyle(
-                                    fontSize: 18, color: textColor)),
+                                     TextStyle(
+                                    fontSize: 18,
+                                    color: isDarkMode
+                                        ? lightTextColor
+                                        : textColor)),
                             const Spacer(),
                             Text(
                                 '${(filters['minCedola']?.toStringAsFixed(2) ?? minBTPCedolaYearly)}% - ${(filters['maxCedola']?.toStringAsFixed(2) ?? maxBTPCedolaYearly)}%',
-                                style: const TextStyle(
-                                    fontSize: 15, color: primaryColor)),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: isDarkMode
+                                        ? primaryColorLight
+                                        : primaryColor)),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -192,7 +219,8 @@ class _ExplorePageSearchAndFilterComponentState
                               widget.searchWithFilters(
                                   search, filters, ordering);
                             },
-                            activeColor: primaryColor,
+                            activeColor:
+                                isDarkMode ? primaryColorLight : primaryColor,
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -202,13 +230,19 @@ class _ExplorePageSearchAndFilterComponentState
                                 getString(
                                     'explorePageExpirationDateFilterTitle'),
                                 style:
-                                    const TextStyle(
-                                    fontSize: 18, color: textColor)),
+                                     TextStyle(
+                                    fontSize: 18,
+                                    color: isDarkMode
+                                        ? lightTextColor
+                                        : textColor)),
                             const Spacer(),
                             Text(
                                 '${filters['minExpirationDate']?.year ?? minBTPExpirationDate.year} - ${filters['maxExpirationDate']?.year ?? maxBTPExpirationDate.year}',
-                                style: const TextStyle(
-                                    fontSize: 15, color: primaryColor)),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: isDarkMode
+                                        ? primaryColorLight
+                                        : primaryColor)),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -243,7 +277,8 @@ class _ExplorePageSearchAndFilterComponentState
                           onChangeEnd: (RangeValues values) {
                             widget.searchWithFilters(search, filters, ordering);
                           },
-                          activeColor: primaryColor,
+                          activeColor:
+                              isDarkMode ? primaryColorLight : primaryColor,
                         )),
                         const SizedBox(height: 25),
                         Center(
@@ -257,8 +292,13 @@ class _ExplorePageSearchAndFilterComponentState
                               style: ElevatedButton.styleFrom(
                                 elevation: 3,
                                 // set white background color
-                                surfaceTintColor: Colors.white,
-                                shadowColor: Colors.grey.withOpacity(0.3),
+                                surfaceTintColor:
+                                    isDarkMode ? darkModeColor : Colors.white,
+                                backgroundColor:
+                                    isDarkMode ? darkModeColor : Colors.white,
+                                shadowColor: isDarkMode
+                                    ? Colors.transparent
+                                    : Colors.grey.withOpacity(0.2),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
                                 padding: const EdgeInsets.symmetric(
@@ -267,10 +307,12 @@ class _ExplorePageSearchAndFilterComponentState
                               ),
                               child: Text(
                                   getString('explorePageApplyFiltersButton'),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
-                                      color: primaryColor)),
+                                      color: isDarkMode
+                                          ? primaryColorLight
+                                          : primaryColor)),
                             ),
                           ),
                         ),
@@ -291,11 +333,13 @@ class _ExplorePageSearchAndFilterComponentState
                 child: Container(
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDarkMode ? darkModeColor : Colors.white,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: isDarkMode
+                            ? Colors.transparent
+                            : Colors.grey.withOpacity(0.2),
                         spreadRadius: 1,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
@@ -307,21 +351,37 @@ class _ExplorePageSearchAndFilterComponentState
                       search = value;
                       widget.searchWithFilters(search, filters, ordering);
                     },
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: isDarkMode
+                            ? lightTextColor
+                            : isDarkMode
+                                ? lightTextColor
+                                : textColor),
                     textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      fillColor: isDarkMode ? darkModeColor : Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: isDarkMode ? darkModeColor : Colors.white),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: isDarkMode ? darkModeColor : Colors.white),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       hintText: getString('exploreSearchPlaceholder'),
-                      hintStyle: const TextStyle(fontSize: 18),
+                      hintStyle: TextStyle(
+                          fontSize: 18,
+                          color: isDarkMode
+                              ? lightTextColor
+                              : isDarkMode
+                                  ? lightTextColor
+                                  : textColor),
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 15),
                       border: const OutlineInputBorder(
@@ -337,8 +397,10 @@ class _ExplorePageSearchAndFilterComponentState
                 onPressed: () => openFilterModal(),
                 icon: SvgPicture.asset(
                   'lib/assets/icons/filter.svg', // Path to the SVG asset
-                  colorFilter: const ColorFilter.mode(
-                      primaryColor,
+                  colorFilter: ColorFilter.mode(
+                      isDarkMode
+                          ? primaryColorLight
+                          : primaryColor, // This is the color filter
                       BlendMode
                           .srcIn // This blend mode is typically used for tinting icons
                       ),
@@ -357,7 +419,13 @@ class _ExplorePageSearchAndFilterComponentState
               children: [
                 Text(
                   getString('explorePageResults'),
-                  style: const TextStyle(fontSize: 20),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: isDarkMode
+                          ? lightTextColor
+                          : isDarkMode
+                              ? lightTextColor
+                              : textColor),
                 ),
                 // show a cupertino picker
                 GestureDetector(
@@ -365,14 +433,19 @@ class _ExplorePageSearchAndFilterComponentState
                     showCupertinoModalPopup(
                       context: context,
                       builder: (BuildContext context) {
-                        return CupertinoActionSheet(
+                        return CupertinoTheme(
+                          data: CupertinoThemeData(
+                            brightness:
+                                isDarkMode ? Brightness.dark : Brightness.light,
+                          ),
+                          child: CupertinoActionSheet(
                           actions: <Widget>[
                             CupertinoActionSheetAction(
                               child: Text(
                                 '${getString('explorePageOrderByValueButton')} ↑',
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: primaryColor,
+                                      color: getColorForItem('value', 'asc'),
                                     fontWeight:
                                         getFontWeightForItem('value', 'asc')),
                               ),
@@ -385,7 +458,7 @@ class _ExplorePageSearchAndFilterComponentState
                                   '${getString('explorePageOrderByValueButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: primaryColor,
+                                        color: getColorForItem('value', 'desc'),
                                       fontWeight: getFontWeightForItem(
                                           'value', 'desc'))),
                               onPressed: () {
@@ -397,7 +470,7 @@ class _ExplorePageSearchAndFilterComponentState
                                   '${getString('explorePageOrderByCedolaButton')} ↑',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: primaryColor,
+                                        color: getColorForItem('cedola', 'asc'),
                                       fontWeight: getFontWeightForItem(
                                           'cedola', 'asc'))),
                               onPressed: () {
@@ -409,7 +482,8 @@ class _ExplorePageSearchAndFilterComponentState
                                   '${getString('explorePageOrderByCedolaButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: primaryColor,
+                                        color:
+                                            getColorForItem('cedola', 'desc'),
                                       fontWeight: getFontWeightForItem(
                                           'cedola', 'desc'))),
                               onPressed: () {
@@ -421,7 +495,8 @@ class _ExplorePageSearchAndFilterComponentState
                                   '${getString('explorePageOrderByExpirationDateButton')} ↑',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: primaryColor,
+                                        color: getColorForItem(
+                                            'expirationDate', 'asc'),
                                       fontWeight: getFontWeightForItem(
                                           'expirationDate', 'asc'))),
                               onPressed: () {
@@ -434,7 +509,8 @@ class _ExplorePageSearchAndFilterComponentState
                                   '${getString('explorePageOrderByExpirationDateButton')} ↓',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: primaryColor,
+                                        color: getColorForItem(
+                                            'expirationDate', 'desc'),
                                       fontWeight: getFontWeightForItem(
                                           'expirationDate', 'desc'))),
                               onPressed: () {
@@ -452,6 +528,7 @@ class _ExplorePageSearchAndFilterComponentState
                                 style:
                                     const TextStyle(
                                     fontSize: 18, color: Colors.red)),
+                            ),
                           ),
                         );
                       },
@@ -459,10 +536,10 @@ class _ExplorePageSearchAndFilterComponentState
                   },
                   child: Text(
                     "${getString('explorePageOrder')}: ${getOrderByButtonText()}",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: primaryColor),
+                        color: isDarkMode ? primaryColorLight : primaryColor),
                   ),
                 ),
               ],

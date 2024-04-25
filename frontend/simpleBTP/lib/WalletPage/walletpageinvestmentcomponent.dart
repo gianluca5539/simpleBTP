@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -64,6 +65,8 @@ class WalletPageInvestmentComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Skeletonizer(
@@ -71,10 +74,12 @@ class WalletPageInvestmentComponent extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.white,
+            color: isDarkMode ? darkModeColor : Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: isDarkMode
+                    ? Colors.transparent
+                    : Colors.grey.withOpacity(0.2),
                 spreadRadius: 2,
                 blurRadius: 3,
                 offset: const Offset(0, 3),
@@ -113,11 +118,15 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                       cedola != null
                           ? '${getString('walletPaysWhat')} $cedola ${getString('walletPaysIn')}:'
                           : '----',
-                      style: const TextStyle(color: textColor, fontSize: 16),
+                      style: TextStyle(
+                          color: isDarkMode ? lightTextColor : textColor,
+                          fontSize: 16),
                     ),
                     Text(
                       cedolaRemainingDays,
-                      style: const TextStyle(color: textColor, fontSize: 16),
+                      style: TextStyle(
+                          color: isDarkMode ? lightTextColor : textColor,
+                          fontSize: 16),
                     ),
                   ],
                 ),
@@ -127,7 +136,9 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                 children: [
                   Text(
                     "€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",")}",
-                    style: const TextStyle(color: textColor, fontSize: 22),
+                    style: TextStyle(
+                        color: isDarkMode ? lightTextColor : textColor,
+                        fontSize: 22),
                   ),
                   Text(
                     "${(variation ?? 0) > 0 ? "▲" : "▼"} $variation%",

@@ -1,6 +1,7 @@
 // create a bottom navigation bar component
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:simpleBTP/ExplorePage/explorepage.dart';
 import 'package:simpleBTP/HomePage/homepage.dart';
 import 'package:simpleBTP/SettingsPage/settingspage.dart';
@@ -32,7 +33,10 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
     return BottomAppBar(
+      color: isDarkMode ? offBlackColor : offWhiteColor,
       padding: const EdgeInsets.only(top: 17),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -49,8 +53,10 @@ class Footer extends StatelessWidget {
                   'lib/assets/icons/home.svg', // Path to the SVG asset
                   colorFilter: ColorFilter.mode(
                       currentPage == 'home'
-                          ? primaryColor
-                          : textColor, // Apply dynamic coloring
+                          ? primaryColorLight
+                          : isDarkMode
+                              ? footerLightTextColor
+                              : textColor, // Apply dynamic coloring
                       BlendMode
                           .srcIn // This blend mode is typically used for tinting icons
                       ),
@@ -60,7 +66,11 @@ class Footer extends StatelessWidget {
                 Text(getString('appBottomBarHome'),
                     style: TextStyle(
                         color:
-                            currentPage == 'home' ? primaryColor : textColor)),
+                            currentPage == 'home'
+                            ? primaryColorLight
+                            : isDarkMode
+                                ? footerLightTextColor
+                                : textColor)),
               ],
             ),
           ),
@@ -76,8 +86,10 @@ class Footer extends StatelessWidget {
                   'lib/assets/icons/wallet.svg', // Path to the SVG asset
                   colorFilter: ColorFilter.mode(
                       currentPage == 'wallet'
-                          ? primaryColor
-                          : textColor, // Apply dynamic coloring
+                          ? primaryColorLight
+                          : isDarkMode
+                              ? footerLightTextColor
+                              : textColor, // Apply dynamic coloring
                       BlendMode
                           .srcIn // This blend mode is typically used for tinting icons
                       ),
@@ -87,8 +99,10 @@ class Footer extends StatelessWidget {
                 Text(getString('appBottomBarWallet'),
                     style: TextStyle(
                         color: currentPage == 'wallet'
-                            ? primaryColor
-                            : textColor)),
+                            ? primaryColorLight
+                            : isDarkMode
+                                ? footerLightTextColor
+                                : textColor)),
               ],
             ),
           ),
@@ -103,8 +117,10 @@ class Footer extends StatelessWidget {
                   'lib/assets/icons/explore.svg', // Path to the SVG asset
                   colorFilter: ColorFilter.mode(
                       currentPage == 'explore'
-                          ? primaryColor
-                          : textColor, // Apply dynamic coloring
+                          ? primaryColorLight
+                          : isDarkMode
+                              ? footerLightTextColor
+                              : textColor, // Apply dynamic coloring
                       BlendMode
                           .srcIn // This blend mode is typically used for tinting icons
                       ),
@@ -114,8 +130,10 @@ class Footer extends StatelessWidget {
                 Text(getString('appBottomBarExplore'),
                     style: TextStyle(
                         color: currentPage == 'explore'
-                            ? primaryColor
-                            : textColor)),
+                            ? primaryColorLight
+                            : isDarkMode
+                                ? footerLightTextColor
+                                : textColor)),
               ],
             ),
           ),
@@ -130,8 +148,10 @@ class Footer extends StatelessWidget {
                   'lib/assets/icons/settings.svg', // Path to the SVG asset
                   colorFilter: ColorFilter.mode(
                       currentPage == 'settings'
-                          ? primaryColor
-                          : textColor, // Apply dynamic coloring
+                          ? primaryColorLight
+                          : isDarkMode
+                              ? footerLightTextColor
+                              : textColor, // Apply dynamic coloring
                       BlendMode
                           .srcIn // This blend mode is typically used for tinting icons
                       ),
@@ -141,8 +161,10 @@ class Footer extends StatelessWidget {
                 Text(getString('appBottomBarSettings'),
                     style: TextStyle(
                         color: currentPage == 'settings'
-                            ? primaryColor
-                            : textColor)),
+                            ? primaryColorLight
+                            : isDarkMode
+                                ? footerLightTextColor
+                                : textColor)),
               ],
             ),
           ),
