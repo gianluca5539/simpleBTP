@@ -76,6 +76,8 @@ Map<String, String> italianLang = {
   'settingsPagePersonalizationTitle': 'Personalizzazione',
   'settingsPageDarkModeButton': 'Modalità scura',
   'settingsPageLanguageButton': 'Seleziona lingua',
+  // addBTP
+  'appTopBarAddBTP': 'Aggiungi BTP',
 };
 
 Map<String, String> englishLang = {
@@ -128,6 +130,8 @@ Map<String, String> englishLang = {
   'settingsPagePersonalizationTitle': 'Personalization',
   'settingsPageDarkModeButton': 'Dark mode',
   'settingsPageLanguageButton': 'Select language',
+  // addBTP
+  'appTopBarAddBTP': 'Add BTP',
 };
 
 Map<String, String> hindiLang = {
