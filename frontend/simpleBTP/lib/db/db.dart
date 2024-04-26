@@ -54,17 +54,15 @@ Future<void> addBTPToWallet(
     String isin, DateTime purchaseDate, double price, double investment) async {
   var mybtpsBox = Hive.box('mybtps');
 
-  var btp = mybtpsBox.get(isin);
   String key = isin;
-  if (btp != null) {
-    key = '$isin-${Random().nextInt(10000)}';
-  }
+  key = '$isin-${Random().nextInt(100000)}';
 
   MyBTP mybtp = MyBTP(
       investment: investment,
       buyDate: purchaseDate,
       buyPrice: price,
       isin: isin);
+
   mybtpsBox.put(key, mybtp);
   return;
 }
