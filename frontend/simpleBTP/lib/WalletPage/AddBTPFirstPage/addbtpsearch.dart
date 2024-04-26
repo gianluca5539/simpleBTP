@@ -23,9 +23,9 @@ class AddBTPSearch extends StatefulWidget {
 class _AddBTPSearchState extends State<AddBTPSearch> {
   String search = '';
 
-  Map<String, dynamic> filters = defaultExploreFilters;
+  Map<String, dynamic> filters = defaultAddBTPFilters;
 
-  Map<String, dynamic> ordering = defaultExploreOrdering;
+  Map<String, dynamic> ordering = defaultAddBTPOrdering;
 
   double maxYear = maxBTPExpirationDate.year.toDouble(); // need these to work
 
@@ -58,11 +58,11 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
     String order = ordering['order'];
     String orderText = '';
     if (orderBy == 'value') {
-      orderText = '${getString('explorePageOrderByValue')} ';
+      orderText = '${getString('addBTPPageOrderByValue')} ';
     } else if (orderBy == 'cedola') {
-      orderText = '${getString('explorePageOrderByCedola')} ';
+      orderText = '${getString('addBTPPageOrderByCedola')} ';
     } else if (orderBy == 'expirationDate') {
-      orderText = '${getString('explorePageOrderByExpirationDate')} ';
+      orderText = '${getString('addBTPPageOrderByExpirationDate')} ';
     }
     if (order == 'asc') {
       orderText += '↑';
@@ -117,7 +117,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                         ),
                         const SizedBox(height: 15),
                         Center(
-                          child: Text(getString('explorePageFilterTitle'),
+                          child: Text(getString('addBTPPageFilterTitle'),
                               style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            Text(getString('explorePageValueFilterTitle'),
+                            Text(getString('addBTPPageValueFilterTitle'),
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
@@ -174,7 +174,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            Text(getString('explorePageCedolaFilterTitle'),
+                            Text(getString('addBTPPageCedolaFilterTitle'),
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
@@ -223,7 +223,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                           children: [
                             Text(
                                 getString(
-                                    'explorePageExpirationDateFilterTitle'),
+                                    'addBTPPageExpirationDateFilterTitle'),
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
@@ -300,7 +300,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                                 textStyle: const TextStyle(fontSize: 18),
                               ),
                               child: Text(
-                                  getString('explorePageApplyFiltersButton'),
+                                  getString('addBTPPageApplyFiltersButton'),
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -368,7 +368,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(15)),
                       ),
-                      hintText: getString('exploreSearchPlaceholder'),
+                      hintText: getString('addBTPSearchPlaceholder'),
                       hintStyle: TextStyle(
                           fontSize: 18,
                           color: isDarkMode
@@ -412,7 +412,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  getString('explorePageResults'),
+                  getString('addBTPPageResults'),
                   style: TextStyle(
                       fontSize: 20,
                       color: isDarkMode
@@ -436,7 +436,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                             actions: <Widget>[
                               CupertinoActionSheetAction(
                                 child: Text(
-                                  '${getString('explorePageOrderByValueButton')} ↑',
+                                  '${getString('addBTPPageOrderByValueButton')} ↑',
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: getColorForItem('value', 'asc'),
@@ -449,7 +449,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                    '${getString('explorePageOrderByValueButton')} ↓',
+                                    '${getString('addBTPPageOrderByValueButton')} ↓',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: getColorForItem('value', 'desc'),
@@ -461,7 +461,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                    '${getString('explorePageOrderByCedolaButton')} ↑',
+                                    '${getString('addBTPPageOrderByCedolaButton')} ↑',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: getColorForItem('cedola', 'asc'),
@@ -473,7 +473,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                    '${getString('explorePageOrderByCedolaButton')} ↓',
+                                    '${getString('addBTPPageOrderByCedolaButton')} ↓',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color:
@@ -486,7 +486,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                    '${getString('explorePageOrderByExpirationDateButton')} ↑',
+                                    '${getString('addBTPPageOrderByExpirationDateButton')} ↑',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: getColorForItem(
@@ -500,7 +500,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                    '${getString('explorePageOrderByExpirationDateButton')} ↓',
+                                    '${getString('addBTPPageOrderByExpirationDateButton')} ↓',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: getColorForItem(
@@ -528,7 +528,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                     );
                   },
                   child: Text(
-                    "${getString('explorePageOrder')}: ${getOrderByButtonText()}",
+                    "${getString('addBTPPageOrder')}: ${getOrderByButtonText()}",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

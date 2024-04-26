@@ -123,6 +123,7 @@ Map<String, String> englishLang = {
   'explorePageCedolaFilterTitle': 'Yearly coupon',
   'explorePageExpirationDateFilterTitle': 'Expiration date',
   'explorePageApplyFiltersButton': 'Apply',
+  // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup wallet',
   'settingsPageWalletBackupRestoreButton': 'Restore wallet backup',
@@ -132,6 +133,20 @@ Map<String, String> englishLang = {
   'settingsPageLanguageButton': 'Select language',
   // addBTP
   'appTopBarAddBTP': 'Add BTP',
+  'addBTPSearchPlaceholder': 'Search for a BTP...',
+  'addBTPPageResults': 'Results',
+  'addBTPPageOrder': 'Order',
+  'addBTPPageOrderByValue': 'Price',
+  'addBTPPageOrderByCedola': 'Coupon',
+  'addBTPPageOrderByExpirationDate': 'Expiration',
+  'addBTPPageOrderByValueButton': 'Market price',
+  'addBTPPageOrderByCedolaButton': 'Yearly coupon',
+  'addBTPPageOrderByExpirationDateButton': 'Expiration date',
+  'addBTPPageFilterTitle': 'Customize your search',
+  'addBTPPageValueFilterTitle': 'Market price',
+  'addBTPPageCedolaFilterTitle': 'Yearly coupon',
+  'addBTPPageExpirationDateFilterTitle': 'Expiration date',
+  'addBTPPageApplyFiltersButton': 'Apply',
 };
 
 Map<String, String> hindiLang = {

@@ -283,8 +283,7 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(
   }).toList();
 }
 
-
-Future<List<Map<String, dynamic>>> getAddBTPPageBTPs(
+Future<List<BTP>> getAddBTPPageBTPs(
     search, filters, ordering) async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -349,12 +348,5 @@ Future<List<Map<String, dynamic>>> getAddBTPPageBTPs(
     }
   }
 
-  return btpsFiltered.map((btp) {
-    return {
-      'name': btp.name,
-      'value': btp.value,
-      'isin': btp.isin,
-      'cedola': btp.cedola,
-    };
-  }).toList();
+  return btpsFiltered;
 }

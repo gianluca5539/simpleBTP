@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
+import 'package:simpleBTP/WalletPage/AddBTPSecondPage/addbtpsecondpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/db/db.dart';
+import 'package:simpleBTP/db/hivemodels.dart';
 
 class AddBTPFirstPage extends StatefulWidget {
   AddBTPFirstPage({Key? key}) : super(key: key);
@@ -33,6 +35,12 @@ class _AddBTPFirstPageState extends State<AddBTPFirstPage> {
     });
   }
 
+  void openSecondPage(BuildContext context, BTP asset) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddBTPSecondPage(asset);
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
@@ -44,7 +52,7 @@ class _AddBTPFirstPageState extends State<AddBTPFirstPage> {
         child: Column(
           children: [
             AddBTPSearch(searchWithFilters),
-            FutureBuilder<List<Map<String, dynamic>>>(
+            FutureBuilder<List<BTP>>(
               future: getAddBTPPageBTPs(search, filters, ordering),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -62,18 +70,20 @@ class _AddBTPFirstPageState extends State<AddBTPFirstPage> {
                 } else if (snapshot.hasData) {
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
-                    final name = processString(asset['name'] ?? 'N/A');
+                    final name = processString(asset.name);
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value = asset['value'];
-                    final double cedola = asset['cedola'];
+                    final double value = asset.value;
+                    final double cedola = asset.cedola;
                     var variation = (value - 100);
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          openSecondPage(context, asset);
+                        },
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.transparent),
