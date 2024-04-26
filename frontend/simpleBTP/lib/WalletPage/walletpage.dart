@@ -10,9 +10,14 @@ import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 
-class WalletPage extends StatelessWidget {
+class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
 
+  @override
+  State<WalletPage> createState() => _WalletPageState();
+}
+
+class _WalletPageState extends State<WalletPage> {
   @override
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
@@ -23,8 +28,9 @@ class WalletPage extends StatelessWidget {
         'icon': Icons.add,
         'onPressed': () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddBTPFirstPage()));
-        },
+                  MaterialPageRoute(builder: (context) => AddBTPFirstPage()))
+              .then((value) => setState(() {}));
+        }
       }),
       body: SingleChildScrollView(
         child: Column(
@@ -66,12 +72,12 @@ class WalletPage extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
                     children: List.generate(
-                        2,
-                        (index) => const WalletPageInvestmentComponent(
-                            investmentName: null,
-                            investmentDetail: null,
-                            cedola: null,
-                            investmentValue: null,
+                      2,
+                      (index) => const WalletPageInvestmentComponent(
+                        investmentName: null,
+                        investmentDetail: null,
+                        cedola: null,
+                        investmentValue: null,
                         variation: null,
                         buyDate: null,
                       ),

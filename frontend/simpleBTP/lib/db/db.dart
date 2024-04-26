@@ -18,7 +18,7 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
 
   btps.forEach((key, value) {
-
+    
     BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0",
         value['cedola'] ?? "0", value['scadenza']!);
 
@@ -108,7 +108,7 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
       'value': mybtp.investment * btp.value / 100,
       'cedola': btp.cedola,
       'isin': btp.isin,
-      'variation': btp.value - 100,
+      'variation': (btp.value - mybtp.buyPrice),
     };
   }).toList();
 
@@ -136,12 +136,13 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   // merge the two lists by isin and retrieve only the attributes we need
   List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
     var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    double quantity = mybtp.investment / mybtp.buyPrice;
     return {
       'name': btp.name,
-      'value': mybtp.investment * btp.value / 100,
+      'value': quantity * btp.value,
       'cedola': btp.cedola,
       'isin': btp.isin,
-      'variation': btp.value - 100,
+      'variation': (btp.value - mybtp.buyPrice),
       'buyDate': mybtp.buyDate,
     };
   }).toList();
@@ -278,8 +279,7 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(
   }).toList();
 }
 
-Future<List<BTP>> getAddBTPPageBTPs(
-    search, filters, ordering) async {
+Future<List<BTP>> getAddBTPPageBTPs(search, filters, ordering) async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
   }
