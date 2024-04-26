@@ -53,12 +53,19 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
 Future<void> addBTPToWallet(
     String isin, DateTime purchaseDate, double price, double investment) async {
   var mybtpsBox = Hive.box('mybtps');
+
+  var btp = mybtpsBox.get(isin);
+  String key = isin;
+  if (btp != null) {
+    key = '$isin-${Random().nextInt(10000)}';
+  }
+
   MyBTP mybtp = MyBTP(
       investment: investment,
       buyDate: purchaseDate,
       buyPrice: price,
       isin: isin);
-  mybtpsBox.put(isin, mybtp);
+  mybtpsBox.put(key, mybtp);
   return;
 }
 
@@ -77,7 +84,8 @@ Future<Map<String, double>> getWalletStats() async {
   double initialBalance = 0.0;
 
   for (var mybtp in mybtps) {
-    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    var btp =
+        btps.firstWhere((btp) => btp.isin == mybtp.isin, orElse: () => null);
     balance += mybtp.investment * btp.value / 100;
     initialBalance += mybtp.investment;
   }
