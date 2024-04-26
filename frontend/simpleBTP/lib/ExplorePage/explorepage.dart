@@ -41,7 +41,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
       appBar: AppTopBar(
-        getString('appTopBarExplore'),
+        getString('appTopBarExplore'), null
       ),
       // add a body and a footer
       body: SingleChildScrollView(

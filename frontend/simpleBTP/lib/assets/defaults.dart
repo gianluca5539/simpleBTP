@@ -13,3 +13,17 @@ final Map<String, dynamic> defaultExploreOrdering = {
   'orderBy': 'value', // value, cedola, expirationDate
   'order': 'desc', // asc, desc
 };
+
+final Map<String, dynamic> defaultAddBTPFilters = {
+  'minValue': null, // double
+  'maxValue': null, // double
+  'minCedola': null, // double
+  'maxCedola': null, // double
+  'minExpirationDate': null, // DateTime
+  'maxExpirationDate': null, // DateTime
+};
+
+final Map<String, dynamic> defaultAddBTPOrdering = {
+  'orderBy': 'value', // value, cedola, expirationDate
+  'order': 'desc', // asc, desc
+};

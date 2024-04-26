@@ -282,3 +282,79 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(
     };
   }).toList();
 }
+
+
+Future<List<Map<String, dynamic>>> getAddBTPPageBTPs(
+    search, filters, ordering) async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var box = Hive.box('btps');
+
+  var btps = box.values.toList();
+
+  // apply search
+  if (search != null && search != "") {
+    btps = btps
+        .where((btp) => btp.name.toLowerCase().contains(search.toLowerCase()))
+        .toList();
+  }
+
+  // apply filters
+  List<BTP> btpsFiltered = [];
+  for (var btp in btps) {
+    if (filters['minValue'] != null && btp.value < filters['minValue']) {
+      continue;
+    }
+    if (filters['maxValue'] != null && btp.value > filters['maxValue']) {
+      continue;
+    }
+    if (filters['minCedola'] != null && btp.cedola * 2 < filters['minCedola']) {
+      continue;
+    }
+    if (filters['maxCedola'] != null && btp.cedola * 2 > filters['maxCedola']) {
+      continue;
+    }
+    if (filters['minExpirationDate'] != null &&
+        btp.expirationDate.isBefore(filters['minExpirationDate'])) {
+      continue;
+    }
+    if (filters['maxExpirationDate'] != null &&
+        btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
+      continue;
+    }
+    btpsFiltered.add(btp);
+  }
+
+  // sort
+  if (ordering['orderBy'] == 'value') {
+    if (ordering['order'] == 'desc') {
+      btpsFiltered.sort((a, b) => b.value.compareTo(a.value));
+    } else {
+      btpsFiltered.sort((a, b) => a.value.compareTo(b.value));
+    }
+  } else if (ordering['orderBy'] == 'cedola') {
+    if (ordering['order'] == 'desc') {
+      btpsFiltered.sort((a, b) => b.cedola.compareTo(a.cedola));
+    } else {
+      btpsFiltered.sort((a, b) => a.cedola.compareTo(b.cedola));
+    }
+  } else if (ordering['orderBy'] == 'expirationDate') {
+    if (ordering['order'] == 'asc') {
+      // works the other way around
+      btpsFiltered.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+    } else {
+      btpsFiltered.sort((a, b) => b.expirationDate.compareTo(a.expirationDate));
+    }
+  }
+
+  return btpsFiltered.map((btp) {
+    return {
+      'name': btp.name,
+      'value': btp.value,
+      'isin': btp.isin,
+      'cedola': btp.cedola,
+    };
+  }).toList();
+}

@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarSettings')),
+      appBar: AppTopBar(getString('appTopBarSettings'), null),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 25),
         child: Column(

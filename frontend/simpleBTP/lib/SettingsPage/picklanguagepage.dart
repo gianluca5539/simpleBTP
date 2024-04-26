@@ -18,7 +18,7 @@ class _PickLanguagePageState extends State<PickLanguagePage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : Colors.white,
-      appBar: AppTopBar(getString('appTopBarPickLanguage')),
+      appBar: AppTopBar(getString('appTopBarPickLanguage'), null),
       body: Column(
         children: [
           const SizedBox(height: 20),

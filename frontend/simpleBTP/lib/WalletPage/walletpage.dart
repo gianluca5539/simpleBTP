@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:simpleBTP/WalletPage/addbtpfirstpage.dart';
+import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpfirstpage.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
@@ -19,7 +19,13 @@ class WalletPage extends StatelessWidget {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarWallet')),
+      appBar: AppTopBar(getString('appTopBarWallet'), {
+        'icon': Icons.add,
+        'onPressed': () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddBTPFirstPage()));
+        },
+      }),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,20 +110,6 @@ class WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 80),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddBTPFirstPage()));
-        },
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50.0))),
-        backgroundColor: primaryColor,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 30,
         ),
       ),
       bottomNavigationBar: Footer('wallet'),

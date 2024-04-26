@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarHome')),
+      appBar: AppTopBar(getString('appTopBarHome'), null),
       body: SingleChildScrollView(
         // To ensure the list is scrollable
         child: Column(

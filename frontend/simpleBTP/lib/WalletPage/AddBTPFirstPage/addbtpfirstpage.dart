@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:simpleBTP/WalletPage/addbtpinvestmentcomponent.dart';
-import 'package:simpleBTP/WalletPage/addbtpsearch.dart';
+import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.dart';
+import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -19,9 +19,9 @@ class AddBTPFirstPage extends StatefulWidget {
 class _AddBTPFirstPageState extends State<AddBTPFirstPage> {
   String search = '';
 
-  Map<String, dynamic> filters = defaultExploreFilters;
+  Map<String, dynamic> filters = defaultAddBTPFilters;
 
-  Map<String, dynamic> ordering = defaultExploreOrdering;
+  Map<String, dynamic> ordering = defaultAddBTPOrdering;
 
   void searchWithFilters(String search, Map<String, dynamic> filters,
       Map<String, dynamic> ordering) {
@@ -39,13 +39,13 @@ class _AddBTPFirstPageState extends State<AddBTPFirstPage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : Colors.white,
-      appBar: AppTopBar(getString('appTopBarAddBTP')),
+      appBar: AppTopBar(getString('appTopBarAddBTP'), null),
       body: SingleChildScrollView(
         child: Column(
           children: [
             AddBTPSearch(searchWithFilters),
             FutureBuilder<List<Map<String, dynamic>>>(
-              future: getExplorePageBTPs(search, filters, ordering),
+              future: getAddBTPPageBTPs(search, filters, ordering),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
