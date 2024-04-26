@@ -147,6 +147,13 @@ Map<String, String> englishLang = {
   'addBTPPageCedolaFilterTitle': 'Yearly coupon',
   'addBTPPageExpirationDateFilterTitle': 'Expiration date',
   'addBTPPageApplyFiltersButton': 'Apply',
+  'addBTPPageDateSectionTitle': 'Purchase date',
+  'addBTPPageSelectDateButton': 'Select',
+  'addBTPPagePriceSectionTitle': 'Purchase price (single)',
+  'addBTPPagePriceSectionPlaceholder': 'Purchase price...',
+  'addBTPPageInvestmentSectionTitle': 'Investment amount',
+  'addBTPPageInvestmentSectionPlaceholder': 'Investment amount...',
+  'addBTPPageAddButton': 'Add to wallet',
 };
 
 Map<String, String> hindiLang = {

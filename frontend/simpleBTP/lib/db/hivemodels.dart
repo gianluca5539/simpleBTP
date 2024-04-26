@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
 part 'hivemodels.g.dart';
@@ -36,16 +37,23 @@ class BTP extends HiveObject {
 @HiveType(typeId: 1)
 class MyBTP extends HiveObject {
   @HiveField(0)
-  final String isin;
-  @HiveField(1)
   late double investment;
-  @HiveField(2)
+  @HiveField(1)
   late DateTime buyDate;
+  @HiveField(2)
+  late double buyPrice;
+  @HiveField(3)
+  late String isin;
 
-  MyBTP.fromData(this.isin, this.investment, String buyDate) {
+  MyBTP.fromData(this.investment, String buyDate, String buyPrice, this.isin) {
     var date = buyDate.split('/');
     this.buyDate = DateTime(int.parse(date[2]), int.parse(date[1]),
         int.parse(date[0]), 0, 0, 0, 0, 0);
+    this.buyPrice = double.tryParse(buyPrice) ?? 0.0;
   }
-  MyBTP({required this.isin, required this.investment, required this.buyDate});
+  MyBTP(
+      {required this.investment,
+      required this.buyDate,
+      required this.buyPrice,
+      required this.isin});
 }

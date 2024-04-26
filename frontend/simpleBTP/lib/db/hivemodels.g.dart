@@ -63,22 +63,25 @@ class MyBTPAdapter extends TypeAdapter<MyBTP> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MyBTP(
-      isin: fields[0] as String,
-      investment: fields[1] as double,
-      buyDate: fields[2] as DateTime,
+      investment: fields[0] as double,
+      buyDate: fields[1] as DateTime,
+      buyPrice: fields[2] as double,
+      isin: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, MyBTP obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.isin)
-      ..writeByte(1)
       ..write(obj.investment)
+      ..writeByte(1)
+      ..write(obj.buyDate)
       ..writeByte(2)
-      ..write(obj.buyDate);
+      ..write(obj.buyPrice)
+      ..writeByte(3)
+      ..write(obj.isin);
   }
 
   @override

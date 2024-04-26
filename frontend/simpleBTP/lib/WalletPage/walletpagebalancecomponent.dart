@@ -172,6 +172,9 @@ class WalletPageBalanceComponent extends StatelessWidget {
   }
 
   List<FlSpot> _getSpots(List<Map<String, dynamic>> data) {
+    if (data.isEmpty) {
+      return [];
+    }
     var first = data.first;
     var history = first["priceHistory"];
     var series = history["series"];

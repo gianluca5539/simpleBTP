@@ -17,24 +17,7 @@ DateTime maxBTPExpirationDate = DateTime.now();
 void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
 
-  // ================== MyBTPs ==================
-  await Hive.deleteBoxFromDisk('mybtps');
-  await Hive.openBox('mybtps');
-  var mybtpsBox = Hive.box('mybtps');
-  // ================== MyBTPs ==================
-
   btps.forEach((key, value) {
-    // ================== MyBTPs ==================
-    // delete all this
-    if (value['btp'] != null && value['ultimo'] != null) {
-      if (Random().nextInt(10) == 0) {
-        MyBTP mybtp =
-            MyBTP.fromData(key, Random().nextDouble() * 100000, "01/01/2024");
-        mybtpsBox.put(key, mybtp);
-      }
-    }
-    // delete all this
-    // ================== MyBTPs ==================
 
     BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0",
         value['cedola'] ?? "0", value['scadenza']!);
@@ -65,6 +48,18 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   });
 
   databaseInitialized = true;
+}
+
+Future<void> addBTPToWallet(
+    String isin, DateTime purchaseDate, double price, double investment) async {
+  var mybtpsBox = Hive.box('mybtps');
+  MyBTP mybtp = MyBTP(
+      investment: investment,
+      buyDate: purchaseDate,
+      buyPrice: price,
+      isin: isin);
+  mybtpsBox.put(isin, mybtp);
+  return;
 }
 
 Future<Map<String, double>> getWalletStats() async {
