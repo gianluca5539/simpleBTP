@@ -235,7 +235,7 @@ Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindo
 Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeWindow.oneMonth]) async {
   List<Map<String, dynamic>> myBTPs;
   try {
-    myBTPs = await fetchMyBTPHistories();
+    myBTPs = await fetchMyBTPHistories(span);
   } catch (e) {
     print("Error fetching BTP histories: $e");
     return {};
