@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:fl_chart/fl_chart.dart';
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
@@ -79,8 +78,8 @@ class WalletPageBalanceComponent extends StatelessWidget {
                             fontSize: 34),
                       )),
                 ),
-                FutureBuilder<List<Map<String, dynamic>>>(
-                  future: fetchMyBTPHistories(),
+                FutureBuilder<Map<DateTime, double>>(
+                  future: createPortfolioValueGraph(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -171,16 +170,9 @@ class WalletPageBalanceComponent extends StatelessWidget {
     );
   }
 
-  List<FlSpot> _getSpots(List<Map<String, dynamic>> data) {
-    if (data.isEmpty) {
-      return [];
-    }
-    var first = data.first;
-    var history = first["priceHistory"];
-    var series = history["series"];
-    List<dynamic> firstSeries = series;
-    return List.generate(firstSeries.length, (index) {
-      return FlSpot(index.toDouble(), firstSeries[index]["close"]);
-    });
+  List<FlSpot> _getSpots(Map<DateTime, double> data) {
+    return data.entries
+        .map((entry) => FlSpot(entry.key.day.toDouble(), entry.value))
+        .toList();
   }
 }
