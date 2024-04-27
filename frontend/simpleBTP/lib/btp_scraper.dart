@@ -265,7 +265,7 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
       if (btp['buyDate'] != null && btp['buyDate'].isBefore(date)) {
         var valueAtDate = _getBTPValueAtDate(btp, date);
         totalValue += valueAtDate;
-        print("BTP ${btp['isin']} value at $date: $valueAtDate");
+        // print("BTP ${btp['isin']} value at $date: $valueAtDate");
       } else {
         print("BTP ${btp['isin']} was bought after $date");
       }

@@ -11,10 +11,10 @@ import 'package:simpleBTP/btp_scraper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class WalletPageBalanceComponent extends StatelessWidget {
-  late double? balance;
-  late double? variation;
+  final double? balance;
+  final double? variation;
 
-  WalletPageBalanceComponent(
+  const WalletPageBalanceComponent(
       {super.key, required this.balance, required this.variation});
 
   @override
@@ -216,11 +216,6 @@ class WalletPageBalanceComponent extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  int _calculateStep(int length) {
-    const maxLabels = 5; // The maximum number of labels you want to show
-    return (length / maxLabels).ceil();
   }
 
   List<FlSpot> _getSpots(Map<DateTime, double> data) {
