@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:core';
@@ -189,7 +191,8 @@ Future<bool> processPageResponse(
   return true;
 }
 
-Future<List<Map<String, dynamic>>> fetchMyBTPHistories([TimeWindow span = TimeWindow.oneWeek]) async {
+Future<List<Map<String, dynamic>>> fetchMyBTPHistories(
+    [TimeWindow span = TimeWindow.oneWeek]) async {
   List<Map<String, dynamic>> myBTPs = await getMyBTPs();
   List<Future<Map<String, dynamic>>> priceHistories = [];
 
@@ -214,7 +217,8 @@ Future<List<Map<String, dynamic>>> fetchMyBTPHistories([TimeWindow span = TimeWi
   return res;
 }
 
-Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindow span = TimeWindow.oneWeek]) async {
+Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries,
+    [TimeWindow span = TimeWindow.oneWeek]) async {
   int attempts = 0;
   while (attempts < retries) {
     try {
@@ -232,7 +236,8 @@ Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindo
 }
 
 /// Fetches the BTPs with their price histories and creates a daily value map from the earliest BTP date to today.
-Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeWindow.oneMonth]) async {
+Future<Map<DateTime, double>> createPortfolioValueGraph(
+    [TimeWindow span = TimeWindow.oneMonth]) async {
   List<Map<String, dynamic>> myBTPs;
   try {
     myBTPs = await fetchMyBTPHistories(span);
@@ -253,9 +258,13 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
   }
   // print earliestDate
   print("Earliest date: $earliestDate");
+  double msInner = 0.0;
+  DateTime now = DateTime.now();
 
   // Calculate portfolio value for each day from earliest date to today
   Map<DateTime, double> valueByDate = {};
+  // map of isin to last index
+  Map<String, int> isinToIndex = {};
   DateTime currentDate = DateTime.now();
   for (DateTime date = earliestDate;
       date.isBefore(currentDate);
@@ -263,7 +272,14 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
     double totalValue = 0.0;
     for (var btp in myBTPs) {
       if (btp['buyDate'] != null && btp['buyDate'].isBefore(date)) {
-        var valueAtDate = _getBTPValueAtDate(btp, date);
+        DateTime now2 = DateTime.now();
+        var priceAndIndex = _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
+        var valueAtDate = priceAndIndex[0];
+        if (valueAtDate == null) {
+          continue;
+        }
+        isinToIndex[btp['isin']] = priceAndIndex[1];
+        msInner += DateTime.now().difference(now2).inMilliseconds;
         totalValue += valueAtDate;
         // print("BTP ${btp['isin']} value at $date: $valueAtDate");
       } else {
@@ -274,29 +290,40 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
     valueByDate[date] = totalValue;
   }
 
+  // print difference in time
+  print(
+      "Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
+  print("Inner loop time: ${msInner / 1000} seconds");
+
   return valueByDate;
 }
 
 /// Finds the closest historical price to the target date for a single BTP and calculates its value.
-double _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate) {
+List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
+    [int start = 0]) {
   double closestPrice = 0.0;
-  DateTime closestDate = DateTime.fromMillisecondsSinceEpoch(0);
+  int lastIndex = 0;
 
   if (btp['priceHistory'] == null) {
     print("No price history available for ISIN ${btp['isin']}");
-    return 0.0;
+    return [0.0, 0];
   }
 
-  for (var entry in btp['priceHistory']['series']) {
-    DateTime entryDate = DateTime.parse(entry['timestamp']);
-    if (entryDate.isBefore(targetDate.add(const Duration(days: 1))) &&
-        (entryDate.isAfter(closestDate) ||
-            entryDate.isAtSameMomentAs(closestDate))) {
-      closestDate = entryDate;
-      closestPrice = entry['close'];
+  var series = btp['priceHistory']['series'];
+
+  for (int i = start; i < btp['priceHistory']['series'].length; i++) {
+    DateTime entryDate = DateTime.parse(series[i]['timestamp']);
+    if (entryDate.isAfter(targetDate)) {
+      if (i == 0) {
+        print("No historical data available for ISIN ${btp['isin']} at $targetDate");
+        return [null, null];
+      }
+      closestPrice = series[i - 1]['close'];
+      lastIndex = i - 1;
+      break;
     }
   }
 
   // Assuming 'investment' stores the number of units held for the BTP
-  return closestPrice * (btp['investment'] ?? 0);
+  return [closestPrice * (btp['investment'] ?? 0), lastIndex];
 }
