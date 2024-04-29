@@ -84,7 +84,7 @@ Future<Map<String, double>> getWalletStats() async {
   for (var mybtp in mybtps) {
     var btp =
         btps.firstWhere((btp) => btp.isin == mybtp.isin, orElse: () => null);
-    balance += mybtp.investment * btp.value / 100;
+    balance += mybtp.investment * btp.value / mybtp.buyPrice;
     initialBalance += mybtp.investment;
   }
 
@@ -204,6 +204,7 @@ Future<List<Map<String, dynamic>>> getMyBTPs() async {
       'isin': mybtp.isin,
       'investment': mybtp.investment,
       'buyDate': mybtp.buyDate,
+      'buyPrice': mybtp.buyPrice,
     };
   }).toList();
 

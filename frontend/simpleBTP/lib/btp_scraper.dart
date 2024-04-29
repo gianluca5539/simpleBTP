@@ -273,14 +273,15 @@ Future<Map<DateTime, double>> createPortfolioValueGraph(
     for (var btp in myBTPs) {
       if (btp['buyDate'] != null && btp['buyDate'].isBefore(date)) {
         DateTime now2 = DateTime.now();
-        var priceAndIndex = _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
+        var priceAndIndex =
+            _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
         var valueAtDate = priceAndIndex[0];
         if (valueAtDate == null) {
           continue;
         }
         isinToIndex[btp['isin']] = priceAndIndex[1];
         msInner += DateTime.now().difference(now2).inMilliseconds;
-        totalValue += valueAtDate;
+        totalValue += (valueAtDate * btp['investment'] ?? 0) / btp['buyPrice'];
         // print("BTP ${btp['isin']} value at $date: $valueAtDate");
       } else {
         print("BTP ${btp['isin']} was bought after $date");
@@ -315,7 +316,8 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
     DateTime entryDate = DateTime.parse(series[i]['timestamp']);
     if (entryDate.isAfter(targetDate)) {
       if (i == 0) {
-        print("No historical data available for ISIN ${btp['isin']} at $targetDate");
+        print(
+            "No historical data available for ISIN ${btp['isin']} at $targetDate");
         return [null, null];
       }
       closestPrice = series[i - 1]['close'];
@@ -325,5 +327,5 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
   }
 
   // Assuming 'investment' stores the number of units held for the BTP
-  return [closestPrice * (btp['investment'] ?? 0), lastIndex];
+  return [closestPrice, lastIndex];
 }
