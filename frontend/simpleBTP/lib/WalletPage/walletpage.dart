@@ -41,7 +41,7 @@ class _WalletPageState extends State<WalletPage> {
                   future: getWalletStats(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return WalletPageBalanceComponent(
+                      return const WalletPageBalanceComponent(
                           balance: null, variation: null);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}'); // Handle errors

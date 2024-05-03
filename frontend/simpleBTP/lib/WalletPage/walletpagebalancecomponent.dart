@@ -20,7 +20,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Assume each label is about 60 pixels wide, change this based on your font size and style
-    double labelWidth = 60;
+    double labelWidth = 80;
     // Get the width of the chart
     double chartWidth = MediaQuery.of(context).size.width *
         0.9; // Since you're using 0.9 of screen width
@@ -108,23 +108,24 @@ class WalletPageBalanceComponent extends StatelessWidget {
                           : 0;
 
                       return Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 25, 40, 15),
-                        child: AspectRatio(
-                          aspectRatio: 1.0, // To make the chart square
+                          padding: const EdgeInsets.fromLTRB(10, 25, 35, 15),
+                          child: SizedBox(
+                            height: 220, // To make the chart square
+                            width: double.infinity,
                           child: LineChart(
                             LineChartData(
                               minY: minY,
                               maxY: maxY,
                               gridData: FlGridData(
                                 show: true,
-                                drawVerticalLine: true,
+                                  drawVerticalLine: false,
                                 drawHorizontalLine: true,
                                 getDrawingHorizontalLine: (value) => FlLine(
-                                  color: Colors.grey[300],
+                                    color: Colors.grey[200],
                                   strokeWidth: 1,
                                 ),
-                                getDrawingVerticalLine: (value) => FlLine(
-                                  color: Colors.grey[300],
+                                  getDrawingVerticalLine: (value) => FlLine(
+                                    color: Colors.grey[200],
                                   strokeWidth: 1,
                                 ),
                               ),
@@ -152,14 +153,15 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                       if (value.toInt() % actualInterval == 0) {
                                         DateTime date = dates[value.toInt()];
                                         String formattedDate =
-                                            DateFormat('yy/MM/dd').format(date);
+                                              DateFormat('dd/MM/yy')
+                                                  .format(date);
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(top: 10.0),
                                           child: Text(formattedDate,
                                               style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 10)),
+                                                    color: primaryColor,
+                                                    fontSize: 13)),
                                         );
                                       }
                                       return const Text('');
@@ -176,26 +178,25 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                         return const Text('');
                                       }
                                       // Customizing the text for left titles
-                                      return Text('${value.toInt()}€',
+                                        return Text('€${value.toInt()}',
                                           style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12));
+                                                color: primaryColor,
+                                                fontSize: 13));
                                     },
                                     reservedSize: 40, // Adjust as needed
                                   ),
                                 ),
                               ),
-                              borderData: FlBorderData(show: true),
+                                borderData: FlBorderData(show: false),
                               lineBarsData: [
                                 LineChartBarData(
-                                  isCurved: false,
+                                    isCurved: true,
                                   dotData: const FlDotData(
                                       show: false), // Hide the dots
-                                  color: Theme.of(context).primaryColor,
+                                    color: primaryColor,
                                   belowBarData: BarAreaData(
                                     show: true,
-                                    color: Theme.of(context)
-                                        .primaryColor
+                                      color: primaryColor
                                         .withOpacity(
                                             0.3), // The fill color with some opacity
                                   ),
