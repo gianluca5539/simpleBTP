@@ -53,7 +53,7 @@ class HomePageBalanceComponent extends StatelessWidget {
                       Skeletonizer(
                           enabled: variation == null,
                           child: Text(
-                            "${variation?.toStringAsFixed(2)}%",
+                            "${(variation != null && !variation!.isNaN) ? variation!.toStringAsFixed(2) : '0'}%",
                             style: TextStyle(
                                 color: (variation ?? 0) > 0
                                     ? Colors.green
