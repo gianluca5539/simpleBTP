@@ -302,8 +302,6 @@ Future<Map<DateTime, double>> createPortfolioValueGraph(
 /// Finds the closest historical price to the target date for a single BTP and calculates its value.
 List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
     [int start = 0]) {
-  double closestPrice = 0.0;
-  int lastIndex = 0;
 
   if (btp['priceHistory'] == null) {
     print("No price history available for ISIN ${btp['isin']}");
@@ -316,22 +314,15 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
   DateTime entryDate;
   for (i = start; i < limit; i++) {
     entryDate = DateTime.parse(series[i]['timestamp']);
-    if (entryDate.isAfter(targetDate) && !entryDate.isAtSameMomentAs(targetDate)) {
+    if (entryDate.isAfter(targetDate) &&
+        !entryDate.isAtSameMomentAs(targetDate)) {
       if (i == 0) {
         print(
             "No historical data available for ISIN ${btp['isin']} at $targetDate");
         return [null, null];
       }
-      closestPrice = series[i - 1]['close'];
-      lastIndex = i - 1;
-      break;
+      return [series[i - 1]['close'], i - 1];  // Return the closest historical price and its index
     }
   }
-
-  if (closestPrice == 0.0) {
-    return [null, null];
-  }
-
-  // Assuming 'investment' stores the number of units held for the BTP
-  return [closestPrice, lastIndex];
+  return [null, null];
 }
