@@ -88,7 +88,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
                             fontSize: 34),
                       )),
                 ),
-                if (variation != null)
+                if (variation != null && balance != 0)
                 FutureBuilder<Map<DateTime, double>>(
                   future: createPortfolioValueGraph(TimeWindow.oneYear),
                   builder: (context, snapshot) {

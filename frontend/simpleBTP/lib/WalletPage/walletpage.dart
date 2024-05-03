@@ -86,6 +86,18 @@ class _WalletPageState extends State<WalletPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 10),
+                      child: Text(
+                        getString('walletPageNoBTPsYet'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: isDarkMode ? lightTextColor : textColor),
+                      ),
+                    );
+                  }
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
                     final name = processString(asset['name'] ?? 'N/A');
