@@ -37,7 +37,7 @@ class BTP extends HiveObject {
 @HiveType(typeId: 1)
 class MyBTP extends HiveObject {
   @HiveField(0)
-  late double investment;
+  late int investment;
   @HiveField(1)
   late DateTime buyDate;
   @HiveField(2)

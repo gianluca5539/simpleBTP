@@ -281,7 +281,7 @@ Future<Map<DateTime, double>> createPortfolioValueGraph(
         }
         isinToIndex[btp['isin']] = priceAndIndex[1];
         msInner += DateTime.now().difference(now2).inMilliseconds;
-        totalValue += (valueAtDate * btp['investment'] ?? 0) / btp['buyPrice'];
+        totalValue += (valueAtDate * btp['investment'] ?? 0);
         // print("BTP ${btp['isin']} value at $date: $valueAtDate");
       } else {
         print("BTP ${btp['isin']} was bought after $date");

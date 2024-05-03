@@ -63,7 +63,7 @@ class MyBTPAdapter extends TypeAdapter<MyBTP> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MyBTP(
-      investment: fields[0] as double,
+      investment: fields[0] as int,
       buyDate: fields[1] as DateTime,
       buyPrice: fields[2] as double,
       isin: fields[3] as String,

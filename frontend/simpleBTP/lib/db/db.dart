@@ -51,7 +51,7 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
 }
 
 Future<void> addBTPToWallet(
-    String isin, DateTime purchaseDate, double price, double investment) async {
+    String isin, DateTime purchaseDate, double price, int investment) async {
   var mybtpsBox = Hive.box('mybtps');
 
   String key = isin;
@@ -84,8 +84,9 @@ Future<Map<String, double>> getWalletStats() async {
   for (var mybtp in mybtps) {
     var btp =
         btps.firstWhere((btp) => btp.isin == mybtp.isin, orElse: () => null);
-    balance += mybtp.investment * btp.value / mybtp.buyPrice;
-    initialBalance += mybtp.investment;
+    balance += mybtp.investment * btp.value; // value is the current value
+    initialBalance +=
+        mybtp.investment * mybtp.buyPrice; // buyPrice is the initial value
   }
 
   return {
@@ -111,7 +112,7 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
     var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
     return {
       'name': btp.name,
-      'value': mybtp.investment * btp.value / 100,
+      'value': mybtp.investment * btp.value,
       'cedola': btp.cedola,
       'isin': btp.isin,
       'variation': (btp.value - mybtp.buyPrice),
@@ -142,10 +143,9 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   // merge the two lists by isin and retrieve only the attributes we need
   List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
     var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
-    double quantity = mybtp.investment / mybtp.buyPrice;
     return {
       'name': btp.name,
-      'value': quantity * btp.value,
+      'value': mybtp.investment * btp.value,
       'cedola': btp.cedola,
       'isin': btp.isin,
       'variation': (btp.value - mybtp.buyPrice),

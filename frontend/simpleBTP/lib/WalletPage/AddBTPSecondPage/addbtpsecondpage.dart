@@ -25,7 +25,7 @@ class AddBTPSecondPage extends StatefulWidget {
 class _AddBTPSecondPageState extends State<AddBTPSecondPage> {
   DateTime? selectedDate;
   double? price;
-  double? investment;
+  int? investment;
 
   String get purchaseDate {
     if (selectedDate == null) {
@@ -200,12 +200,10 @@ class _AddBTPSecondPageState extends State<AddBTPSecondPage> {
                     elevation: 1,
                     borderRadius: BorderRadius.circular(10),
                     child: TextField(
-                      onChanged: (value) => investment = double.tryParse(value),
+                      onChanged: (value) => investment = int.tryParse(value),
                       keyboardType: TextInputType.number,
-                      // allow only numbers and one comma with two decimal places (max)
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+[,.]?\d{0,2}')),
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d+')),
                       ],
                       style: TextStyle(
                           fontSize: 18,

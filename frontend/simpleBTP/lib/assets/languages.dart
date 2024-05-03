@@ -151,8 +151,8 @@ Map<String, String> englishLang = {
   'addBTPPageSelectDateButton': 'Select',
   'addBTPPagePriceSectionTitle': 'Purchase price (single)',
   'addBTPPagePriceSectionPlaceholder': 'Purchase price...',
-  'addBTPPageInvestmentSectionTitle': 'Investment amount',
-  'addBTPPageInvestmentSectionPlaceholder': 'Investment amount...',
+  'addBTPPageInvestmentSectionTitle': 'Investment quantity',
+  'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
 };
 
