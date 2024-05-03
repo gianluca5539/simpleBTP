@@ -307,14 +307,16 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
 
   if (btp['priceHistory'] == null) {
     print("No price history available for ISIN ${btp['isin']}");
-    return [0.0, 0];
+    return [null, null];
   }
 
   var series = btp['priceHistory']['series'];
-
-  for (int i = start; i < btp['priceHistory']['series'].length; i++) {
-    DateTime entryDate = DateTime.parse(series[i]['timestamp']);
-    if (entryDate.isAfter(targetDate)) {
+  int limit = btp['priceHistory']['series'].length;
+  int i;
+  DateTime entryDate;
+  for (i = start; i < limit; i++) {
+    entryDate = DateTime.parse(series[i]['timestamp']);
+    if (entryDate.isAfter(targetDate) && !entryDate.isAtSameMomentAs(targetDate)) {
       if (i == 0) {
         print(
             "No historical data available for ISIN ${btp['isin']} at $targetDate");
@@ -324,6 +326,10 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
       lastIndex = i - 1;
       break;
     }
+  }
+
+  if (closestPrice == 0.0) {
+    return [null, null];
   }
 
   // Assuming 'investment' stores the number of units held for the BTP
