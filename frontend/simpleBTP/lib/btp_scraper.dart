@@ -71,11 +71,9 @@ List<String?> processString(String inputString) {
   return [percentage, withBtp, btpless];
 }
 
-Future<Map<String, dynamic>> fetchBtpPrices(String isin,
-    [TimeWindow timeWindow = TimeWindow.oneWeek]) async {
+Future<Map<String, dynamic>> fetchBtpPrices(String isin, [TimeWindow timeWindow = TimeWindow.oneWeek]) async {
   String timeWindowStr = timeWindowToString(timeWindow);
-  String url =
-      'https://mercatiwdg.ilsole24ore.com/FinanzaMercati/api/TimeSeries/GetTimeSeries/$isin.MOT?timeWindow=$timeWindowStr&';
+  String url = 'https://mercatiwdg.ilsole24ore.com/FinanzaMercati/api/TimeSeries/GetTimeSeries/$isin.MOT?timeWindow=$timeWindowStr&';
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body);
@@ -130,37 +128,48 @@ Future<Map<String, Map<String, String>>> fetchBtps() async {
     if (batchFetchTasks.isEmpty) {
       break;
     }
-    print(
-        "Batch fetch took ${DateTime.now().difference(start).inSeconds} seconds");
+    print("Batch fetch took ${DateTime.now().difference(start).inSeconds} seconds");
   }
 
   print('Total ISINs: ${isinDict.length}');
   return isinDict;
 }
 
-Future<void> fetchAndProcessPage(int page,
-    Map<String, Map<String, String>> isinDict, Function(bool) callback) async {
-  try {
-    print("Fetching page $page");
-    var url = Uri.parse(
-        'https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
-    var response = await http.get(url);
-    print("Fetched page $page");
-    if (response.statusCode == 200) {
-      var hasIsins = await processPageResponse(response.body, isinDict);
-      callback(hasIsins);
-    } else {
-      print('Error fetching page $page: ${response.statusCode}');
-      callback(false);
+Future<void> fetchAndProcessPage(int page, Map<String, Map<String, String>> isinDict, Function(bool) callback, {int maxRetries = 3}) async {
+  int retries = 0;
+  bool success = false;
+
+  while (!success && retries < maxRetries) {
+    try {
+      print("Fetching page $page");
+      var url = Uri.parse('https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
+      var response = await http.get(url);
+      print("Fetched page $page");
+      if (response.statusCode == 200) {
+        var hasIsins = await processPageResponse(response.body, isinDict);
+        callback(hasIsins);
+        success = true;
+      } else {
+        print('Error fetching page $page: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception during fetch for page $page: \n$e');
     }
-  } catch (e) {
-    print('Exception during fetch for page $page: $e');
+
+    if (!success) {
+      retries++;
+      print('Retrying... Attempt $retries of $maxRetries');
+      await Future.delayed(const Duration(seconds: 1)); // You might want to adjust the delay time
+    }
+  }
+
+  if (!success) {
+    print('Failed to fetch page $page after $maxRetries attempts');
     callback(false);
   }
 }
 
-Future<bool> processPageResponse(
-    String text, Map<String, Map<String, String>> isinDict) async {
+Future<bool> processPageResponse(String text, Map<String, Map<String, String>> isinDict) async {
   int start = 0;
   List<String> tIsinList = [];
   while ((start = text.indexOf('IT000', start)) != -1) {
@@ -177,48 +186,39 @@ Future<bool> processPageResponse(
 
   for (int i = 0; i < tIsinList.length; i++) {
     int isinStart = text.indexOf(tIsinList[i]);
-    int end = (i + 1 < tIsinList.length)
-        ? text.indexOf(tIsinList[i + 1])
-        : text.length;
+    int end = (i + 1 < tIsinList.length) ? text.indexOf(tIsinList[i + 1]) : text.length;
     String subtext = text.substring(isinStart, end);
-    RegExp exp =
-        RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
-    var matches =
-        exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
+    RegExp exp = RegExp(r'<span class="t-text[^"]*">(.*?)</span>', dotAll: true);
+    var matches = exp.allMatches(subtext).map((m) => m.group(1)!.trim()).toList();
     isinDict[tIsinList[i]] = await toDict(matches);
   }
 
   return true;
 }
 
-Future<List<Map<String, dynamic>>> fetchMyBTPHistories(
-    [TimeWindow span = TimeWindow.oneWeek]) async {
+Future<List<Map<String, dynamic>>> fetchMyBTPHistories([TimeWindow span = TimeWindow.oneWeek]) async {
   List<Map<String, dynamic>> myBTPs = await getMyBTPs();
   List<Future<Map<String, dynamic>>> priceHistories = [];
 
   for (var btp in myBTPs) {
     print("Fetching history for ${btp['isin']}");
-    Future<Map<String, dynamic>> priceHistory =
-        fetchWithRetry(btp['isin'], 3, span) // Retry up to 3 times
-            .then((data) {
+    Future<Map<String, dynamic>> priceHistory = fetchWithRetry(btp['isin'], 3, span) // Retry up to 3 times
+        .then((data) {
       btp['priceHistory'] = data; // Enrich the BTP data with price history
       print('Fetched price data for ISIN ${btp['isin']}');
       return btp;
     }).catchError((e) {
-      print(
-          'Failed to fetch price data for ISIN ${btp['isin']} after retries: $e');
+      print('Failed to fetch price data for ISIN ${btp['isin']} after retries: $e');
       return btp; // Return BTP data without price history on failure
     });
     priceHistories.add(priceHistory);
   }
 
-  var res = await Future.wait(
-      priceHistories); // Wait for all price histories to complete
+  var res = await Future.wait(priceHistories); // Wait for all price histories to complete
   return res;
 }
 
-Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries,
-    [TimeWindow span = TimeWindow.oneWeek]) async {
+Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindow span = TimeWindow.oneWeek]) async {
   int attempts = 0;
   while (attempts < retries) {
     try {
@@ -236,8 +236,7 @@ Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries,
 }
 
 /// Fetches the BTPs with their price histories and creates a daily value map from the earliest BTP date to today.
-Future<Map<DateTime, double>> createPortfolioValueGraph(
-    [TimeWindow span = TimeWindow.oneMonth]) async {
+Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeWindow.oneMonth]) async {
   List<Map<String, dynamic>> myBTPs;
   try {
     myBTPs = await fetchMyBTPHistories(span);
@@ -266,43 +265,48 @@ Future<Map<DateTime, double>> createPortfolioValueGraph(
   // map of isin to last index
   Map<String, int> isinToIndex = {};
   DateTime currentDate = DateTime.now();
-  for (DateTime date = earliestDate;
-      date.isBefore(currentDate);
-      date = date.add(const Duration(days: 1))) {
+  for (DateTime date = earliestDate; date.isBefore(currentDate) || date.isAtSameMomentAs(currentDate); date = date.add(const Duration(days: 1))) {
+    bool killDay = false;
     double totalValue = 0.0;
+    List priceAndIndex;
+    dynamic valueAtDate;
     for (var btp in myBTPs) {
       if (btp['buyDate'] != null && btp['buyDate'].isBefore(date)) {
         DateTime now2 = DateTime.now();
-        var priceAndIndex =
-            _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
-        var valueAtDate = priceAndIndex[0];
+        priceAndIndex = _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
+        valueAtDate = priceAndIndex[0];
         if (valueAtDate == null) {
-          continue;
+          if (date.isAtSameMomentAs(earliestDate)) {
+            killDay = true;
+            earliestDate = earliestDate.add(const Duration(days: 1));
+            print("Killing day $date");
+            break;
+          }
+          print("No price data available for BTP ${btp['isin']} at $date");
         }
         isinToIndex[btp['isin']] = priceAndIndex[1];
         msInner += DateTime.now().difference(now2).inMilliseconds;
-        totalValue += (valueAtDate * btp['investment'] ?? 0);
+        totalValue += (valueAtDate * (btp['investment'] ?? 0));
         // print("BTP ${btp['isin']} value at $date: $valueAtDate");
       } else {
         print("BTP ${btp['isin']} was bought after $date");
       }
     }
-    // String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    valueByDate[date] = totalValue;
+    
+    if (!killDay) {
+      valueByDate[date] = totalValue;
+    }
   }
 
   // print difference in time
-  print(
-      "Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
+  print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
   print("Inner loop time: ${msInner / 1000} seconds");
 
   return valueByDate;
 }
 
 /// Finds the closest historical price to the target date for a single BTP and calculates its value.
-List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
-    [int start = 0]) {
-
+List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate, [int start = 0]) {
   if (btp['priceHistory'] == null) {
     print("No price history available for ISIN ${btp['isin']}");
     return [null, null];
@@ -314,15 +318,16 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate,
   DateTime entryDate;
   for (i = start; i < limit; i++) {
     entryDate = DateTime.parse(series[i]['timestamp']);
-    if (entryDate.isAfter(targetDate) &&
-        !entryDate.isAtSameMomentAs(targetDate)) {
+    if (entryDate.isAfter(targetDate) && !entryDate.isAtSameMomentAs(targetDate)) {
       if (i == 0) {
-        print(
-            "No historical data available for ISIN ${btp['isin']} at $targetDate");
+        print("No historical data available for ISIN ${btp['isin']} at $targetDate");
         return [null, null];
       }
-      return [series[i - 1]['close'], i - 1];  // Return the closest historical price and its index
+      return [series[i - 1]['close'], i - 1]; // Return the closest historical price and its index
     }
+  }
+  if (i == limit) {
+    return [series[i - 1]['close'], i - 1]; // Return the last historical price if the target date is after the last entry
   }
   return [null, null];
 }
