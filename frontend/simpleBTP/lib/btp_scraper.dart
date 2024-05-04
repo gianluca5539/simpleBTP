@@ -271,7 +271,8 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
     List priceAndIndex;
     dynamic valueAtDate;
     for (var btp in myBTPs) {
-      if (btp['buyDate'] != null && btp['buyDate'].isBefore(date)) {
+      var investment = btp['investment'] ?? 0.0;
+      if (btp['buyDate'] != null && btp['buyDate'].isBefore(date) && investment > 0.0) {
         DateTime now2 = DateTime.now();
         priceAndIndex = _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
         valueAtDate = priceAndIndex[0];
@@ -286,13 +287,12 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
         }
         isinToIndex[btp['isin']] = priceAndIndex[1];
         msInner += DateTime.now().difference(now2).inMilliseconds;
-        totalValue += (valueAtDate * (btp['investment'] ?? 0));
-        // print("BTP ${btp['isin']} value at $date: $valueAtDate");
+        totalValue += valueAtDate * investment;
       } else {
         print("BTP ${btp['isin']} was bought after $date");
       }
     }
-    
+
     if (!killDay) {
       valueByDate[date] = totalValue;
     }

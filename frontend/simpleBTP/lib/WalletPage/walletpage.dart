@@ -27,9 +27,7 @@ class _WalletPageState extends State<WalletPage> {
       appBar: AppTopBar(getString('appTopBarWallet'), {
         'icon': Icons.add,
         'onPressed': () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddBTPFirstPage()))
-              .then((value) => setState(() {}));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddBTPFirstPage())).then((value) => setState(() {}));
         }
       }),
       body: SingleChildScrollView(
@@ -41,8 +39,7 @@ class _WalletPageState extends State<WalletPage> {
                   future: getWalletStats(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const WalletPageBalanceComponent(
-                          balance: null, variation: null);
+                      return const WalletPageBalanceComponent(balance: null, variation: null);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}'); // Handle errors
                     } else if (snapshot.hasData) {
@@ -50,8 +47,7 @@ class _WalletPageState extends State<WalletPage> {
                       double variation = snapshot.data!['variation']!;
                       // limit variation to 3 decimal places
                       variation = double.parse(variation.toStringAsFixed(2));
-                      return WalletPageBalanceComponent(
-                          balance: balance, variation: variation);
+                      return WalletPageBalanceComponent(balance: balance, variation: variation);
                     }
                     return const Text('No data'); // Handle the case of no data
                   }),
@@ -61,9 +57,7 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 getString('walletMyAssets'),
-                style: TextStyle(
-                    fontSize: 24,
-                    color: isDarkMode ? lightTextColor : textColor),
+                style: TextStyle(fontSize: 24, color: isDarkMode ? lightTextColor : textColor),
               ),
             ),
             FutureBuilder<List<Map<String, dynamic>>>(
