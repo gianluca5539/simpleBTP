@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: const EdgeInsets.only(top: 5),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: isDarkMode ? darkModeColor : offWhiteColor,
+                color: isDarkMode ? darkModeColor : Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
