@@ -157,6 +157,7 @@ Map<String, String> englishLang = {
   'addBTPPageInvestmentSectionTitle': 'Investment quantity',
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
+  'addBTPSecondPageBackButton': 'Select BTP',
 };
 
 Map<String, String> hindiLang = {
