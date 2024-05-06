@@ -108,12 +108,31 @@ class WalletPageBalanceComponent extends StatelessWidget {
                           : 0;
 
                       return Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 25, 35, 15),
+                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 15),
                           child: SizedBox(
                             height: 220, // To make the chart square
                             width: double.infinity,
                           child: LineChart(
                             LineChartData(
+                                lineTouchData: LineTouchData(
+                                  touchTooltipData: LineTouchTooltipData(
+                                    getTooltipItems:
+                                        (List<LineBarSpot> touchedSpots) {
+                                      return touchedSpots
+                                          .map((LineBarSpot touchedSpot) {
+                                        final DateTime date = snapshot
+                                            .data!.keys
+                                            .toList()[touchedSpot.x.toInt()];
+                                        final double value = touchedSpot.y;
+                                        return LineTooltipItem(
+                                          '€${value.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}\n${DateFormat('dd/MM/yy').format(date)}',
+                                          const TextStyle(color: Colors.white),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                  handleBuiltInTouches: true,
+                                ),
                               minY: minY,
                               maxY: maxY,
                               gridData: FlGridData(
@@ -141,7 +160,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                 ),
                                 bottomTitles: AxisTitles(
                                   sideTitles: SideTitles(
-                                    showTitles: true,
+                                      showTitles: true,
                                     interval: 1, // Start with an interval of 1
                                     getTitlesWidget:
                                         (double value, TitleMeta meta) {
@@ -171,7 +190,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                 ),
                                 leftTitles: AxisTitles(
                                   sideTitles: SideTitles(
-                                    showTitles: true,
+                                      showTitles: false,
                                     getTitlesWidget:
                                         (double value, TitleMeta meta) {
                                       if (value == minY) {
