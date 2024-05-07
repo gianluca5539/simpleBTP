@@ -14,8 +14,6 @@ import 'package:simpleBTP/db/db.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  
-
   @override
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
@@ -63,6 +61,14 @@ class HomePage extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return Text(
+                      getString('homePageNoBTPsYet'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: isDarkMode ? lightTextColor : textColor),
+                    );
+                  }
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
                     final name = processString(asset['name'] ?? 'N/A');

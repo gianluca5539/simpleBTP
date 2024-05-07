@@ -1,11 +1,9 @@
 // create a dart widget
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -318,7 +316,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
     }
 
     return Container(
-      padding: const EdgeInsets.only(top: 18, left: 18, right: 18, bottom: 10),
+      padding: const EdgeInsets.only(top: 0, left: 18, right: 18, bottom: 10),
       child: Column(
         children: [
           Row(

@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: const EdgeInsets.only(top: 5),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: isDarkMode ? darkModeColor : offWhiteColor,
+                color: isDarkMode ? darkModeColor : Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -99,12 +99,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         Text(
                           getString('settingsPageWalletBackupButton'),
                           style:
-                               TextStyle(
-                              color: isDarkMode ? lightTextColor : textColor,
+                               const TextStyle(
+                              color: Colors
+                                  .grey, // isDarkMode ? lightTextColor : textColor,
                               fontSize: 20),
                         ),
-                        Icon(Icons.chevron_right,
-                            color: isDarkMode ? lightTextColor : textColor,
+                        const Icon(Icons.chevron_right,
+                            color: Colors
+                                .grey, // isDarkMode ? lightTextColor : textColor,
                             size: 30)
                       ],
                     ),
@@ -136,12 +138,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         Text(
                           getString('settingsPageWalletBackupRestoreButton'),
                           style:
-                               TextStyle(
-                              color: isDarkMode ? lightTextColor : textColor,
+                               const TextStyle(
+                              color: Colors
+                                  .grey, //isDarkMode ? lightTextColor : textColor,
                               fontSize: 20),
                         ),
-                        Icon(Icons.chevron_right,
-                            color: isDarkMode ? lightTextColor : textColor,
+                        const Icon(Icons.chevron_right,
+                            color: Colors
+                                .grey, // isDarkMode ? lightTextColor : textColor,
                             size: 30)
                       ],
                     ),
@@ -173,7 +177,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         Text(
                           getString('settingsPageWalletDeleteButton'),
                           style:
-                               TextStyle(
+                                TextStyle(
                               color: isDarkMode ? lightTextColor : textColor,
                               fontSize: 20),
                         ),

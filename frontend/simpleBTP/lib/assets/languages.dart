@@ -100,6 +100,7 @@ Map<String, String> englishLang = {
   // homepage
   'homeBalanceText': 'Your investment',
   'homeMyAssets': 'Your best BTPs',
+  'homePageNoBTPsYet': "You didn't add any BTPs yet. Go to Wallet to add one.",
   'homeMyAssetsViewAllButton': 'View all',
   'homeBestBTPs': 'Best performing BTPs',
   'homeBestBTPsViewAllButton': 'View all',
@@ -108,6 +109,8 @@ Map<String, String> englishLang = {
   'walletMyAssets': 'Your assets',
   'walletPaysWhat': 'Pays',
   'walletPaysIn': 'in',
+  'walletPageNoBTPsYet':
+      'To add a new asset, press the "+" on the top-right corner of the screen.',
   // explorepage
   'exploreSearchPlaceholder': 'Search for a BTP...',
   'explorePageResults': 'Results',
@@ -154,6 +157,7 @@ Map<String, String> englishLang = {
   'addBTPPageInvestmentSectionTitle': 'Investment quantity',
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
+  'addBTPSecondPageBackButton': 'Select BTP',
 };
 
 Map<String, String> hindiLang = {
