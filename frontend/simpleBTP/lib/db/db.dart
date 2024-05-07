@@ -66,6 +66,13 @@ Future<void> addBTPToWallet(
   return;
 }
 
+Future<void> removeBTPFromWallet(String key) async {
+  var mybtpsBox = Hive.box('mybtps');
+
+  mybtpsBox.delete(key);
+  return;
+}
+
 Future<Map<String, double>> getWalletStats() async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -135,20 +142,20 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   var mybtpsBox = Hive.box('mybtps');
   var btpsBox = Hive.box('btps');
 
-  // get all btps that have an isin in mybtps
-  var mybtps = mybtpsBox.values.toList();
-  var btps = btpsBox.values.toList();
+  // get tuples (key, value) from mybtps
+  var mybtps = mybtpsBox.toMap().entries.toList();
+  var btps = btpsBox.toMap().entries.toList();
 
   // merge the two lists by isin and retrieve only the attributes we need
   List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
-    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
+    var btp = btps.firstWhere((btp) => btp.value.isin == mybtp.value.isin);
     return {
-      'name': btp.name,
-      'value': mybtp.investment * btp.value,
-      'cedola': btp.cedola,
-      'isin': btp.isin,
-      'variation': (btp.value - mybtp.buyPrice),
-      'buyDate': mybtp.buyDate,
+      'btp': btp.value,
+      'value': mybtp.value.investment * btp.value.value,
+      'variation': (btp.value.value - mybtp.value.buyPrice),
+      'buyDate': mybtp.value.buyDate,
+      'buyPrice': mybtp.value.buyPrice,
+      'key': mybtp.key,
     };
   }).toList();
 

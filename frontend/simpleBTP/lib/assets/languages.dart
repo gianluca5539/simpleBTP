@@ -111,6 +111,15 @@ Map<String, String> englishLang = {
   'walletPaysIn': 'in',
   'walletPageNoBTPsYet':
       'To add a new asset, press the "+" on the top-right corner of the screen.',
+  'walletBalanceGraphOneWeekText': 'Week',
+  'walletBalanceGraphOneMonthText': 'Month',
+  'walletBalanceGraphThreeMonthsText': '3M',
+  'walletBalanceGraphOneYearText': 'Year',
+  'walletBalanceGraphTenYearsText': '10Y',
+  'WalletPageBTPInformationBuyDate': 'Buy date',
+  'WalletPageBTPInformationBuyPrice': 'Buy price',
+  'WalletPageBTPInformationProfitability': 'Profit at expiration',
+  'ExplorePageBTPInformationDeleteButton': 'Delete from wallet',
   // explorepage
   'exploreSearchPlaceholder': 'Search for a BTP...',
   'explorePageResults': 'Results',
@@ -133,6 +142,10 @@ Map<String, String> englishLang = {
   'ExplorePageBTPInformationExpirationDate': 'Expiration date',
   'ExplorePageBTPInformationISIN': 'ISIN code',
   'ExplorePageBTPInformationProfitability': 'Profit buying now',
+  'ExplorePageBTPInformationDeleteConfirmationMessage':
+      'Are you sure? This action cannot be undone.',
+  'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Cancel',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'Delete',
   // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup wallet',
@@ -165,11 +178,7 @@ Map<String, String> englishLang = {
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
   'addBTPSecondPageBackButton': 'Select BTP',
-  'walletBalanceGraphOneWeekText': 'Week',
-  'walletBalanceGraphOneMonthText': 'Month',
-  'walletBalanceGraphThreeMonthsText': '3M',
-  'walletBalanceGraphOneYearText': 'Year',
-  'walletBalanceGraphTenYearsText': '10Y',
+  
 };
 
 Map<String, String> hindiLang = {
