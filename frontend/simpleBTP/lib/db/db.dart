@@ -18,7 +18,8 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   var box = Hive.box('btps');
 
   btps.forEach((key, value) {
-    BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0", value['cedola'] ?? "0", value['scadenza']!);
+    BTP btp = BTP.fromData(key, value['btp']!, value['ultimo'] ?? "0",
+        value['cedola'] ?? "0", value['scadenza']!);
 
     if (btp.value != 0) {
       // update min and max values
@@ -48,13 +49,18 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   databaseInitialized = true;
 }
 
-Future<void> addBTPToWallet(String isin, DateTime purchaseDate, double price, int investment) async {
+Future<void> addBTPToWallet(
+    String isin, DateTime purchaseDate, double price, int investment) async {
   var mybtpsBox = Hive.box('mybtps');
 
   String key = isin;
   key = '$isin-${Random().nextInt(100000)}';
 
-  MyBTP mybtp = MyBTP(investment: investment, buyDate: purchaseDate, buyPrice: price, isin: isin);
+  MyBTP mybtp = MyBTP(
+      investment: investment,
+      buyDate: purchaseDate,
+      buyPrice: price,
+      isin: isin);
 
   mybtpsBox.put(key, mybtp);
   return;
@@ -75,9 +81,11 @@ Future<Map<String, double>> getWalletStats() async {
   double initialBalance = 0.0;
 
   for (var mybtp in mybtps) {
-    var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin, orElse: () => null);
+    var btp =
+        btps.firstWhere((btp) => btp.isin == mybtp.isin, orElse: () => null);
     balance += mybtp.investment * btp.value; // value is the current value
-    initialBalance += mybtp.investment * mybtp.buyPrice; // buyPrice is the initial value
+    initialBalance +=
+        mybtp.investment * mybtp.buyPrice; // buyPrice is the initial value
   }
 
   return {
@@ -114,7 +122,8 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
   merged.sort((a, b) => b['variation'].compareTo(a['variation']));
 
   // get the first 5 elements
-  List<Map<String, dynamic>> mergedList = merged.length > 3 ? merged.sublist(0, 3) : merged;
+  List<Map<String, dynamic>> mergedList =
+      merged.length > 3 ? merged.sublist(0, 3) : merged;
   return mergedList;
 }
 
@@ -198,7 +207,7 @@ Future<List<Map<String, dynamic>>> getMyBTPs() async {
   return merged;
 }
 
-Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters, ordering) async {
+Future<List<BTP>> getExplorePageBTPs(search, filters, ordering) async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
   }
@@ -209,7 +218,9 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters, ordering)
 
   // apply search
   if (search != null && search != "") {
-    btps = btps.where((btp) => btp.name.toLowerCase().contains(search.toLowerCase())).toList();
+    btps = btps
+        .where((btp) => btp.name.toLowerCase().contains(search.toLowerCase()))
+        .toList();
   }
 
   // apply filters
@@ -227,10 +238,12 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters, ordering)
     if (filters['maxCedola'] != null && btp.cedola * 2 > filters['maxCedola']) {
       continue;
     }
-    if (filters['minExpirationDate'] != null && btp.expirationDate.isBefore(filters['minExpirationDate'])) {
+    if (filters['minExpirationDate'] != null &&
+        btp.expirationDate.isBefore(filters['minExpirationDate'])) {
       continue;
     }
-    if (filters['maxExpirationDate'] != null && btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
+    if (filters['maxExpirationDate'] != null &&
+        btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
       continue;
     }
     btpsFiltered.add(btp);
@@ -258,14 +271,7 @@ Future<List<Map<String, dynamic>>> getExplorePageBTPs(search, filters, ordering)
     }
   }
 
-  return btpsFiltered.map((btp) {
-    return {
-      'name': btp.name,
-      'value': btp.value,
-      'isin': btp.isin,
-      'cedola': btp.cedola,
-    };
-  }).toList();
+  return btpsFiltered;
 }
 
 Future<List<BTP>> getAddBTPPageBTPs(search, filters, ordering) async {
@@ -279,7 +285,9 @@ Future<List<BTP>> getAddBTPPageBTPs(search, filters, ordering) async {
 
   // apply search
   if (search != null && search != "") {
-    btps = btps.where((btp) => btp.name.toLowerCase().contains(search.toLowerCase())).toList();
+    btps = btps
+        .where((btp) => btp.name.toLowerCase().contains(search.toLowerCase()))
+        .toList();
   }
 
   // apply filters
@@ -297,10 +305,12 @@ Future<List<BTP>> getAddBTPPageBTPs(search, filters, ordering) async {
     if (filters['maxCedola'] != null && btp.cedola * 2 > filters['maxCedola']) {
       continue;
     }
-    if (filters['minExpirationDate'] != null && btp.expirationDate.isBefore(filters['minExpirationDate'])) {
+    if (filters['minExpirationDate'] != null &&
+        btp.expirationDate.isBefore(filters['minExpirationDate'])) {
       continue;
     }
-    if (filters['maxExpirationDate'] != null && btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
+    if (filters['maxExpirationDate'] != null &&
+        btp.expirationDate.isAfter(filters['maxExpirationDate'])) {
       continue;
     }
     btpsFiltered.add(btp);
