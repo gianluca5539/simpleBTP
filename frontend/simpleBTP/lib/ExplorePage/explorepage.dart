@@ -1,5 +1,10 @@
+import 'dart:math';
+
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:simpleBTP/ExplorePage/explorepageinvestmentcomponent.dart';
 import 'package:simpleBTP/ExplorePage/explorepagesearchandfiltercomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
@@ -25,8 +30,9 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Map<String, dynamic> ordering = defaultExploreOrdering;
 
-  void searchWithFilters(String search, Map<String, dynamic> filters,
-      Map<String, dynamic> ordering) {
+  TimeWindow timeWindow = TimeWindow.oneWeek;
+
+  void searchWithFilters(String search, Map<String, dynamic> filters, Map<String, dynamic> ordering) {
     // update the state with the new search and filters
     setState(() {
       this.search = search;
@@ -36,14 +42,18 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   void _openBTPDetailPage(BuildContext context, isDarkMode, BTP btp) {
+    // Assume each label is about 60 pixels wide, change this based on your font size and style
+    double labelWidth = 80;
+    // Get the width of the chart
+    double chartWidth = MediaQuery.of(context).size.width * 0.9; // Since you're using 0.9 of screen width
+    // Calculate the number of labels that could fit
+    int numLabelsThatFit = chartWidth ~/ labelWidth;
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setModalState) {
-            void searchWithFilters(String search, Map<String, dynamic> filters,
-                Map<String, dynamic> ordering) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
+            void searchWithFilters(String search, Map<String, dynamic> filters, Map<String, dynamic> ordering) {
               // update the state with the new search and filters
               setModalState(() {
                 this.search = search;
@@ -57,164 +67,266 @@ class _ExplorePageState extends State<ExplorePage> {
               height: MediaQuery.of(context).size.height * 0.92,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 80,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color:
-                                  isDarkMode ? darkModeColor : Colors.grey[400],
-                              borderRadius: BorderRadius.circular(10),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 80,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: isDarkMode ? darkModeColor : Colors.grey[400],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      btp.name.toUpperCase(),
+                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: isDarkMode ? primaryColorLight : primaryColor),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Historical data',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+                  FutureBuilder<Map<DateTime, double>>(
+                    future: createSingleBtpValueGraph(btp.isin, timeWindow),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          height: 200,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CupertinoActivityIndicator(),
+                                const SizedBox(height: 10),
+                                Text('Loading the graph...',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 14,
+                                    )),
+                              ],
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: Text(
-                          btp.name.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: isDarkMode
-                                  ? primaryColorLight
-                                  : primaryColor),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Historical data',
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      const Center(
-                        child: Text(
-                          'FRA FAI IL GRAFICO',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        getString('ExplorePageBTPInformationTitle'),
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isDarkMode ? darkModeColor : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 8),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Price',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        btp.value.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                          )),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        // Determine minY and maxY for padding
+                        final double minY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(min) * 0.95) // 5% padding at bottom
+                            : 0;
+                        final double maxY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(max) * 1.05) // 5% padding at top
+                            : 0;
+
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                          child: SizedBox(
+                            height: 190, // To make the chart square
+                            width: double.infinity,
+                            child: LineChart(
+                              LineChartData(
+                                lineTouchData: LineTouchData(
+                                  touchTooltipData: LineTouchTooltipData(
+                                    getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                                      return touchedSpots.map((LineBarSpot touchedSpot) {
+                                        final DateTime date = snapshot.data!.keys.toList()[touchedSpot.x.toInt()];
+                                        final double value = touchedSpot.y;
+                                        return LineTooltipItem(
+                                          '€${value.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}\n${DateFormat('dd/MM/yy').format(date)}',
+                                          const TextStyle(color: lightTextColor),
+                                        );
+                                      }).toList();
+                                    },
                                   ),
-                                  Divider(
+                                ),
+                                minY: minY,
+                                maxY: maxY,
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  drawHorizontalLine: true,
+                                  getDrawingHorizontalLine: (value) => FlLine(
                                     color: Colors.grey[200],
-                                    thickness: 1,
+                                    strokeWidth: 1,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Coupon',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${btp.cedola * 2}%',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
+                                  getDrawingVerticalLine: (value) => FlLine(
                                     color: Colors.grey[200],
-                                    thickness: 1,
+                                    strokeWidth: 1,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Expiration date',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                ),
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  rightTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false), // No right titles
                                   ),
-                                  Divider(
-                                    color: Colors.grey[200],
-                                    thickness: 1,
+                                  topTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false), // No top titles
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'ISIN code',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        btp.isin,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: false,
+                                      interval: 1, // Start with an interval of 1
+                                      getTitlesWidget: (double value, TitleMeta meta) {
+                                        final dates = snapshot.data!.keys.toList()..sort();
+                                        // Calculate the actual interval based on the data length and the number of labels that fit
+                                        int actualInterval = max(1, dates.length ~/ numLabelsThatFit);
+                                        if (value.toInt() % actualInterval == 0) {
+                                          DateTime date = dates[value.toInt()];
+                                          String formattedDate = DateFormat('dd/MM/yy').format(date);
+                                          return Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text(formattedDate, style: const TextStyle(color: primaryColor, fontSize: 13)),
+                                          );
+                                        }
+                                        return const Text('');
+                                      },
+                                      reservedSize: 30,
+                                    ),
+                                  ),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: false,
+                                      getTitlesWidget: (double value, TitleMeta meta) {
+                                        if (value == minY) {
+                                          return const Text('');
+                                        }
+                                        // Customizing the text for left titles
+                                        return Text('€${value.toInt()}', style: const TextStyle(color: primaryColor, fontSize: 13));
+                                      },
+                                      reservedSize: 40, // Adjust as needed
+                                    ),
+                                  ),
+                                ),
+                                borderData: FlBorderData(show: false),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    isCurved: true,
+                                    dotData: const FlDotData(show: false), // Hide the dots
+                                    color: primaryColor,
+                                    belowBarData: BarAreaData(
+                                      show: true,
+                                      color: primaryColor.withOpacity(0.3), // The fill color with some opacity
+                                    ),
+                                    spots: _getSpots(snapshot.data!),
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                        );
+                      } else {
+                        return const Center(child: Text('No data found'));
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    getString('ExplorePageBTPInformationTitle'),
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDarkMode ? darkModeColor : Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Price',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    btp.value.toString(),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Coupon',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${btp.cedola * 2}%',
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Expiration date',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'ISIN code',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    btp.isin,
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ]),
+                    ),
+                  ),
+                ]),
               ),
             );
           });
         });
+  }
+
+  List<FlSpot> _getSpots(Map<DateTime, double> data) {
+    final dates = data.keys.toList()..sort(); // Ensure the dates are sorted
+    return dates.asMap().entries.map((entry) => FlSpot(entry.key.toDouble(), data[entry.value]!)).toList();
   }
 
   @override
@@ -237,11 +349,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       children: List.generate(
                           5,
                           (index) => const ExplorePageInvestmentComponent(
-                              investmentName: null,
-                              investmentDetail: null,
-                              cedola: null,
-                              investmentValue: null,
-                              variation: null)));
+                              investmentName: null, investmentDetail: null, cedola: null, investmentValue: null, variation: null)));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
@@ -264,14 +372,10 @@ class _ExplorePageState extends State<ExplorePage> {
                               asset,
                             ),
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all(Colors.transparent),
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(
-                              primaryColor.withOpacity(0.3)),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero)),
+                          overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                         ),
                         child: ExplorePageInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",

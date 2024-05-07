@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:core';
@@ -235,6 +233,52 @@ Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindo
   return {}; // Return empty if all retries fail, though the rethrow will typically handle failure
 }
 
+Future<Map<DateTime, double>> createSingleBtpValueGraph(isin, [TimeWindow span = TimeWindow.oneMonth]) async {
+  Map<String, dynamic> btp = await fetchBtpPrices(isin, span);
+  btp['priceHistory'] = {'series': btp['series']}; // Rename the series key for consistency
+
+  // Determine the earliest date from BTP purchases
+  DateTime earliestDate = DateTime.now();
+  for (var entry in btp['priceHistory']['series']) {
+    DateTime entryDate = DateTime.parse(entry['timestamp']);
+    if (entryDate.isBefore(earliestDate)) {
+      earliestDate = entryDate;
+    }
+  }
+
+  // print earliestDate
+  print("Earliest date: $earliestDate");
+  double msInner = 0.0;
+  DateTime now = DateTime.now();
+
+  // Calculate portfolio value for each day from earliest date to today
+  Map<DateTime, double> valueByDate = {};
+  // map of isin to last index
+  int lastIndex = 0;
+  DateTime currentDate = DateTime.now();
+  for (DateTime date = earliestDate; date.isBefore(currentDate) || date.isAtSameMomentAs(currentDate); date = date.add(const Duration(days: 1))) {
+    List priceAndIndex;
+    dynamic valueAtDate;
+    DateTime now2 = DateTime.now();
+    priceAndIndex = _getBTPValueAtDate(btp, date, lastIndex);
+    valueAtDate = priceAndIndex[0];
+    msInner += DateTime.now().difference(now2).inMilliseconds;
+
+    if (valueAtDate != null) {
+      lastIndex = priceAndIndex[1];
+      valueByDate[date] = valueAtDate;
+    } else {
+      print("No price data available for BTP ${btp['isin']} at $date");
+    }
+  }
+
+  // print difference in time
+  print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
+  print("Inner loop time: ${msInner / 1000} seconds");
+
+  return valueByDate;
+}
+
 /// Fetches the BTPs with their price histories and creates a daily value map from the earliest BTP date to today.
 Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeWindow.oneMonth]) async {
   List<Map<String, dynamic>> myBTPs;
@@ -289,7 +333,7 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
         msInner += DateTime.now().difference(now2).inMilliseconds;
         totalValue += valueAtDate * investment;
       } else {
-        print("BTP ${btp['isin']} was bought after $date");
+        // print("BTP ${btp['isin']} was bought after $date");
       }
     }
 

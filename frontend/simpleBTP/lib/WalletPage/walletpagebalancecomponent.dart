@@ -94,7 +94,7 @@ class _WalletPageBalanceComponentState
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return SizedBox(
-                          height: 220,
+                          height: 200,
                           child: Center(
                               child: Padding(
                             padding: const EdgeInsets.only(top: 24.0),
@@ -129,7 +129,7 @@ class _WalletPageBalanceComponentState
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
                           child: SizedBox(
-                            height: 220, // To make the chart square
+                            height: 190, // To make the chart square
                             width: double.infinity,
                             child: LineChart(
                               LineChartData(
@@ -252,7 +252,7 @@ class _WalletPageBalanceComponentState
                   ),
                 if (widget.variation != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0, top: 8.0),
+                    padding: const EdgeInsets.only(bottom: 10.0, top: 25.0),
                     child: Center(
                       child: CupertinoSlidingSegmentedControl<TimeWindow>(
                         backgroundColor: Colors.transparent,
