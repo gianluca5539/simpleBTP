@@ -158,6 +158,11 @@ Map<String, String> englishLang = {
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
   'addBTPSecondPageBackButton': 'Select BTP',
+  'walletBalanceGraphOneWeekText': 'Week',
+  'walletBalanceGraphOneMonthText': 'Month',
+  'walletBalanceGraphThreeMonthsText': '3M',
+  'walletBalanceGraphOneYearText': 'Year',
+  'walletBalanceGraphTenYearsText': '10Y',
 };
 
 Map<String, String> hindiLang = {

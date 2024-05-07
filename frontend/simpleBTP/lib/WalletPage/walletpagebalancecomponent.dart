@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -10,12 +11,22 @@ import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class WalletPageBalanceComponent extends StatelessWidget {
+class WalletPageBalanceComponent extends StatefulWidget {
   final double? balance;
   final double? variation;
 
   const WalletPageBalanceComponent({super.key, required this.balance, required this.variation});
 
+  @override
+  State<WalletPageBalanceComponent> createState() =>
+      _WalletPageBalanceComponentState();
+}
+
+class _WalletPageBalanceComponentState
+    extends State<WalletPageBalanceComponent> {
+  TimeWindow timeWindow = TimeWindow.oneWeek;
+  
+  
   @override
   Widget build(BuildContext context) {
     // Assume each label is about 60 pixels wide, change this based on your font size and style
@@ -55,10 +66,14 @@ class WalletPageBalanceComponent extends StatelessWidget {
                         style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 22),
                       ),
                       Skeletonizer(
-                          enabled: variation == null,
+                          enabled: widget.variation == null,
                           child: Text(
-                            "${(variation != null && !variation!.isNaN) ? variation!.toStringAsFixed(2) : '0'}%",
-                            style: TextStyle(color: (variation ?? 0) > 0 ? Colors.green : Colors.red, fontSize: 22),
+                            "${(widget.variation != null && !widget.variation!.isNaN) ? widget.variation!.toStringAsFixed(2) : '0'}%",
+                            style: TextStyle(
+                                color: (widget.variation ?? 0) > 0
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontSize: 22),
                           )),
                     ],
                   ),
@@ -66,18 +81,37 @@ class WalletPageBalanceComponent extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
                   child: Skeletonizer(
-                      enabled: balance == null,
+                      enabled: widget.balance == null,
                       child: Text(
-                        "€${balance == null ? '----' : ''}${balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                        "€${widget.balance == null ? '----' : ''}${widget.balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
                         style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 34),
                       )),
                 ),
-                if (variation != null)
+                
+                if (widget.variation != null)
                   FutureBuilder<Map<DateTime, double>>(
-                    future: createPortfolioValueGraph(TimeWindow.oneYear),
+                    future: createPortfolioValueGraph(timeWindow),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return SizedBox(
+                          height: 220,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CupertinoActivityIndicator(),
+                                const SizedBox(height: 10),
+                                Text('Loading the graph...',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          )),
+                        );
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData &&
@@ -93,7 +127,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
                             : 0;
 
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 10),
+                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
                           child: SizedBox(
                             height: 220, // To make the chart square
                             width: double.infinity,
@@ -145,7 +179,7 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                   ),
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
-                                      showTitles: true,
+                                      showTitles: false,
                                       interval:
                                           1, // Start with an interval of 1
                                       getTitlesWidget:
@@ -215,6 +249,54 @@ class WalletPageBalanceComponent extends StatelessWidget {
                         return const Center(child: Text('No data found'));
                       }
                     },
+                  ),
+                if (widget.variation != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0, top: 8.0),
+                    child: Center(
+                      child: CupertinoSlidingSegmentedControl<TimeWindow>(
+                        backgroundColor: Colors.transparent,
+                        thumbColor: primaryColor,
+                        children: {
+                          TimeWindow.oneWeek: Text(
+                              getString('walletBalanceGraphOneWeekText'),
+                              style: TextStyle(
+                                  color: timeWindow == TimeWindow.oneWeek
+                                      ? Colors.white
+                                      : textColor)),
+                          TimeWindow.oneMonth: Text(
+                              getString('walletBalanceGraphOneMonthText'),
+                              style: TextStyle(
+                                  color: timeWindow == TimeWindow.oneMonth
+                                      ? Colors.white
+                                      : textColor)),
+                          TimeWindow.threeMonths: Text(
+                              getString('walletBalanceGraphThreeMonthsText'),
+                              style: TextStyle(
+                                  color: timeWindow == TimeWindow.threeMonths
+                                      ? Colors.white
+                                      : textColor)),
+                          TimeWindow.oneYear: Text(
+                              getString('walletBalanceGraphOneYearText'),
+                              style: TextStyle(
+                                  color: timeWindow == TimeWindow.oneYear
+                                      ? Colors.white
+                                      : textColor)),
+                          TimeWindow.tenYears: Text(
+                              getString('walletBalanceGraphTenYearsText'),
+                              style: TextStyle(
+                                  color: timeWindow == TimeWindow.tenYears
+                                      ? Colors.white
+                                      : textColor)),
+                        },
+                        groupValue: timeWindow,
+                        onValueChanged: (TimeWindow? value) {
+                          setState(() {
+                            timeWindow = value!;
+                          });
+                        },
+                      ),
+                    ),
                   ),
               ],
             ),
