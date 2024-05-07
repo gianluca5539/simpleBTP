@@ -619,7 +619,7 @@ class _WalletPageState extends State<WalletPage> {
           builder: (context) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setModalState) {
-              void _showDatePickerDialog(Widget child) {
+              void _showDatePickerDialog(Widget child, bool isDarkMode) {
                 showCupertinoModalPopup<void>(
                   context: context,
                   builder: (BuildContext context) => Container(
@@ -632,7 +632,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                     // Provide a background color for the popup.
                     color:
-                        CupertinoColors.systemBackground.resolveFrom(context),
+                        isDarkMode ? darkModeColor : CupertinoColors.white,
                     // Use a SafeArea widget to avoid system overlaps.
                     child: SafeArea(
                       top: false,
@@ -642,11 +642,18 @@ class _WalletPageState extends State<WalletPage> {
                 );
               }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.92,
-                    child: Column(
+              return Container(
+                decoration: BoxDecoration(
+                  color: isDarkMode ? offBlackColor : offWhiteColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                height: MediaQuery.of(context).size.height * 0.92,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
@@ -709,7 +716,16 @@ class _WalletPageState extends State<WalletPage> {
                             Center(
                                 child: ElevatedButton(
                               onPressed: () => _showDatePickerDialog(
-                                CupertinoDatePicker(
+                                CupertinoTheme(
+                                  data: CupertinoThemeData(
+                                    brightness: isDarkMode
+                                        ? Brightness.dark
+                                        : Brightness.light,
+                                  ),
+                                  child: CupertinoDatePicker(
+                                    backgroundColor: isDarkMode
+                                        ? darkModeColor
+                                        : Colors.white,
                                   initialDateTime: DateTime.now(),
                                   mode: CupertinoDatePickerMode.date,
                                   use24hFormat: true,
@@ -721,7 +737,8 @@ class _WalletPageState extends State<WalletPage> {
                                   maximumYear: DateTime.now().year,
                                   minimumYear: 1950,
                                 ),
-                              ),
+                                ),
+                                isDarkMode),
                               style: ButtonStyle(
                                 minimumSize: MaterialStateProperty.all(
                                     const Size(double.infinity, 45)),
@@ -793,7 +810,7 @@ class _WalletPageState extends State<WalletPage> {
                                             ? darkModeColor
                                             : Colors.white),
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
+                                      Radius.circular(10)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -801,7 +818,7 @@ class _WalletPageState extends State<WalletPage> {
                                             ? darkModeColor
                                             : Colors.white),
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
+                                      Radius.circular(10)),
                                   ),
                                   hintText: getString(
                                       'addBTPPagePriceSectionPlaceholder'),
@@ -816,7 +833,7 @@ class _WalletPageState extends State<WalletPage> {
                                       horizontal: 15),
                                   border: const OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
+                                      BorderRadius.all(Radius.circular(10)),
                                   ),
                                 ),
                               ),
@@ -860,7 +877,7 @@ class _WalletPageState extends State<WalletPage> {
                                             ? darkModeColor
                                             : Colors.white),
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
+                                      Radius.circular(10)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -868,7 +885,7 @@ class _WalletPageState extends State<WalletPage> {
                                             ? darkModeColor
                                             : Colors.white),
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
+                                      Radius.circular(10)),
                                   ),
                                   hintText: getString(
                                       'addBTPPageInvestmentSectionPlaceholder'),
@@ -927,7 +944,8 @@ class _WalletPageState extends State<WalletPage> {
                           ],
                         ),
                       ],
-                    )),
+                  ),
+                ),
               );
             });
           });
@@ -950,7 +968,14 @@ class _WalletPageState extends State<WalletPage> {
                 });
               }
 
-              return SizedBox(
+              return Container(
+                decoration: BoxDecoration(
+                  color: isDarkMode ? offBlackColor : offWhiteColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
                 height: MediaQuery.of(context).size.height * 0.92,
                 child: Column(
                   children: [
