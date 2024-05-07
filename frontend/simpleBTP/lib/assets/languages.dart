@@ -126,7 +126,13 @@ Map<String, String> englishLang = {
   'explorePageCedolaFilterTitle': 'Yearly coupon',
   'explorePageExpirationDateFilterTitle': 'Expiration date',
   'explorePageApplyFiltersButton': 'Apply',
+  'ExplorePageBTPChartTitle': 'Historical data',
   'ExplorePageBTPInformationTitle': 'BTP Information',
+  'ExplorePageBTPInformationPrice': 'Price',
+  'ExplorePageBTPInformationCoupon': 'Yearly coupon',
+  'ExplorePageBTPInformationExpirationDate': 'Expiration date',
+  'ExplorePageBTPInformationISIN': 'ISIN code',
+  'ExplorePageBTPInvestmentTitle': 'Investment details',
   // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup wallet',
