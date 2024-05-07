@@ -213,7 +213,8 @@ class _WalletPageState extends State<WalletPage> {
                               borderRadius: BorderRadius.circular(10),
                               child: TextField(
                                 onChanged: (value) =>
-                                    price = double.tryParse(value),
+                                    price =
+                                    double.tryParse(value.replaceAll(',', '.')),
                                 keyboardType: TextInputType.number,
                                 // allow only numbers and one comma or dot with two decimal places (max)
                                 inputFormatters: [

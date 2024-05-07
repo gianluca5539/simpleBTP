@@ -72,32 +72,33 @@ class WalletPageBalanceComponent extends StatelessWidget {
                         style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 34),
                       )),
                 ),
-                if (variation != null && balance != 0)
-                FutureBuilder<Map<DateTime, double>>(
-                  future: createPortfolioValueGraph(TimeWindow.oneYear),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      // Determine minY and maxY for padding
-                      final double minY = snapshot.data!.values.isNotEmpty
-                          ? (snapshot.data!.values.reduce(min) *
-                              0.95) // 5% padding at bottom
-                          : 0;
-                      final double maxY = snapshot.data!.values.isNotEmpty
-                          ? (snapshot.data!.values.reduce(max) *
-                              1.05) // 5% padding at top
-                          : 0;
+                if (variation != null)
+                  FutureBuilder<Map<DateTime, double>>(
+                    future: createPortfolioValueGraph(TimeWindow.oneYear),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.isNotEmpty) {
+                        // Determine minY and maxY for padding
+                        final double minY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(min) *
+                                0.95) // 5% padding at bottom
+                            : 0;
+                        final double maxY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(max) *
+                                1.05) // 5% padding at top
+                            : 0;
 
-                      return Padding(
-                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 15),
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(35, 0, 35, 10),
                           child: SizedBox(
                             height: 220, // To make the chart square
                             width: double.infinity,
-                          child: LineChart(
-                            LineChartData(
+                            child: LineChart(
+                              LineChartData(
                                 lineTouchData: LineTouchData(
                                   touchTooltipData: LineTouchTooltipData(
                                     getTooltipItems:
@@ -110,19 +111,13 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                         final double value = touchedSpot.y;
                                         return LineTooltipItem(
                                           '€${value.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}\n${DateFormat('dd/MM/yy').format(date)}',
-                                          const TextStyle(color: Colors.white),
+                                          const TextStyle(
+                                              color: lightTextColor),
                                         );
                                       }).toList();
                                     },
                                   ),
-                                  handleBuiltInTouches: true,
                                 ),
-                              minY: minY,
-                              maxY: maxY,
-                              gridData: FlGridData(
-                                show: true,
-                            child: LineChart(
-                              LineChartData(
                                 minY: minY,
                                 maxY: maxY,
                                 gridData: FlGridData(
@@ -135,67 +130,70 @@ class WalletPageBalanceComponent extends StatelessWidget {
                                   ),
                                   getDrawingVerticalLine: (value) => FlLine(
                                     color: Colors.grey[200],
-                                  strokeWidth: 1,
+                                    strokeWidth: 1,
+                                  ),
                                 ),
-                              ),
-                              titlesData: FlTitlesData(
-                                show: true,
-                                rightTitles: const AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: false), // No right titles
-                                ),
-                                topTitles: const AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: false), // No top titles
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  rightTitles: const AxisTitles(
+                                    sideTitles: SideTitles(
+                                        showTitles: false), // No right titles
+                                  ),
+                                  topTitles: const AxisTitles(
+                                    sideTitles: SideTitles(
+                                        showTitles: false), // No top titles
+                                  ),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
                                       showTitles: true,
-                                    interval: 1, // Start with an interval of 1
-                                    getTitlesWidget:
-                                        (double value, TitleMeta meta) {
-                                      final dates = snapshot.data!.keys.toList()
-                                        ..sort();
-                                      // Calculate the actual interval based on the data length and the number of labels that fit
-                                      int actualInterval = max(
-                                          1, dates.length ~/ numLabelsThatFit);
-                                      if (value.toInt() % actualInterval == 0) {
-                                        DateTime date = dates[value.toInt()];
-                                        String formattedDate =
+                                      interval:
+                                          1, // Start with an interval of 1
+                                      getTitlesWidget:
+                                          (double value, TitleMeta meta) {
+                                        final dates = snapshot.data!.keys
+                                            .toList()
+                                          ..sort();
+                                        // Calculate the actual interval based on the data length and the number of labels that fit
+                                        int actualInterval = max(1,
+                                            dates.length ~/ numLabelsThatFit);
+                                        if (value.toInt() % actualInterval ==
+                                            0) {
+                                          DateTime date = dates[value.toInt()];
+                                          String formattedDate =
                                               DateFormat('dd/MM/yy')
                                                   .format(date);
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10.0),
-                                          child: Text(formattedDate,
-                                              style: const TextStyle(
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10.0),
+                                            child: Text(formattedDate,
+                                                style: const TextStyle(
                                                     color: primaryColor,
                                                     fontSize: 13)),
-                                        );
-                                      }
-                                      return const Text('');
-                                    },
-                                    reservedSize: 30,
-                                  ),
-                                ),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: false,
-                                    getTitlesWidget:
-                                        (double value, TitleMeta meta) {
-                                      if (value == minY) {
+                                          );
+                                        }
                                         return const Text('');
-                                      }
-                                      // Customizing the text for left titles
+                                      },
+                                      reservedSize: 30,
+                                    ),
+                                  ),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: false,
+                                      getTitlesWidget:
+                                          (double value, TitleMeta meta) {
+                                        if (value == minY) {
+                                          return const Text('');
+                                        }
+                                        // Customizing the text for left titles
                                         return Text('€${value.toInt()}',
-                                          style: const TextStyle(
+                                            style: const TextStyle(
                                                 color: primaryColor,
                                                 fontSize: 13));
-                                    },
-                                    reservedSize: 40, // Adjust as needed
+                                      },
+                                      reservedSize: 40, // Adjust as needed
+                                    ),
                                   ),
                                 ),
-                              ),
                                 borderData: FlBorderData(show: false),
                                 lineBarsData: [
                                   LineChartBarData(
