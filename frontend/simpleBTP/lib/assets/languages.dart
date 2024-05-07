@@ -132,7 +132,7 @@ Map<String, String> englishLang = {
   'ExplorePageBTPInformationCoupon': 'Yearly coupon',
   'ExplorePageBTPInformationExpirationDate': 'Expiration date',
   'ExplorePageBTPInformationISIN': 'ISIN code',
-  'ExplorePageBTPInvestmentTitle': 'Investment details',
+  'ExplorePageBTPInformationProfitability': 'Profit buying now',
   // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup wallet',
