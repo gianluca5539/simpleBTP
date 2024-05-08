@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -32,9 +33,10 @@ class _ExplorePageState extends State<ExplorePage> {
 
   TimeWindow timeWindow = TimeWindow.oneWeek;
 
+  // Cache to store graph data
+  Map<String, Map<DateTime, double>> graphDataCache = {};
 
-  void searchWithFilters(String search, Map<String, dynamic> filters,
-      Map<String, dynamic> ordering) {
+  void searchWithFilters(String search, Map<String, dynamic> filters, Map<String, dynamic> ordering) {
     // update the state with the new search and filters
     setState(() {
       this.search = search;
@@ -43,15 +45,23 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  double _getBTPProfitability(
-      double value, double cedola, DateTime expirationDate) {
+  Future<Map<DateTime, double>> getCachedGraphData(String isin) async {
+    if (graphDataCache.containsKey(isin)) {
+      print('Cached data found for $isin');
+      return graphDataCache[isin]!;
+    } else {
+      print('No cached data found for $isin');
+      return createSingleBtpValueGraph(isin, timeWindow);
+    }
+  }
+
+  double _getBTPProfitability(double value, double cedola, DateTime expirationDate) {
     var finalValue = (100 - value) * 100 / value;
     DateTime now = DateTime.now();
     // check how many years are left
     int yearsLeft = expirationDate.year - now.year;
     int cedolaPayments = yearsLeft * 2;
-    if (expirationDate.month < now.month ||
-        (expirationDate.month == now.month && expirationDate.day < now.day)) {
+    if (expirationDate.month < now.month || (expirationDate.month == now.month && expirationDate.day < now.day)) {
       cedolaPayments -= 1;
     }
     double totalCedola = cedolaPayments * cedola;
@@ -63,418 +73,314 @@ class _ExplorePageState extends State<ExplorePage> {
     // Assume each label is about 60 pixels wide, change this based on your font size and style
     double labelWidth = 80;
     // Get the width of the chart
-    double chartWidth = MediaQuery.of(context).size.width *
-        0.9; // Since you're using 0.9 of screen width
+    double chartWidth = MediaQuery.of(context).size.width * 0.9; // Since you're using 0.9 of screen width
     // Calculate the number of labels that could fit
     int numLabelsThatFit = chartWidth ~/ labelWidth;
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setModalState) {
-            
-
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.92,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 80,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color:
-                                  isDarkMode ? darkModeColor : Colors.grey[400],
-                              borderRadius: BorderRadius.circular(10),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 80,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: isDarkMode ? darkModeColor : Colors.grey[400],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      btp.name.toUpperCase(),
+                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: isDarkMode ? primaryColorLight : primaryColor),
+                    ),
+                  ),
+                  FutureBuilder<Map<DateTime, double>>(
+                    future: getCachedGraphData(btp.isin),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+                        return SizedBox(
+                          height: 200,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CupertinoActivityIndicator(),
+                                const SizedBox(height: 10),
+                                Text('Loading the graph...',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 14,
+                                    )),
+                              ],
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: Text(
-                          btp.name.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: isDarkMode
-                                  ? primaryColorLight
-                                  : primaryColor),
-                        ),
-                      ),
-                      FutureBuilder<Map<DateTime, double>>(
-                        future: createSingleBtpValueGraph(btp.isin, timeWindow),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                  child: Padding(
-                                padding: const EdgeInsets.only(top: 24.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const CupertinoActivityIndicator(),
-                                    const SizedBox(height: 10),
-                                    Text('Loading the graph...',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 14,
-                                        )),
-                                  ],
-                                ),
-                              )),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          } else if (snapshot.hasData &&
-                              snapshot.data!.isNotEmpty) {
-                            // Determine minY and maxY for padding
-                            final double minY = snapshot.data!.values.isNotEmpty
-                                ? (snapshot.data!.values.reduce(min) *
-                                    0.95) // 5% padding at bottom
-                                : 0;
-                            final double maxY = snapshot.data!.values.isNotEmpty
-                                ? (snapshot.data!.values.reduce(max) *
-                                    1.05) // 5% padding at top
-                                : 0;
+                          )),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        // Cache the data
+                        graphDataCache[btp.isin] = snapshot.data!;
+                        // Determine minY and maxY for padding
+                        final double minY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(min) * 0.95) // 5% padding at bottom
+                            : 0;
+                        final double maxY = snapshot.data!.values.isNotEmpty
+                            ? (snapshot.data!.values.reduce(max) * 1.05) // 5% padding at top
+                            : 0;
 
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                              child: SizedBox(
-                                height: 190, // To make the chart square
-                                width: double.infinity,
-                                child: LineChart(
-                                  LineChartData(
-                                    lineTouchData: LineTouchData(
-                                      touchTooltipData: LineTouchTooltipData(
-                                        getTooltipItems:
-                                            (List<LineBarSpot> touchedSpots) {
-                                          return touchedSpots
-                                              .map((LineBarSpot touchedSpot) {
-                                            final DateTime date =
-                                                snapshot.data!.keys.toList()[
-                                                    touchedSpot.x.toInt()];
-                                            final double value = touchedSpot.y;
-                                            return LineTooltipItem(
-                                              '€${value.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}\n${DateFormat('dd/MM/yy').format(date)}',
-                                              const TextStyle(
-                                                  color: lightTextColor),
-                                            );
-                                          }).toList();
-                                        },
-                                      ),
-                                    ),
-                                    minY: minY,
-                                    maxY: maxY,
-                                    gridData: FlGridData(
-                                      show: true,
-                                      drawVerticalLine: false,
-                                      drawHorizontalLine: true,
-                                      getDrawingHorizontalLine: (value) =>
-                                          FlLine(
-                                        color: Colors.grey[200],
-                                        strokeWidth: 1,
-                                      ),
-                                      getDrawingVerticalLine: (value) => FlLine(
-                                        color: Colors.grey[200],
-                                        strokeWidth: 1,
-                                      ),
-                                    ),
-                                    titlesData: FlTitlesData(
-                                      show: true,
-                                      rightTitles: const AxisTitles(
-                                        sideTitles: SideTitles(
-                                            showTitles:
-                                                false), // No right titles
-                                      ),
-                                      topTitles: const AxisTitles(
-                                        sideTitles: SideTitles(
-                                            showTitles: false), // No top titles
-                                      ),
-                                      bottomTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          showTitles: false,
-                                          interval:
-                                              1, // Start with an interval of 1
-                                          getTitlesWidget:
-                                              (double value, TitleMeta meta) {
-                                            final dates = snapshot.data!.keys
-                                                .toList()
-                                              ..sort();
-                                            // Calculate the actual interval based on the data length and the number of labels that fit
-                                            int actualInterval = max(
-                                                1,
-                                                dates.length ~/
-                                                    numLabelsThatFit);
-                                            if (value.toInt() %
-                                                    actualInterval ==
-                                                0) {
-                                              DateTime date =
-                                                  dates[value.toInt()];
-                                              String formattedDate =
-                                                  DateFormat('dd/MM/yy')
-                                                      .format(date);
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10.0),
-                                                child: Text(formattedDate,
-                                                    style: const TextStyle(
-                                                        color: primaryColor,
-                                                        fontSize: 13)),
-                                              );
-                                            }
-                                            return const Text('');
-                                          },
-                                          reservedSize: 30,
-                                        ),
-                                      ),
-                                      leftTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          showTitles: false,
-                                          getTitlesWidget:
-                                              (double value, TitleMeta meta) {
-                                            if (value == minY) {
-                                              return const Text('');
-                                            }
-                                            // Customizing the text for left titles
-                                            return Text('€${value.toInt()}',
-                                                style: const TextStyle(
-                                                    color: primaryColor,
-                                                    fontSize: 13));
-                                          },
-                                          reservedSize: 40, // Adjust as needed
-                                        ),
-                                      ),
-                                    ),
-                                    borderData: FlBorderData(show: false),
-                                    lineBarsData: [
-                                      LineChartBarData(
-                                        isCurved: true,
-                                        dotData: const FlDotData(
-                                            show: false), // Hide the dots
-                                        color: primaryColor,
-                                        belowBarData: BarAreaData(
-                                          show: true,
-                                          color: primaryColor.withOpacity(
-                                              0.3), // The fill color with some opacity
-                                        ),
-                                        spots: _getSpots(snapshot.data!),
-                                      ),
-                                    ],
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          child: SizedBox(
+                            height: 190, // To make the chart square
+                            width: double.infinity,
+                            child: LineChart(
+                              LineChartData(
+                                lineTouchData: LineTouchData(
+                                  touchTooltipData: LineTouchTooltipData(
+                                    getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                                      return touchedSpots.map((LineBarSpot touchedSpot) {
+                                        final DateTime date = snapshot.data!.keys.toList()[touchedSpot.x.toInt()];
+                                        final double value = touchedSpot.y;
+                                        return LineTooltipItem(
+                                          '€${value.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}\n${DateFormat('dd/MM/yy').format(date)}',
+                                          const TextStyle(color: lightTextColor),
+                                        );
+                                      }).toList();
+                                    },
                                   ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            return const Center(child: Text('No data found'));
-                          }
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0, top: 25.0),
-                        child: Center(
-                          child: CupertinoSlidingSegmentedControl<TimeWindow>(
-                            backgroundColor: Colors.transparent,
-                            thumbColor: primaryColor,
-                            children: {
-                              TimeWindow.oneWeek: Text(
-                                  getString('walletBalanceGraphOneWeekText'),
-                                  style: TextStyle(
-                                      color: timeWindow == TimeWindow.oneWeek
-                                          ? Colors.white
-                                          : textColor)),
-                              TimeWindow.oneMonth: Text(
-                                  getString('walletBalanceGraphOneMonthText'),
-                                  style: TextStyle(
-                                      color: timeWindow == TimeWindow.oneMonth
-                                          ? Colors.white
-                                          : textColor)),
-                              TimeWindow.threeMonths: Text(
-                                  getString(
-                                      'walletBalanceGraphThreeMonthsText'),
-                                  style: TextStyle(
-                                      color:
-                                          timeWindow == TimeWindow.threeMonths
-                                              ? Colors.white
-                                              : textColor)),
-                              TimeWindow.oneYear: Text(
-                                  getString('walletBalanceGraphOneYearText'),
-                                  style: TextStyle(
-                                      color: timeWindow == TimeWindow.oneYear
-                                          ? Colors.white
-                                          : textColor)),
-                              TimeWindow.tenYears: Text(
-                                  getString('walletBalanceGraphTenYearsText'),
-                                  style: TextStyle(
-                                      color: timeWindow == TimeWindow.tenYears
-                                          ? Colors.white
-                                          : textColor)),
-                            },
-                            groupValue: timeWindow,
-                            onValueChanged: (TimeWindow? value) {
-                              setModalState(() {
-                                timeWindow = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        getString('ExplorePageBTPInformationTitle'),
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isDarkMode ? darkModeColor : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 8),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        getString(
-                                            'ExplorePageBTPInformationPrice'),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        btp.value.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
+                                minY: minY,
+                                maxY: maxY,
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  drawHorizontalLine: true,
+                                  getDrawingHorizontalLine: (value) => FlLine(
                                     color: Colors.grey[200],
-                                    thickness: 1,
+                                    strokeWidth: 1,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        getString(
-                                            'ExplorePageBTPInformationCoupon'),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${btp.cedola * 2}%',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
+                                  getDrawingVerticalLine: (value) => FlLine(
                                     color: Colors.grey[200],
-                                    thickness: 1,
+                                    strokeWidth: 1,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        getString(
-                                            'ExplorePageBTPInformationExpirationDate'),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                ),
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  rightTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false), // No right titles
                                   ),
-                                  Divider(
-                                    color: Colors.grey[200],
-                                    thickness: 1,
+                                  topTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false), // No top titles
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        getString(
-                                            'ExplorePageBTPInformationISIN'),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        btp.isin,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: false,
+                                      interval: 1, // Start with an interval of 1
+                                      getTitlesWidget: (double value, TitleMeta meta) {
+                                        final dates = snapshot.data!.keys.toList()..sort();
+                                        // Calculate the actual interval based on the data length and the number of labels that fit
+                                        int actualInterval = max(1, dates.length ~/ numLabelsThatFit);
+                                        if (value.toInt() % actualInterval == 0) {
+                                          DateTime date = dates[value.toInt()];
+                                          String formattedDate = DateFormat('dd/MM/yy').format(date);
+                                          return Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text(formattedDate, style: const TextStyle(color: primaryColor, fontSize: 13)),
+                                          );
+                                        }
+                                        return const Text('');
+                                      },
+                                      reservedSize: 30,
+                                    ),
                                   ),
-                                  Divider(
-                                    color: Colors.grey[200],
-                                    thickness: 1,
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: false,
+                                      getTitlesWidget: (double value, TitleMeta meta) {
+                                        if (value == minY) {
+                                          return const Text('');
+                                        }
+                                        // Customizing the text for left titles
+                                        return Text('€${value.toInt()}', style: const TextStyle(color: primaryColor, fontSize: 13));
+                                      },
+                                      reservedSize: 40, // Adjust as needed
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        getString(
-                                            'ExplorePageBTPInformationProfitability'),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${_getBTPProfitability(btp.value, btp.cedola, btp.expirationDate).toStringAsFixed(2)}%',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: _getBTPProfitability(
-                                                      btp.value,
-                                                      btp.cedola,
-                                                      btp.expirationDate) <
-                                                  0
-                                              ? Colors.red
-                                              : Colors.green,
-                                        ),
-                                      )
-                                    ],
+                                ),
+                                borderData: FlBorderData(show: false),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    isCurved: true,
+                                    dotData: const FlDotData(show: false), // Hide the dots
+                                    color: primaryColor,
+                                    belowBarData: BarAreaData(
+                                      show: true,
+                                      color: primaryColor.withOpacity(0.3), // The fill color with some opacity
+                                    ),
+                                    spots: _getSpots(snapshot.data!),
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                        );
+                      } else {
+                        return const Center(child: Text('No data found'));
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0, top: 25.0),
+                    child: Center(
+                      child: CupertinoSlidingSegmentedControl<TimeWindow>(
+                        backgroundColor: Colors.transparent,
+                        thumbColor: primaryColor,
+                        children: {
+                          TimeWindow.oneWeek: Text(getString('walletBalanceGraphOneWeekText'),
+                              style: TextStyle(color: timeWindow == TimeWindow.oneWeek ? Colors.white : textColor)),
+                          TimeWindow.oneMonth: Text(getString('walletBalanceGraphOneMonthText'),
+                              style: TextStyle(color: timeWindow == TimeWindow.oneMonth ? Colors.white : textColor)),
+                          TimeWindow.threeMonths: Text(getString('walletBalanceGraphThreeMonthsText'),
+                              style: TextStyle(color: timeWindow == TimeWindow.threeMonths ? Colors.white : textColor)),
+                          TimeWindow.oneYear: Text(getString('walletBalanceGraphOneYearText'),
+                              style: TextStyle(color: timeWindow == TimeWindow.oneYear ? Colors.white : textColor)),
+                          TimeWindow.tenYears: Text(getString('walletBalanceGraphTenYearsText'),
+                              style: TextStyle(color: timeWindow == TimeWindow.tenYears ? Colors.white : textColor)),
+                        },
+                        groupValue: timeWindow,
+                        onValueChanged: (TimeWindow? value) {
+                          setModalState(() {
+                            timeWindow = value!;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    getString('ExplorePageBTPInformationTitle'),
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDarkMode ? darkModeColor : Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getString('ExplorePageBTPInformationPrice'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    btp.value.toString(),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getString('ExplorePageBTPInformationCoupon'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${btp.cedola * 2}%',
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getString('ExplorePageBTPInformationExpirationDate'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getString('ExplorePageBTPInformationISIN'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    btp.isin,
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getString('ExplorePageBTPInformationProfitability'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${_getBTPProfitability(btp.value, btp.cedola, btp.expirationDate).toStringAsFixed(2)}%',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: _getBTPProfitability(btp.value, btp.cedola, btp.expirationDate) < 0 ? Colors.red : Colors.green,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ]),
+                    ),
+                  ),
+                ]),
               ),
             );
           });
@@ -483,11 +389,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   List<FlSpot> _getSpots(Map<DateTime, double> data) {
     final dates = data.keys.toList()..sort(); // Ensure the dates are sorted
-    return dates
-        .asMap()
-        .entries
-        .map((entry) => FlSpot(entry.key.toDouble(), data[entry.value]!))
-        .toList();
+    return dates.asMap().entries.map((entry) => FlSpot(entry.key.toDouble(), data[entry.value]!)).toList();
   }
 
   @override
@@ -510,11 +412,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       children: List.generate(
                           5,
                           (index) => const ExplorePageInvestmentComponent(
-                              investmentName: null,
-                              investmentDetail: null,
-                              cedola: null,
-                              investmentValue: null,
-                              variation: null)));
+                              investmentName: null, investmentDetail: null, cedola: null, investmentValue: null, variation: null)));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}'); // Handle errors
                 } else if (snapshot.hasData) {
@@ -537,14 +435,10 @@ class _ExplorePageState extends State<ExplorePage> {
                               asset,
                             ),
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all(Colors.transparent),
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(
-                              primaryColor.withOpacity(0.3)),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero)),
+                          overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                         ),
                         child: ExplorePageInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",
