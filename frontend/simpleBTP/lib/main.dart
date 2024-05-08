@@ -46,8 +46,8 @@ Future<void> loadData() async {
     await Hive.openBox('btps');
     fetchBtps().then((value) => saveBTPsToDB(value));
   } else {
-    // for debugging purposes caching is disabled
     await Hive.openBox('btps');
+    await initializeBTPData();
     databaseInitialized = true;
   }
 }

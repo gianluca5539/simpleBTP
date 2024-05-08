@@ -85,6 +85,7 @@ class _ExplorePageSearchAndFilterComponentState
           context: context,
           isDismissible: true,
           builder: (BuildContext ctx) {
+            print('opening filter modal');
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
               return Container(
@@ -92,7 +93,7 @@ class _ExplorePageSearchAndFilterComponentState
                 width: double.infinity,
                 // set background color
                 decoration: BoxDecoration(
-                    color: isDarkMode ? offBlackColor : offBlackColor,
+                    color: isDarkMode ? offBlackColor : offWhiteColor,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
@@ -127,8 +128,7 @@ class _ExplorePageSearchAndFilterComponentState
                         Row(
                           children: [
                             Text(getString('explorePageValueFilterTitle'),
-                                style:
-                                     TextStyle(
+                                style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
                                         ? lightTextColor
@@ -175,8 +175,7 @@ class _ExplorePageSearchAndFilterComponentState
                         Row(
                           children: [
                             Text(getString('explorePageCedolaFilterTitle'),
-                                style:
-                                     TextStyle(
+                                style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
                                         ? lightTextColor
@@ -225,8 +224,7 @@ class _ExplorePageSearchAndFilterComponentState
                             Text(
                                 getString(
                                     'explorePageExpirationDateFilterTitle'),
-                                style:
-                                     TextStyle(
+                                style: TextStyle(
                                     fontSize: 18,
                                     color: isDarkMode
                                         ? lightTextColor
@@ -438,95 +436,94 @@ class _ExplorePageSearchAndFilterComponentState
                                 isDarkMode ? Brightness.dark : Brightness.light,
                           ),
                           child: CupertinoActionSheet(
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                '${getString('explorePageOrderByValueButton')} ↑',
-                                style: TextStyle(
-                                    fontSize: 18,
+                            actions: <Widget>[
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                  '${getString('explorePageOrderByValueButton')} ↑',
+                                  style: TextStyle(
+                                      fontSize: 18,
                                       color: getColorForItem('value', 'asc'),
-                                    fontWeight:
-                                        getFontWeightForItem('value', 'asc')),
+                                      fontWeight:
+                                          getFontWeightForItem('value', 'asc')),
+                                ),
+                                onPressed: () {
+                                  executeOrdering('value', 'asc', context);
+                                },
                               ),
-                              onPressed: () {
-                                executeOrdering('value', 'asc', context);
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                  '${getString('explorePageOrderByValueButton')} ↓',
-                                  style: TextStyle(
-                                      fontSize: 18,
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                    '${getString('explorePageOrderByValueButton')} ↓',
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color: getColorForItem('value', 'desc'),
-                                      fontWeight: getFontWeightForItem(
-                                          'value', 'desc'))),
-                              onPressed: () {
-                                executeOrdering('value', 'desc', context);
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                  '${getString('explorePageOrderByCedolaButton')} ↑',
-                                  style: TextStyle(
-                                      fontSize: 18,
+                                        fontWeight: getFontWeightForItem(
+                                            'value', 'desc'))),
+                                onPressed: () {
+                                  executeOrdering('value', 'desc', context);
+                                },
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                    '${getString('explorePageOrderByCedolaButton')} ↑',
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color: getColorForItem('cedola', 'asc'),
-                                      fontWeight: getFontWeightForItem(
-                                          'cedola', 'asc'))),
-                              onPressed: () {
-                                executeOrdering('cedola', 'asc', context);
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                  '${getString('explorePageOrderByCedolaButton')} ↓',
-                                  style: TextStyle(
-                                      fontSize: 18,
+                                        fontWeight: getFontWeightForItem(
+                                            'cedola', 'asc'))),
+                                onPressed: () {
+                                  executeOrdering('cedola', 'asc', context);
+                                },
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                    '${getString('explorePageOrderByCedolaButton')} ↓',
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color:
                                             getColorForItem('cedola', 'desc'),
-                                      fontWeight: getFontWeightForItem(
-                                          'cedola', 'desc'))),
-                              onPressed: () {
-                                executeOrdering('cedola', 'desc', context);
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                  '${getString('explorePageOrderByExpirationDateButton')} ↑',
-                                  style: TextStyle(
-                                      fontSize: 18,
+                                        fontWeight: getFontWeightForItem(
+                                            'cedola', 'desc'))),
+                                onPressed: () {
+                                  executeOrdering('cedola', 'desc', context);
+                                },
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                    '${getString('explorePageOrderByExpirationDateButton')} ↑',
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color: getColorForItem(
                                             'expirationDate', 'asc'),
-                                      fontWeight: getFontWeightForItem(
-                                          'expirationDate', 'asc'))),
-                              onPressed: () {
-                                executeOrdering(
-                                    'expirationDate', 'asc', context);
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                  '${getString('explorePageOrderByExpirationDateButton')} ↓',
-                                  style: TextStyle(
-                                      fontSize: 18,
+                                        fontWeight: getFontWeightForItem(
+                                            'expirationDate', 'asc'))),
+                                onPressed: () {
+                                  executeOrdering(
+                                      'expirationDate', 'asc', context);
+                                },
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                    '${getString('explorePageOrderByExpirationDateButton')} ↓',
+                                    style: TextStyle(
+                                        fontSize: 18,
                                         color: getColorForItem(
                                             'expirationDate', 'desc'),
-                                      fontWeight: getFontWeightForItem(
-                                          'expirationDate', 'desc'))),
+                                        fontWeight: getFontWeightForItem(
+                                            'expirationDate', 'desc'))),
+                                onPressed: () {
+                                  executeOrdering(
+                                      'expirationDate', 'desc', context);
+                                },
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
+                              isDefaultAction: true,
                               onPressed: () {
-                                executeOrdering(
-                                    'expirationDate', 'desc', context);
+                                Navigator.pop(context);
                               },
-                            ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            isDefaultAction: true,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(getString('cancel'),
-                                style:
-                                    const TextStyle(
-                                    fontSize: 18, color: Colors.red)),
+                              child: Text(getString('cancel'),
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.red)),
                             ),
                           ),
                         );

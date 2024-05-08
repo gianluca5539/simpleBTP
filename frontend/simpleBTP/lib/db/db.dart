@@ -49,6 +49,37 @@ void saveBTPsToDB(Map<String, Map<String, String>> btps) async {
   databaseInitialized = true;
 }
 
+Future<void> initializeBTPData() {
+  var box = Hive.box('btps');
+
+  for (var btp in box.values) {
+    if (btp.value != 0) {
+      // update min and max values
+      if (btp.value < minBTPVal) {
+        minBTPVal = btp.value;
+      }
+      if (btp.value > maxBTPVal) {
+        maxBTPVal = btp.value;
+      }
+      if (btp.cedola < minBTPCedola) {
+        minBTPCedola = btp.cedola;
+      }
+      if (btp.cedola > maxBTPCedola) {
+        maxBTPCedola = btp.cedola;
+      }
+      if (btp.expirationDate.isBefore(minBTPExpirationDate)) {
+        minBTPExpirationDate = btp.expirationDate;
+      }
+      if (btp.expirationDate.isAfter(maxBTPExpirationDate)) {
+        maxBTPExpirationDate = btp.expirationDate;
+      }
+    }
+  }
+
+  databaseInitialized = true;
+  return Future.value();
+}
+
 Future<void> addBTPToWallet(
     String isin, DateTime purchaseDate, double price, int investment) async {
   var mybtpsBox = Hive.box('mybtps');
