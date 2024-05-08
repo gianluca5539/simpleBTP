@@ -13,7 +13,7 @@ import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
-import 'package:simpleBTP/components/BTPDetail/openBTPDetail.dart';
+import 'package:simpleBTP/components/BTPDetail/BTPDetail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
@@ -87,11 +87,11 @@ class _ExplorePageState extends State<ExplorePage> {
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return TextButton(
-                        onPressed: () => openBTPDetailPage(
+                        onPressed: () =>
+                            openBTPDetailModal(
                               context,
                               isDarkMode,
-                              asset,
-                              timeWindow
+                              asset
                             ),
                         style: ButtonStyle(
                           backgroundColor:

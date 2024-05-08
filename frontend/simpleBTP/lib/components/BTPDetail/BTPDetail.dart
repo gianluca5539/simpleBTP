@@ -13,6 +13,8 @@ import 'package:simpleBTP/db/hivemodels.dart';
 // Cache to store graph data
 Map<String, Map<TimeWindow, Map<DateTime, double>>> graphDataCache = {};
 
+TimeWindow timeWindow = TimeWindow.oneWeek;
+
 double _getBTPProfitability(
     double value, double cedola, DateTime expirationDate) {
   var finalValue = (100 - value) * 100 / value;
@@ -58,8 +60,7 @@ List<FlSpot> _getSpots(Map<DateTime, double> data) {
       .toList();
 }
 
-void openBTPDetailPage(
-    BuildContext context, isDarkMode, BTP btp, TimeWindow timeWindow) {
+void openBTPDetailModal(BuildContext context, isDarkMode, BTP btp) {
   // Assume each label is about 60 pixels wide, change this based on your font size and style
   double labelWidth = 80;
   // Get the width of the chart
