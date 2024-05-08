@@ -88,8 +88,8 @@ void openMyBTPDetailModal(
     BTP btp,
     double buyPrice,
     DateTime buyDate,
-    String key,
-    Function deleteBTPFromWallet) {
+    String? key,
+    Function? deleteBTPFromWallet) {
   // Assume each label is about 60 pixels wide, change this based on your font size and style
   double labelWidth = 80;
   // Get the width of the chart
@@ -635,12 +635,49 @@ void openMyBTPDetailModal(
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          deleteBTPFromWallet(key, context, isDarkMode);
+                          if (deleteBTPFromWallet != null) {
+                            deleteBTPFromWallet(key, context, isDarkMode);
+                          } else {
+                            // show a dialog that the user can't delete this BTP
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CupertinoTheme(
+                                    data: CupertinoThemeData(
+                                      brightness: isDarkMode
+                                          ? Brightness.dark
+                                          : Brightness.light,
+                                    ),
+                                    child: CupertinoAlertDialog(
+                                      title: Text(getString(
+                                          'MyBTPInformationDeleteError')),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                            getString(
+                                                'ExplorePageBTPInformationDeleteErrorButton'),
+                                            style: const TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          }
                         },
                         child: Text(
                           getString('ExplorePageBTPInformationDeleteButton'),
                           style:
-                              TextStyle(fontSize: 16, color: Colors.red[700]),
+                              TextStyle(
+                              fontSize: 16,
+                              color: deleteBTPFromWallet != null
+                                  ? Colors.red[700]
+                                  : Colors.grey),
                         ),
                       ),
                     ),

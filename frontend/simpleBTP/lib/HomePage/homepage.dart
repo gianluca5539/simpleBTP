@@ -8,8 +8,11 @@ import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/BTPDetail/BTPDetail.dart';
+import 'package:simpleBTP/components/BTPDetail/myBTPDetail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
+import 'package:simpleBTP/db/hivemodels.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,7 +47,7 @@ class HomePage extends StatelessWidget {
                   return const Text('No data'); // Handle the case of no data
                 }),
             const HomeMyAssetsComponent(),
-            FutureBuilder<List<Map<String, dynamic>>>(
+            FutureBuilder<List>(
               future: getHomePageMyBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -71,37 +74,30 @@ class HomePage extends StatelessWidget {
                   }
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
-                    final name = processString(asset['name'] ?? 'N/A');
+                    final name = processString(asset['btp'].name);
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value = asset['value'];
-                    final double cedola = asset['cedola'];
-                    double variation = asset['variation'];
+                    final double value =
+                        asset['btp'].value * asset['investment'];
+                    final double cedola = asset['btp'].cedola;
+                    double variation =
+                        (asset['btp'].value - asset['buyPrice']) /
+                            asset['buyPrice'] *
+                            100;
                     // fix variation to have 3 decimal places
-                    variation = double.parse(variation.toStringAsFixed(3));
+                    variation = double.parse(variation.toStringAsFixed(2));
 
                     return TextButton(
                         onPressed: () {
-                          // show floating snackbar
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                margin: const EdgeInsets.only(
-                                    bottom: 30, left: 20, right: 20),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.grey[700],
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                content: Text(
-                                  getString(
-                                    'homePageMyBTPSnackBar',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                )),
-                          );
+                          openMyBTPDetailModal(
+                              context,
+                              isDarkMode,
+                              asset['btp'],
+                              asset['buyPrice'],
+                              asset['buyDate'],
+                              null,
+                              null);
                         },
                         style: ButtonStyle(
                           backgroundColor:
@@ -114,11 +110,11 @@ class HomePage extends StatelessWidget {
                                   borderRadius: BorderRadius.zero)),
                         ),
                         child: HomePageInvestmentComponent(
-                      investmentName: btpLess ?? "Unknown",
-                      investmentDetail: "$withBtp",
-                      cedola: "${cedola * 2}%",
-                      investmentValue: value,
-                      variation: variation,
+                          investmentName: btpLess ?? "Unknown",
+                          investmentDetail: "$withBtp",
+                          cedola: "${cedola * 2}%",
+                          investmentValue: value,
+                          variation: variation,
                         ));
                   }).toList();
                   return Column(children: investmentList);
@@ -128,7 +124,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             const HomeBestBTPsComponent(),
-            FutureBuilder<List<Map<String, dynamic>>>(
+            FutureBuilder<List>(
               future: getHomePageBestBTPs(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -146,37 +142,19 @@ class HomePage extends StatelessWidget {
                 } else if (snapshot.hasData) {
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
-                    final name = processString(asset['name'] ?? 'N/A');
+                    final name = processString(asset.name);
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value = asset['value'];
-                    final double cedola = asset['cedola'];
+                    final double value = asset.value;
+                    final double cedola = asset.cedola;
                     var variation = (value - 100);
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
                     return TextButton(
                         onPressed: () {
-                          // show floating snackbar
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                margin: const EdgeInsets.only(
-                                    bottom: 30, left: 20, right: 20),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.grey[700],
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                content: Text(
-                                  getString(
-                                    'homePageExploreBTPSnackBar',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                )),
-                          );
+                          openBTPDetailModal(context, isDarkMode, asset);
                         },
                         style: ButtonStyle(
                           backgroundColor:
@@ -189,11 +167,11 @@ class HomePage extends StatelessWidget {
                                   borderRadius: BorderRadius.zero)),
                         ),
                         child: HomePageInvestmentComponent(
-                      investmentName: btpLess ?? "Unknown",
-                      investmentDetail: "$withBtp",
-                      cedola: "${cedola * 2}%",
-                      investmentValue: value,
-                      variation: variation,
+                          investmentName: btpLess ?? "Unknown",
+                          investmentDetail: "$withBtp",
+                          cedola: "${cedola * 2}%",
+                          investmentValue: value,
+                          variation: variation,
                         ));
                   }).toList();
                   return Column(children: investmentList);

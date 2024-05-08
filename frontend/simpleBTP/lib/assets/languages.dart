@@ -86,6 +86,8 @@ Map<String, String> englishLang = {
   'and': 'and',
   'days': 'days',
   'cancel': 'Cancel',
+  'MyBTPInformationDeleteError': 'To delete a BTP please go to Wallet.',
+  'ExplorePageBTPInformationDeleteErrorButton': 'Dismiss',
   // header
   'appTopBarHome': 'simpleBTP',
   'appTopBarExplore': 'Explore',

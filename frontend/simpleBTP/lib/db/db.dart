@@ -117,11 +117,10 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
   List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
     var btp = btps.firstWhere((btp) => btp.isin == mybtp.isin);
     return {
-      'name': btp.name,
-      'value': mybtp.investment * btp.value,
-      'cedola': btp.cedola,
-      'isin': btp.isin,
-      'variation': (btp.value - mybtp.buyPrice),
+      'btp': btp,
+      'investment': mybtp.investment,
+      'buyPrice': mybtp.buyPrice,
+      'buyDate': mybtp.buyDate,
     };
   }).toList();
 
@@ -151,8 +150,7 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
     var btp = btps.firstWhere((btp) => btp.value.isin == mybtp.value.isin);
     return {
       'btp': btp.value,
-      'value': mybtp.value.investment * btp.value.value,
-      'variation': (btp.value.value - mybtp.value.buyPrice),
+      'investment': mybtp.value.investment,
       'buyDate': mybtp.value.buyDate,
       'buyPrice': mybtp.value.buyPrice,
       'key': mybtp.key,
@@ -165,26 +163,19 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   return merged;
 }
 
-Future<List<Map<String, dynamic>>> getHomePageBestBTPs() async {
+Future<List> getHomePageBestBTPs() async {
   while (!databaseInitialized) {
     await Future.delayed(const Duration(milliseconds: 100));
   }
 
   var box = Hive.box('btps');
 
-  var btps = box.values.toList();
+  List btps = box.values.toList();
   btps.sort((a, b) => b.value.compareTo(a.value));
 
   List btpslist = btps.length > 5 ? btps.sublist(0, 5) : btps;
 
-  return btpslist.map((btp) {
-    return {
-      'name': btp.name,
-      'value': btp.value,
-      'isin': btp.isin,
-      'cedola': btp.cedola,
-    };
-  }).toList();
+  return btpslist;
 }
 
 Future<List<Map<String, dynamic>>> getMyBTPs() async {

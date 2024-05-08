@@ -526,11 +526,15 @@ class _WalletPageState extends State<WalletPage> {
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value = asset['value'];
+                    final double value =
+                        asset['btp'].value * asset['investment'];
                     final double cedola = asset['btp'].cedola;
-                    double variation = asset['variation'];
+                    double variation =
+                        (asset['btp'].value - asset['buyPrice']) /
+                            asset['buyPrice'] *
+                            100;
                     // fix variation to have 3 decimal places
-                    variation = double.parse(variation.toStringAsFixed(3));
+                    variation = double.parse(variation.toStringAsFixed(2));
                     final date = asset['btp'].expirationDate;
 
                     return TextButton(
