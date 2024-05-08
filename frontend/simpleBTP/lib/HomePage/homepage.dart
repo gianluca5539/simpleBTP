@@ -81,13 +81,45 @@ class HomePage extends StatelessWidget {
                     // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
-                    return HomePageInvestmentComponent(
+                    return TextButton(
+                        onPressed: () {
+                          // show floating snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                margin: const EdgeInsets.only(
+                                    bottom: 30, left: 20, right: 20),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.grey[700],
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                content: Text(
+                                  getString(
+                                    'homePageMyBTPSnackBar',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                )),
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          overlayColor: MaterialStateProperty.all(
+                              primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(
+                              const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero)),
+                        ),
+                        child: HomePageInvestmentComponent(
                       investmentName: btpLess ?? "Unknown",
                       investmentDetail: "$withBtp",
                       cedola: "${cedola * 2}%",
                       investmentValue: value,
                       variation: variation,
-                    );
+                        ));
                   }).toList();
                   return Column(children: investmentList);
                 } else {
@@ -124,13 +156,45 @@ class HomePage extends StatelessWidget {
                     // make it have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
 
-                    return HomePageInvestmentComponent(
+                    return TextButton(
+                        onPressed: () {
+                          // show floating snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                margin: const EdgeInsets.only(
+                                    bottom: 30, left: 20, right: 20),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.grey[700],
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                content: Text(
+                                  getString(
+                                    'homePageExploreBTPSnackBar',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                )),
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          overlayColor: MaterialStateProperty.all(
+                              primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(
+                              const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero)),
+                        ),
+                        child: HomePageInvestmentComponent(
                       investmentName: btpLess ?? "Unknown",
                       investmentDetail: "$withBtp",
                       cedola: "${cedola * 2}%",
                       investmentValue: value,
                       variation: variation,
-                    );
+                        ));
                   }).toList();
                   return Column(children: investmentList);
                 } else {

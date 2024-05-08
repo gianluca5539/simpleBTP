@@ -104,6 +104,8 @@ Map<String, String> englishLang = {
   'homeMyAssetsViewAllButton': 'View all',
   'homeBestBTPs': 'Best performing BTPs',
   'homeBestBTPsViewAllButton': 'View all',
+  'homePageMyBTPSnackBar': 'To view all BTP information go to Wallet.',
+  'homePageExploreBTPSnackBar': 'To view all BTP information go to Explore.',
   // walletpage
   'walletBalanceText': 'Your investment',
   'walletMyAssets': 'Your assets',
