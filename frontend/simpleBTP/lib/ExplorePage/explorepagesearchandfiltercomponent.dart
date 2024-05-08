@@ -96,7 +96,7 @@ class _ExplorePageSearchAndFilterComponentState
                 width: double.infinity,
                 // set background color
                 decoration: BoxDecoration(
-                    color: isDarkMode ? offBlackColor : Colors.white,
+                    color: isDarkMode ? offBlackColor : offBlackColor,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),

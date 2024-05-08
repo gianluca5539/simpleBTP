@@ -159,7 +159,9 @@ class _WalletPageBalanceComponentState
                                   drawVerticalLine: false,
                                   drawHorizontalLine: true,
                                   getDrawingHorizontalLine: (value) => FlLine(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     strokeWidth: 1,
                                   ),
                                   getDrawingVerticalLine: (value) => FlLine(
@@ -263,31 +265,41 @@ class _WalletPageBalanceComponentState
                               style: TextStyle(
                                   color: timeWindow == TimeWindow.oneWeek
                                       ? Colors.white
-                                      : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.oneMonth: Text(
                               getString('walletBalanceGraphOneMonthText'),
                               style: TextStyle(
                                   color: timeWindow == TimeWindow.oneMonth
                                       ? Colors.white
-                                      : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.threeMonths: Text(
                               getString('walletBalanceGraphThreeMonthsText'),
                               style: TextStyle(
                                   color: timeWindow == TimeWindow.threeMonths
                                       ? Colors.white
-                                      : textColor)),
+                                      : isDarkMode
+                                          ? lightTextColor
+                                          : textColor)),
                           TimeWindow.oneYear: Text(
                               getString('walletBalanceGraphOneYearText'),
                               style: TextStyle(
                                   color: timeWindow == TimeWindow.oneYear
                                       ? Colors.white
-                                      : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.tenYears: Text(
                               getString('walletBalanceGraphTenYearsText'),
                               style: TextStyle(
                                   color: timeWindow == TimeWindow.tenYears
                                       ? Colors.white
-                                      : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                         },
                         groupValue: timeWindow,
                         onValueChanged: (TimeWindow? value) {

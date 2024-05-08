@@ -96,7 +96,14 @@ class _ExplorePageState extends State<ExplorePage> {
         builder: (context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
-            return SizedBox(
+            return Container(
+              decoration: BoxDecoration(
+                color: isDarkMode ? offBlackColor : offWhiteColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.92,
               child: Padding(
@@ -204,7 +211,9 @@ class _ExplorePageState extends State<ExplorePage> {
                                       drawHorizontalLine: true,
                                       getDrawingHorizontalLine: (value) =>
                                           FlLine(
-                                        color: Colors.grey[200],
+                                        color: isDarkMode
+                                            ? Colors.grey[700]
+                                            : Colors.grey[200],
                                         strokeWidth: 1,
                                       ),
                                       getDrawingVerticalLine: (value) => FlLine(
@@ -314,13 +323,17 @@ class _ExplorePageState extends State<ExplorePage> {
                                   style: TextStyle(
                                       color: timeWindow == TimeWindow.oneWeek
                                           ? Colors.white
-                                          : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                               TimeWindow.oneMonth: Text(
                                   getString('walletBalanceGraphOneMonthText'),
                                   style: TextStyle(
                                       color: timeWindow == TimeWindow.oneMonth
                                           ? Colors.white
-                                          : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                               TimeWindow.threeMonths: Text(
                                   getString(
                                       'walletBalanceGraphThreeMonthsText'),
@@ -328,19 +341,25 @@ class _ExplorePageState extends State<ExplorePage> {
                                       color:
                                           timeWindow == TimeWindow.threeMonths
                                               ? Colors.white
-                                              : textColor)),
+                                              : isDarkMode
+                                                  ? lightTextColor
+                                                  : textColor)),
                               TimeWindow.oneYear: Text(
                                   getString('walletBalanceGraphOneYearText'),
                                   style: TextStyle(
                                       color: timeWindow == TimeWindow.oneYear
                                           ? Colors.white
-                                          : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                               TimeWindow.tenYears: Text(
                                   getString('walletBalanceGraphTenYearsText'),
                                   style: TextStyle(
                                       color: timeWindow == TimeWindow.tenYears
                                           ? Colors.white
-                                          : textColor)),
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                             },
                             groupValue: timeWindow,
                             onValueChanged: (TimeWindow? value) {
@@ -354,8 +373,10 @@ class _ExplorePageState extends State<ExplorePage> {
                       const SizedBox(height: 20),
                       Text(
                         getString('ExplorePageBTPInformationTitle'),
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? lightTextColor : textColor),
                       ),
                       const SizedBox(height: 10),
                       Center(
@@ -378,20 +399,28 @@ class _ExplorePageState extends State<ExplorePage> {
                                       Text(
                                         getString(
                                             'ExplorePageBTPInformationPrice'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         btp.value.toString(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                   Divider(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     thickness: 1,
                                   ),
                                   Row(
@@ -401,20 +430,28 @@ class _ExplorePageState extends State<ExplorePage> {
                                       Text(
                                         getString(
                                             'ExplorePageBTPInformationCoupon'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         '${btp.cedola * 2}%',
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                   Divider(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     thickness: 1,
                                   ),
                                   Row(
@@ -424,20 +461,28 @@ class _ExplorePageState extends State<ExplorePage> {
                                       Text(
                                         getString(
                                             'ExplorePageBTPInformationExpirationDate'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                   Divider(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     thickness: 1,
                                   ),
                                   Row(
@@ -447,20 +492,28 @@ class _ExplorePageState extends State<ExplorePage> {
                                       Text(
                                         getString(
                                             'ExplorePageBTPInformationISIN'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         btp.isin,
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                   Divider(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     thickness: 1,
                                   ),
                                   Row(
@@ -470,7 +523,10 @@ class _ExplorePageState extends State<ExplorePage> {
                                       Text(
                                         getString(
                                             'ExplorePageBTPInformationProfitability'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),

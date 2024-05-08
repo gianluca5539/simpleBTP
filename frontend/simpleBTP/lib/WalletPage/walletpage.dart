@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.dart';
@@ -127,11 +126,15 @@ class _WalletPageState extends State<WalletPage> {
     return dates.asMap().entries.map((entry) => FlSpot(entry.key.toDouble(), data[entry.value]!)).toList();
   }
 
-  void deleteBTPFromWallet(String key, BuildContext context) {
+  void deleteBTPFromWallet(String key, BuildContext context, bool isDarkMode) {
     // show a dialog to confirm the deletion
     showCupertinoModalPopup(
       context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
+        builder: (BuildContext context) => CupertinoTheme(
+              data: CupertinoThemeData(
+                brightness: isDarkMode ? Brightness.dark : Brightness.light,
+              ),
+              child: CupertinoActionSheet(
         message: Text(
           getString('ExplorePageBTPInformationDeleteConfirmationMessage'),
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -159,7 +162,8 @@ class _WalletPageState extends State<WalletPage> {
             style: const TextStyle(color: primaryColor),
           ),
         ),
-      ),
+              ),
+            )
     );
   }
 
@@ -175,7 +179,14 @@ class _WalletPageState extends State<WalletPage> {
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
-            return SizedBox(
+            return Container(
+              decoration: BoxDecoration(
+                color: isDarkMode ? offBlackColor : offWhiteColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.92,
               child: Padding(
@@ -263,7 +274,9 @@ class _WalletPageState extends State<WalletPage> {
                                   drawVerticalLine: false,
                                   drawHorizontalLine: true,
                                   getDrawingHorizontalLine: (value) => FlLine(
-                                    color: Colors.grey[200],
+                                        color: isDarkMode
+                                            ? Colors.grey[700]
+                                            : Colors.grey[200],
                                     strokeWidth: 1,
                                   ),
                                   getDrawingVerticalLine: (value) => FlLine(
@@ -344,15 +357,41 @@ class _WalletPageState extends State<WalletPage> {
                         thumbColor: primaryColor,
                         children: {
                           TimeWindow.oneWeek: Text(getString('walletBalanceGraphOneWeekText'),
-                              style: TextStyle(color: timeWindow == TimeWindow.oneWeek ? Colors.white : textColor)),
+                                  style: TextStyle(
+                                      color: timeWindow == TimeWindow.oneWeek
+                                          ? Colors.white
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.oneMonth: Text(getString('walletBalanceGraphOneMonthText'),
-                              style: TextStyle(color: timeWindow == TimeWindow.oneMonth ? Colors.white : textColor)),
+                                  style: TextStyle(
+                                      color: timeWindow == TimeWindow.oneMonth
+                                          ? Colors.white
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.threeMonths: Text(getString('walletBalanceGraphThreeMonthsText'),
-                              style: TextStyle(color: timeWindow == TimeWindow.threeMonths ? Colors.white : textColor)),
+                                  style: TextStyle(
+                                      color:
+                                          timeWindow == TimeWindow.threeMonths
+                                              ? Colors.white
+                                              : isDarkMode
+                                                  ? lightTextColor
+                                                  : textColor)),
                           TimeWindow.oneYear: Text(getString('walletBalanceGraphOneYearText'),
-                              style: TextStyle(color: timeWindow == TimeWindow.oneYear ? Colors.white : textColor)),
+                                  style: TextStyle(
+                                      color: timeWindow == TimeWindow.oneYear
+                                          ? Colors.white
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                           TimeWindow.tenYears: Text(getString('walletBalanceGraphTenYearsText'),
-                              style: TextStyle(color: timeWindow == TimeWindow.tenYears ? Colors.white : textColor)),
+                                  style: TextStyle(
+                                      color: timeWindow == TimeWindow.tenYears
+                                          ? Colors.white
+                                          : isDarkMode
+                                              ? lightTextColor
+                                              : textColor)),
                         },
                         groupValue: timeWindow,
                         onValueChanged: (TimeWindow? value) {
@@ -366,7 +405,10 @@ class _WalletPageState extends State<WalletPage> {
                   const SizedBox(height: 20),
                   Text(
                     getString('ExplorePageBTPInformationTitle'),
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? lightTextColor : textColor),
                   ),
                   const SizedBox(height: 10),
                   Center(
@@ -386,16 +428,28 @@ class _WalletPageState extends State<WalletPage> {
                                 children: [
                                   Text(
                                     getString('ExplorePageBTPInformationPrice'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     btp.value.toString(),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Divider(
-                                color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                 thickness: 1,
                               ),
                               Row(
@@ -403,16 +457,28 @@ class _WalletPageState extends State<WalletPage> {
                                 children: [
                                   Text(
                                     getString('WalletPageBTPInformationBuyPrice'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     buyPrice.toString(),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Divider(
-                                color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                 thickness: 1,
                               ),
                               Row(
@@ -421,16 +487,28 @@ class _WalletPageState extends State<WalletPage> {
                                   Text(
                                         getString(
                                             'ExplorePageBTPInformationExpirationDate'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                         '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Divider(
-                                color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                 thickness: 1,
                               ),
                               Row(
@@ -439,16 +517,28 @@ class _WalletPageState extends State<WalletPage> {
                                   Text(
                                         getString(
                                             'WalletPageBTPInformationBuyDate'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                         '${buyDate.day}/${buyDate.month}/${buyDate.year}',
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Divider(
-                                color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                 thickness: 1,
                               ),
                               Row(
@@ -457,16 +547,28 @@ class _WalletPageState extends State<WalletPage> {
                                   Text(
                                         getString(
                                             'ExplorePageBTPInformationISIN'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                         btp.isin,
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Divider(
-                                color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                 thickness: 1,
                               ),
                               Row(
@@ -475,7 +577,12 @@ class _WalletPageState extends State<WalletPage> {
                                   Text(
                                         getString(
                                             'WalletPageBTPInformationProfitability'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                         '${_getBTPProfitabilityAtExpiration(
@@ -501,7 +608,9 @@ class _WalletPageState extends State<WalletPage> {
                                     ],
                                   ),
                                   Divider(
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[700]
+                                        : Colors.grey[200],
                                     thickness: 1,
                                   ),
                                   Row(
@@ -511,7 +620,10 @@ class _WalletPageState extends State<WalletPage> {
                                       Text(
                                         getString(
                                             'WalletPageBTPInformationProfitabilityNow'),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: isDarkMode
+                                                ? lightTextColor
+                                                : textColor,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -547,7 +659,7 @@ class _WalletPageState extends State<WalletPage> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        deleteBTPFromWallet(key, context);
+                            deleteBTPFromWallet(key, context, isDarkMode);
                       },
                       child: Text(
                         getString('ExplorePageBTPInformationDeleteButton'),
@@ -584,7 +696,7 @@ class _WalletPageState extends State<WalletPage> {
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
                     // Provide a background color for the popup.
-                    color: isDarkMode ? darkModeColor : CupertinoColors.white,
+                    color: isDarkMode ? darkModeColor : offWhiteColor,
                     // Use a SafeArea widget to avoid system overlaps.
                     child: SafeArea(
                       top: false,

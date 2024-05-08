@@ -91,7 +91,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                 width: double.infinity,
                 // set background color
                 decoration: BoxDecoration(
-                    color: isDarkMode ? offBlackColor : Colors.white,
+                    color: isDarkMode ? offBlackColor : offWhiteColor,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
