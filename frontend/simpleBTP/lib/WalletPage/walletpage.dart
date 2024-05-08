@@ -68,12 +68,17 @@ class _WalletPageState extends State<WalletPage> {
       DateTime expirationDate, DateTime buyDate) {
     var finalValue = (100 - buyPrice) * 100 / buyPrice;
     // check how many years are left
-    int yearsLeft = expirationDate.year - buyDate.year;
-    int cedolaPayments = yearsLeft * 2;
-    if (expirationDate.month < buyDate.month ||
-        (expirationDate.month == buyDate.month &&
-            expirationDate.day < buyDate.day)) {
-      cedolaPayments -= 1;
+    int cedolaPayments = 0;
+    while (buyDate.isBefore(expirationDate)) {
+      cedolaPayments++;
+      // take 6 months from the expiration date
+      if (expirationDate.month > 6) {
+        expirationDate = DateTime(
+            expirationDate.year, expirationDate.month - 6, expirationDate.day);
+      } else {
+        expirationDate = DateTime(expirationDate.year - 1,
+            expirationDate.month + 6, expirationDate.day);
+      }
     }
     double totalCedola = cedolaPayments * cedola;
     double totalProfit = totalCedola + finalValue;
@@ -85,12 +90,17 @@ class _WalletPageState extends State<WalletPage> {
     var finalValue = (value - buyPrice) * value / buyPrice;
     // check how many years are left
     DateTime expirationDate = DateTime.now();
-    int yearsLeft = expirationDate.year - buyDate.year;
-    int cedolaPayments = yearsLeft * 2;
-    if (expirationDate.month < buyDate.month ||
-        (expirationDate.month == buyDate.month &&
-            expirationDate.day < buyDate.day)) {
-      cedolaPayments -= 1;
+    int cedolaPayments = 0;
+    while (buyDate.isBefore(expirationDate)) {
+      cedolaPayments++;
+      // take 6 months from the expiration date
+      if (expirationDate.month > 6) {
+        expirationDate = DateTime(
+            expirationDate.year, expirationDate.month - 6, expirationDate.day);
+      } else {
+        expirationDate = DateTime(expirationDate.year - 1,
+            expirationDate.month + 6, expirationDate.day);
+      }
     }
     double totalCedola = cedolaPayments * cedola;
     double totalProfit = totalCedola + finalValue;
