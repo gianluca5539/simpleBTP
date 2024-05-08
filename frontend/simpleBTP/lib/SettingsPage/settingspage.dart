@@ -177,12 +177,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         Text(
                           getString('settingsPageWalletDeleteButton'),
                           style:
-                                TextStyle(
-                              color: isDarkMode ? lightTextColor : textColor,
+                                const TextStyle(
+                              color: Colors
+                                  .grey, // isDarkMode ? lightTextColor : textColor,
                               fontSize: 20),
                         ),
-                        Icon(Icons.chevron_right,
-                            color: isDarkMode ? lightTextColor : textColor,
+                        const Icon(Icons.chevron_right,
+                            color: Colors
+                                .grey, // isDarkMode ? lightTextColor : textColor,
                             size: 30)
                       ],
                     ),
