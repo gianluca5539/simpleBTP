@@ -11,9 +11,9 @@ import 'package:simpleBTP/assets/languages.dart';
 
 class Footer extends StatelessWidget {
   // create a variable to store the current page
-  late String currentPage;
+  late final String currentPage;
 
-  ButtonStyle footerButtonStyle = ButtonStyle(
+  final ButtonStyle footerButtonStyle = ButtonStyle(
     overlayColor: MaterialStateProperty.all(Colors.transparent),
     backgroundColor: MaterialStateProperty.all(Colors.transparent),
     shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -108,7 +108,7 @@ class Footer extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              navigateTo(context, ExplorePage());
+              navigateTo(context, const ExplorePage());
             },
             style: footerButtonStyle,
             child: Column(

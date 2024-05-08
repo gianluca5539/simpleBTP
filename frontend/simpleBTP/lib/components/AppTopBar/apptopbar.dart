@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 
-PreferredSizeWidget AppTopBar(title, Map<String, dynamic>? action) {
+PreferredSizeWidget appTopBar(title, Map<String, dynamic>? action) {
   Box box = Hive.box('settings');
   bool isDarkMode = box.get('darkMode', defaultValue: false);
   return AppBar(

@@ -1,19 +1,13 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:simpleBTP/ExplorePage/explorepageinvestmentcomponent.dart';
 import 'package:simpleBTP/ExplorePage/explorepagesearchandfiltercomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
-import 'package:simpleBTP/components/BTPDetail/BTPDetail.dart';
+import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/BTPDetail/btp_detail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
@@ -52,7 +46,7 @@ class _ExplorePageState extends State<ExplorePage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarExplore'), null),
+      appBar: appTopBar(getString('appTopBarExplore'), null),
       // add a body and a footer
       body: SingleChildScrollView(
         child: Column(

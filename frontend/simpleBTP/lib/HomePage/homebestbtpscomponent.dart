@@ -44,7 +44,7 @@ class HomeBestBTPsComponent extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ExplorePage(),
+                            builder: (context) => const ExplorePage(),
                           ));
                     },
                     child: Text(getString('homeBestBTPsViewAllButton'),

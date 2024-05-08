@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
 part 'hivemodels.g.dart';

@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:simpleBTP/SettingsPage/picklanguagepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarSettings'), null),
+      appBar: appTopBar(getString('appTopBarSettings'), null),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 25),
         child: Column(

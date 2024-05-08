@@ -38,7 +38,7 @@ Future<void> loadData() async {
 
   await Hive.openBox('mybtps');
 
-  if (DateTime.now().difference(lastFetch) > const Duration(hours: 3) || true) {
+  if (DateTime.now().difference(lastFetch) > const Duration(hours: 3)) {
     utilsBox.put('lastFetch', DateTime.now());
     await Hive.deleteBoxFromDisk('btps');
     await Hive.openBox('btps');

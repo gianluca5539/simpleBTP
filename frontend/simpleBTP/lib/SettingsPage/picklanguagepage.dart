@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
 
 class PickLanguagePage extends StatefulWidget {
   const PickLanguagePage({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _PickLanguagePageState extends State<PickLanguagePage> {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : Colors.white,
-      appBar: AppTopBar(getString('appTopBarPickLanguage'), null),
+      appBar: appTopBar(getString('appTopBarPickLanguage'), null),
       body: Column(
         children: [
           const SizedBox(height: 20),

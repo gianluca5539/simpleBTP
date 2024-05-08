@@ -5,10 +5,10 @@ import 'package:simpleBTP/assets/languages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePageBalanceComponent extends StatelessWidget {
-  late double? balance;
-  late double? variation;
+  final double? balance;
+  final double? variation;
 
-  HomePageBalanceComponent(
+  const HomePageBalanceComponent(
       {super.key, required this.balance, required this.variation});
 
   @override

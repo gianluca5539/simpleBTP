@@ -1,7 +1,6 @@
 // create a dart widget
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';

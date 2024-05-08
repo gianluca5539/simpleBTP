@@ -7,12 +7,11 @@ import 'package:simpleBTP/HomePage/homepageinvestmentcomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
-import 'package:simpleBTP/components/BTPDetail/BTPDetail.dart';
-import 'package:simpleBTP/components/BTPDetail/myBTPDetail.dart';
+import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/BTPDetail/btp_detail.dart';
+import 'package:simpleBTP/components/BTPDetail/my_btp_detail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
-import 'package:simpleBTP/db/hivemodels.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,7 +22,7 @@ class HomePage extends StatelessWidget {
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarHome'), null),
+      appBar: appTopBar(getString('appTopBarHome'), null),
       body: SingleChildScrollView(
         // To ensure the list is scrollable
         child: Column(
@@ -32,7 +31,7 @@ class HomePage extends StatelessWidget {
                 future: getWalletStats(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return HomePageBalanceComponent(
+                    return const HomePageBalanceComponent(
                         balance: null, variation: null);
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}'); // Handle errors

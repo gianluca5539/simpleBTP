@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,13 +60,13 @@ Future<Map<DateTime, double>?> getCachedGraphData(
     String isin, TimeWindow timeWindow) async {
   if (graphDataCache.containsKey(isin) &&
       graphDataCache[isin]!.containsKey(timeWindow)) {
-    print('Cached data found for $isin');
+    //print('Cached data found for $isin');
     return graphDataCache[isin]?[timeWindow]!;
   } else {
-    print('No cached data found for $isin');
+    //print('No cached data found for $isin');
     return createSingleBtpValueGraph(isin, timeWindow).then((value) {
       graphDataCache.putIfAbsent(isin, () => {})[timeWindow] = value;
-      print('Cached data for $isin');
+      //print('Cached data for $isin');
       return value;
     });
   }
@@ -672,8 +671,7 @@ void openMyBTPDetailModal(
                         },
                         child: Text(
                           getString('ExplorePageBTPInformationDeleteButton'),
-                          style:
-                              TextStyle(
+                          style: TextStyle(
                               fontSize: 16,
                               color: deleteBTPFromWallet != null
                                   ? Colors.red[700]

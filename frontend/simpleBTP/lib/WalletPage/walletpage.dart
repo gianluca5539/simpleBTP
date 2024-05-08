@@ -1,11 +1,7 @@
-import 'dart:math';
-
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
@@ -14,8 +10,8 @@ import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
-import 'package:simpleBTP/components/BTPDetail/myBTPDetail.dart';
+import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
+import 'package:simpleBTP/components/BTPDetail/my_btp_detail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
@@ -100,19 +96,7 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  
-
-  @override
-  Widget build(BuildContext context) {
-    Box box = Hive.box('settings');
-    bool isDarkMode = box.get('darkMode', defaultValue: false);
-    void openAddBTPModal2() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (context) {
-            return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
-              void _showDatePickerDialog(Widget child, bool isDarkMode) {
+  void _showDatePickerDialog(Widget child, bool isDarkMode) {
                 showCupertinoModalPopup<void>(
                   context: context,
                   builder: (BuildContext context) => Container(
@@ -134,6 +118,20 @@ class _WalletPageState extends State<WalletPage> {
                 );
               }
 
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    Box box = Hive.box('settings');
+    bool isDarkMode = box.get('darkMode', defaultValue: false);
+    void openAddBTPModal2() {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
               return Container(
                 decoration: BoxDecoration(
                   color: isDarkMode ? offBlackColor : offWhiteColor,
@@ -454,7 +452,7 @@ class _WalletPageState extends State<WalletPage> {
 
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: AppTopBar(getString('appTopBarWallet'), {
+      appBar: appTopBar(getString('appTopBarWallet'), {
         'icon': Icons.add,
         'onPressed': () {
           openAddBTPModal();

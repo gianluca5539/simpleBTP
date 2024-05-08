@@ -111,7 +111,7 @@ Future<Map<String, Map<String, String>>> fetchBtps() async {
 
   while (shouldContinue) {
     // start timestamp
-    DateTime start = DateTime.now();
+    //DateTime start = DateTime.now();
     List<Future<void>> batchFetchTasks = [];
     for (int i = 0; i < 5 && shouldContinue; i++) {
       batchFetchTasks.add(fetchAndProcessPage(page, isinDict, (hasIsins) {
@@ -126,10 +126,10 @@ Future<Map<String, Map<String, String>>> fetchBtps() async {
     if (batchFetchTasks.isEmpty) {
       break;
     }
-    print("Batch fetch took ${DateTime.now().difference(start).inSeconds} seconds");
+    //print("Batch fetch took ${DateTime.now().difference(start).inSeconds} seconds");
   }
 
-  print('Total ISINs: ${isinDict.length}');
+  //print('Total ISINs: ${isinDict.length}');
   return isinDict;
 }
 
@@ -139,30 +139,30 @@ Future<void> fetchAndProcessPage(int page, Map<String, Map<String, String>> isin
 
   while (!success && retries < maxRetries) {
     try {
-      print("Fetching page $page");
+      //print("Fetching page $page");
       var url = Uri.parse('https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/lista.html?lang=it&page=$page');
       var response = await http.get(url);
-      print("Fetched page $page");
+      //print("Fetched page $page");
       if (response.statusCode == 200) {
         var hasIsins = await processPageResponse(response.body, isinDict);
         callback(hasIsins);
         success = true;
       } else {
-        print('Error fetching page $page: ${response.statusCode}');
+        //print('Error fetching page $page: ${response.statusCode}');
       }
     } catch (e) {
-      print('Exception during fetch for page $page: \n$e');
+      //print('Exception during fetch for page $page: \n$e');
     }
 
     if (!success) {
       retries++;
-      print('Retrying... Attempt $retries of $maxRetries');
+      //print('Retrying... Attempt $retries of $maxRetries');
       await Future.delayed(const Duration(seconds: 1)); // You might want to adjust the delay time
     }
   }
 
   if (!success) {
-    print('Failed to fetch page $page after $maxRetries attempts');
+    //print('Failed to fetch page $page after $maxRetries attempts');
     callback(false);
   }
 }
@@ -199,14 +199,14 @@ Future<List<Map<String, dynamic>>> fetchMyBTPHistories([TimeWindow span = TimeWi
   List<Future<Map<String, dynamic>>> priceHistories = [];
 
   for (var btp in myBTPs) {
-    print("Fetching history for ${btp['isin']}");
+    //print("Fetching history for ${btp['isin']}");
     Future<Map<String, dynamic>> priceHistory = fetchWithRetry(btp['isin'], 3, span) // Retry up to 3 times
         .then((data) {
       btp['priceHistory'] = data; // Enrich the BTP data with price history
-      print('Fetched price data for ISIN ${btp['isin']}');
+      //print('Fetched price data for ISIN ${btp['isin']}');
       return btp;
     }).catchError((e) {
-      print('Failed to fetch price data for ISIN ${btp['isin']} after retries: $e');
+      //print('Failed to fetch price data for ISIN ${btp['isin']} after retries: $e');
       return btp; // Return BTP data without price history on failure
     });
     priceHistories.add(priceHistory);
@@ -227,7 +227,7 @@ Future<Map<String, dynamic>> fetchWithRetry(String isin, int retries, [TimeWindo
       }
       attempts++;
       await Future.delayed(const Duration(seconds: 2)); // Wait before retrying
-      print('Retrying fetch for ISIN $isin (${attempts + 1})');
+      //print('Retrying fetch for ISIN $isin (${attempts + 1})');
     }
   }
   return {}; // Return empty if all retries fail, though the rethrow will typically handle failure
@@ -247,9 +247,9 @@ Future<Map<DateTime, double>> createSingleBtpValueGraph(isin, [TimeWindow span =
   }
 
   // print earliestDate
-  print("Earliest date: $earliestDate");
-  double msInner = 0.0;
-  DateTime now = DateTime.now();
+  //print("Earliest date: $earliestDate");
+  //double msInner = 0.0;
+  //DateTime now = DateTime.now();
 
   // Calculate portfolio value for each day from earliest date to today
   Map<DateTime, double> valueByDate = {};
@@ -259,22 +259,22 @@ Future<Map<DateTime, double>> createSingleBtpValueGraph(isin, [TimeWindow span =
   for (DateTime date = earliestDate; date.isBefore(currentDate) || date.isAtSameMomentAs(currentDate); date = date.add(const Duration(days: 1))) {
     List priceAndIndex;
     dynamic valueAtDate;
-    DateTime now2 = DateTime.now();
+    //DateTime now2 = DateTime.now();
     priceAndIndex = _getBTPValueAtDate(btp, date, lastIndex);
     valueAtDate = priceAndIndex[0];
-    msInner += DateTime.now().difference(now2).inMilliseconds;
+    // msInner += DateTime.now().difference(now2).inMilliseconds;
 
     if (valueAtDate != null) {
       lastIndex = priceAndIndex[1];
       valueByDate[date] = valueAtDate;
     } else {
-      print("No price data available for BTP ${btp['isin']} at $date");
+      //print("No price data available for BTP ${btp['isin']} at $date");
     }
   }
 
   // print difference in time
-  print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
-  print("Inner loop time: ${msInner / 1000} seconds");
+  //print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
+  //print("Inner loop time: ${msInner / 1000} seconds");
 
   return valueByDate;
 }
@@ -285,7 +285,7 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
   try {
     myBTPs = await fetchMyBTPHistories(span);
   } catch (e) {
-    print("Error fetching BTP histories: $e");
+    //print("Error fetching BTP histories: $e");
     return {};
   }
 
@@ -300,9 +300,9 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
     }
   }
   // print earliestDate
-  print("Earliest date: $earliestDate");
-  double msInner = 0.0;
-  DateTime now = DateTime.now();
+  //print("Earliest date: $earliestDate");
+  //double msInner = 0.0;
+  //DateTime now = DateTime.now();
 
   // Calculate portfolio value for each day from earliest date to today
   Map<DateTime, double> valueByDate = {};
@@ -317,20 +317,20 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
     for (var btp in myBTPs) {
       var investment = btp['investment'] ?? 0.0;
       if (btp['buyDate'] != null && btp['buyDate'].isBefore(date) && investment > 0.0) {
-        DateTime now2 = DateTime.now();
+        //DateTime now2 = DateTime.now();
         priceAndIndex = _getBTPValueAtDate(btp, date, isinToIndex[btp['isin']] ?? 0);
         valueAtDate = priceAndIndex[0];
         if (valueAtDate == null) {
           if (date.isAtSameMomentAs(earliestDate)) {
             killDay = true;
             earliestDate = earliestDate.add(const Duration(days: 1));
-            print("Killing day $date");
+            //print("Killing day $date");
             break;
           }
-          print("No price data available for BTP ${btp['isin']} at $date");
+          //print("No price data available for BTP ${btp['isin']} at $date");
         }
         isinToIndex[btp['isin']] = priceAndIndex[1];
-        msInner += DateTime.now().difference(now2).inMilliseconds;
+        //msInner += DateTime.now().difference(now2).inMilliseconds;
         totalValue += valueAtDate * investment;
       } else {
         // print("BTP ${btp['isin']} was bought after $date");
@@ -343,8 +343,8 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
   }
 
   // print difference in time
-  print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
-  print("Inner loop time: ${msInner / 1000} seconds");
+  //print("Time taken: ${DateTime.now().difference(now).inMilliseconds / 1000} seconds");
+  //print("Inner loop time: ${msInner / 1000} seconds");
 
   return valueByDate;
 }
@@ -352,7 +352,7 @@ Future<Map<DateTime, double>> createPortfolioValueGraph([TimeWindow span = TimeW
 /// Finds the closest historical price to the target date for a single BTP and calculates its value.
 List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate, [int start = 0]) {
   if (btp['priceHistory'] == null) {
-    print("No price history available for ISIN ${btp['isin']}");
+    //print("No price history available for ISIN ${btp['isin']}");
     return [null, null];
   }
 
@@ -364,7 +364,7 @@ List _getBTPValueAtDate(Map<String, dynamic> btp, DateTime targetDate, [int star
     entryDate = DateTime.parse(series[i]['timestamp']);
     if (entryDate.isAfter(targetDate) && !entryDate.isAtSameMomentAs(targetDate)) {
       if (i == 0) {
-        print("No historical data available for ISIN ${btp['isin']} at $targetDate");
+        //print("No historical data available for ISIN ${btp['isin']} at $targetDate");
         return [null, null];
       }
       return [series[i - 1]['close'], i - 1]; // Return the closest historical price and its index
