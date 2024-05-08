@@ -125,7 +125,8 @@ Future<List<Map<String, dynamic>>> getHomePageMyBestBTPs() async {
   }).toList();
 
   // sort by buy price
-  merged.sort((a, b) => b['variation'].compareTo(a['variation']));
+  merged.sort((a, b) => ((b['btp'].value - b['buyPrice']) / b['buyPrice'] * 100)
+      .compareTo(((a['btp'].value - a['buyPrice']) / a['buyPrice'] * 100)));
 
   // get the first 5 elements
   List<Map<String, dynamic>> mergedList =
@@ -158,7 +159,8 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
   }).toList();
 
   // sort by buy price
-  merged.sort((a, b) => b['variation'].compareTo(a['variation']));
+  merged.sort((a, b) => ((b['btp'].value - b['buyPrice']) / b['buyPrice'] * 100)
+      .compareTo((a['btp'].value - a['buyPrice']) / a['buyPrice'] * 100));
 
   return merged;
 }
