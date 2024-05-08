@@ -419,7 +419,7 @@ class _AddBTPSearchState extends State<AddBTPSearch> {
                           ? lightTextColor
                           : isDarkMode
                               ? lightTextColor
-                              : textColor),
+                              : const Color.fromARGB(255, 117, 117, 117)),
                 ),
                 // show a cupertino picker
                 GestureDetector(

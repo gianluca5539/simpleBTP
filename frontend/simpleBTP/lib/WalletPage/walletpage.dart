@@ -491,7 +491,7 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 getString('walletMyAssets'),
-                style: TextStyle(fontSize: 24, color: isDarkMode ? lightTextColor : textColor),
+                style: TextStyle(fontSize: 24, color: isDarkMode ? lightTextColor : const Color.fromARGB(255, 117, 117, 117)),
               ),
             ),
             FutureBuilder<List<Map<String, dynamic>>>(
