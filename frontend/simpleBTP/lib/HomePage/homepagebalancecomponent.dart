@@ -29,9 +29,9 @@ class HomePageBalanceComponent extends StatelessWidget {
               Text(
                 getString('homeBalanceText'),
                 style: TextStyle(
-                  color: isDarkMode ? lightTextColor : Color.fromARGB(255, 144, 144, 144),
+                  color: isDarkMode ? lightTextColor : titleColor,
                   fontSize: 17,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
               Skeletonizer(

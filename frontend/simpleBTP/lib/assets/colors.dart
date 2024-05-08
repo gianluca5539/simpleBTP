@@ -11,3 +11,4 @@ const Color lightTextColor = Colors.white;
 const Color footerLightTextColor = Color.fromARGB(255, 185, 185, 185);
 const Color offWhiteColor = Color.fromARGB(255, 248, 248, 248);
 const Color offBlackColor = Color.fromARGB(255, 38, 38, 38);
+const Color titleColor = Color.fromARGB(255, 117, 117, 117);

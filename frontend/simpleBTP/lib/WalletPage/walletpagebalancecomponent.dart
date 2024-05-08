@@ -37,6 +37,9 @@ class _WalletPageBalanceComponentState
     int numLabelsThatFit = chartWidth ~/ labelWidth;
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
+    Color positiveColor = Colors.green.shade100; // Lighter green for positive variation
+    Color negativeColor = Colors.red.shade100; // Lighter red for negative variation
+
     return Padding(
       padding: const EdgeInsets.only(top: 40.0),
       child: Center(
@@ -63,18 +66,25 @@ class _WalletPageBalanceComponentState
                     children: [
                       Text(
                         getString('walletBalanceText'),
-                        style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 22),
+                        style: TextStyle(color: isDarkMode ? lightTextColor : titleColor, fontSize: 20),
                       ),
                       Skeletonizer(
-                          enabled: widget.variation == null,
+                        enabled: widget.variation == null,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: (widget.variation ?? 0) > 0 ? positiveColor : negativeColor,
+                            borderRadius: BorderRadius.circular(12), // Rounded corners
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                           child: Text(
-                            "${(widget.variation != null && !widget.variation!.isNaN) ? widget.variation!.toStringAsFixed(2) : '0'}%",
+                            "${(widget.variation ?? 0) > 0 ? "▲" : "▼"} ${widget.variation?.toStringAsFixed(2)}%", 
                             style: TextStyle(
-                                color: (widget.variation ?? 0) > 0
-                                    ? Colors.green
-                                    : Colors.red,
-                                fontSize: 22),
-                          )),
+                              color: (widget.variation ?? 0) > 0 ? Colors.green : Colors.red,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -84,7 +94,7 @@ class _WalletPageBalanceComponentState
                       enabled: widget.balance == null,
                       child: Text(
                         "€${widget.balance == null ? '----' : ''}${widget.balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
-                        style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 34),
+                        style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 34, fontWeight: FontWeight.bold),
                       )),
                 ),
                 

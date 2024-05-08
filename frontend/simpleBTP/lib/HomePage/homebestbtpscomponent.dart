@@ -23,7 +23,7 @@ class HomeBestBTPsComponent extends StatelessWidget {
                   child: Text(
                     getString('homeBestBTPs'),
                     style: TextStyle(
-                        color: isDarkMode ? lightTextColor : const Color.fromARGB(255, 117, 117, 117),
+                        color: isDarkMode ? lightTextColor : titleColor,
                         fontSize: 24),
                   ),
                 ),
