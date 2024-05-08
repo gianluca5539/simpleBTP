@@ -12,7 +12,6 @@ import 'package:simpleBTP/components/BTPDetail/BTPDetail.dart';
 import 'package:simpleBTP/components/BTPDetail/myBTPDetail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
-import 'package:simpleBTP/db/hivemodels.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
