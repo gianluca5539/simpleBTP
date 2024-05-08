@@ -90,9 +90,10 @@ class _WalletPageState extends State<WalletPage> {
     var finalValue = (value - buyPrice) * value / buyPrice;
     // check how many years are left
     DateTime expirationDate = DateTime.now();
-    int cedolaPayments = 0;
+    int cedolaPayments =
+        -1; // -1 because now isn't a cedola payment like with expiration
     while (buyDate.isBefore(expirationDate)) {
-      cedolaPayments++;
+      cedolaPayments++; 
       // take 6 months from the expiration date
       if (expirationDate.month > 6) {
         expirationDate = DateTime(
