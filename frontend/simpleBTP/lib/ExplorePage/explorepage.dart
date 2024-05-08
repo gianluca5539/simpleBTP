@@ -18,7 +18,7 @@ import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
 
 class ExplorePage extends StatefulWidget {
-  ExplorePage({Key? key}) : super(key: key);
+  const ExplorePage({Key? key}) : super(key: key);
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -34,7 +34,7 @@ class _ExplorePageState extends State<ExplorePage> {
   TimeWindow timeWindow = TimeWindow.oneWeek;
 
   // Cache to store graph data
-  Map<String, Map<DateTime, double>> graphDataCache = {};
+  Map<String, Map<TimeWindow, Map<DateTime, double>>> graphDataCache = {};
 
   void searchWithFilters(String search, Map<String, dynamic> filters, Map<String, dynamic> ordering) {
     // update the state with the new search and filters
@@ -45,10 +45,10 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  Future<Map<DateTime, double>> getCachedGraphData(String isin) async {
-    if (graphDataCache.containsKey(isin)) {
+  Future<Map<DateTime, double>?> getCachedGraphData(String isin, TimeWindow timeWindow) async {
+    if (graphDataCache.containsKey(isin) && graphDataCache[isin]!.containsKey(timeWindow)) {
       print('Cached data found for $isin');
-      return graphDataCache[isin]!;
+      return graphDataCache[isin]?[timeWindow]!;
     } else {
       print('No cached data found for $isin');
       return createSingleBtpValueGraph(isin, timeWindow);
@@ -107,8 +107,8 @@ class _ExplorePageState extends State<ExplorePage> {
                       style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: isDarkMode ? primaryColorLight : primaryColor),
                     ),
                   ),
-                  FutureBuilder<Map<DateTime, double>>(
-                    future: getCachedGraphData(btp.isin),
+                  FutureBuilder<Map<DateTime, double>?>(
+                    future: getCachedGraphData(btp.isin, timeWindow),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
                         return SizedBox(
@@ -134,7 +134,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                         // Cache the data
-                        graphDataCache[btp.isin] = snapshot.data!;
+                        graphDataCache.putIfAbsent(btp.isin, () => {})[timeWindow] = snapshot.data!;
                         // Determine minY and maxY for padding
                         final double minY = snapshot.data!.values.isNotEmpty
                             ? (snapshot.data!.values.reduce(min) * 0.95) // 5% padding at bottom
