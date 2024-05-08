@@ -84,7 +84,11 @@ class _WalletPageState extends State<WalletPage> {
       return graphDataCache[isin]?[timeWindow]!;
     } else {
       print('No cached data found for $isin');
-      return createSingleBtpValueGraph(isin, timeWindow);
+      return createSingleBtpValueGraph(isin, timeWindow).then((value) {
+        graphDataCache.putIfAbsent(isin, () => {})[timeWindow] = value;
+        print('Cached data for $isin');
+        return value;
+      });
     }
   }
 
@@ -193,7 +197,6 @@ class _WalletPageState extends State<WalletPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                        graphDataCache.putIfAbsent(btp.isin, () => {})[timeWindow] = snapshot.data!;
                         // Determine minY and maxY for padding
                         final double minY = snapshot.data!.values.isNotEmpty
                             ? (snapshot.data!.values.reduce(min) * 0.95) // 5% padding at bottom
