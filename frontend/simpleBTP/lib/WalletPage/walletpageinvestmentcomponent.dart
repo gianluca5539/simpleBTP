@@ -10,47 +10,54 @@ class WalletPageInvestmentComponent extends StatelessWidget {
   final String? cedola;
   final double? investmentValue;
   final double? variation;
-  final DateTime? buyDate;
+  final DateTime? expirationDate;
 
-  const WalletPageInvestmentComponent({
-    super.key,
-    required this.investmentName,
-    required this.investmentDetail,
-    required this.cedola,
-    required this.investmentValue,
-    required this.variation,
-    required this.buyDate,
-  });
+  const WalletPageInvestmentComponent(
+      {super.key,
+      required this.investmentName,
+      required this.investmentDetail,
+      required this.cedola,
+      required this.investmentValue,
+      required this.variation,
+      required this.expirationDate});
 
   String get cedolaRemainingDays {
-    if (buyDate == null) {
-      return '----';
-    }
     final DateTime now = DateTime.now();
 
-    // bring the buy date to this year
-    final DateTime buyDateThisYear =
-        DateTime(now.year, buyDate!.month, buyDate!.day);
+    final DateTime cedolaDate1 = DateTime(
+        now.year, expirationDate?.month ?? 1, expirationDate?.day ?? 1);
 
-    // subtract 6 months from the buy date
-    final DateTime buyDateThisYearMinus6Months =
-        buyDateThisYear.subtract(const Duration(days: 180));
-
-    // add 6 months to the buy date
-    final DateTime buyDateThisYearPlus6Months =
-        buyDateThisYear.add(const Duration(days: 180));
-
-    if (now.isBefore(buyDateThisYearMinus6Months)) {
-      return formatRemainingTime(buyDateThisYearMinus6Months.difference(now));
-    } else if (now.isAfter(buyDateThisYearMinus6Months) &&
-        now.isBefore(buyDateThisYear)) {
-      return formatRemainingTime(buyDateThisYear.difference(now));
-    } else if (now.isAfter(buyDateThisYear) &&
-        now.isBefore(buyDateThisYearPlus6Months)) {
-      return formatRemainingTime(buyDateThisYearPlus6Months.difference(now));
+    DateTime cedolaDate0;
+    // subtract 6 months from cedolaDate1
+    if (cedolaDate1.month > 6) {
+      cedolaDate0 = DateTime(cedolaDate1.year, cedolaDate1.month - 6,
+          cedolaDate1.day); // subtract 6 months
     } else {
-      return '----';
+      cedolaDate0 = DateTime(cedolaDate1.year - 1, cedolaDate1.month + 6,
+          cedolaDate1.day); // subtract 6 months
     }
+    DateTime cedolaDate2;
+    // add 6 months to cedolaDate1
+    if (cedolaDate1.month < 6) {
+      cedolaDate2 = DateTime(cedolaDate1.year, cedolaDate1.month + 6,
+          cedolaDate1.day); // add 6 months
+    } else {
+      cedolaDate2 = DateTime(cedolaDate1.year + 1, cedolaDate1.month - 6,
+          cedolaDate1.day); // add 6 months
+    }
+
+    List<DateTime> cedoleDates = [
+      cedolaDate0,
+      cedolaDate1,
+      cedolaDate2
+    ]; // next 3 cedole dates sorted
+
+    Duration remainingTime = cedoleDates
+        .where((element) => element.isAfter(now))
+        .first
+        .difference(now);
+
+    return formatRemainingTime(remainingTime);
   }
 
   String formatRemainingTime(Duration remainingTime) {

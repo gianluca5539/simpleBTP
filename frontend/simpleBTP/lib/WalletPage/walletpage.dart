@@ -952,7 +952,7 @@ class _WalletPageState extends State<WalletPage> {
                         cedola: null,
                         investmentValue: null,
                         variation: null,
-                        buyDate: null,
+                        expirationDate: null,
                       ),
                     ),
                   );
@@ -980,7 +980,7 @@ class _WalletPageState extends State<WalletPage> {
                     double variation = asset['variation'];
                     // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(3));
-                    final date = asset['buyDate'];
+                    final date = asset['btp'].expirationDate;
 
                     return TextButton(
                         onPressed: () => _openBTPDetailPage(context, isDarkMode, asset['btp'], asset['buyPrice'], asset['buyDate'], asset['key']),
@@ -996,7 +996,7 @@ class _WalletPageState extends State<WalletPage> {
                           cedola: "$cedola%",
                           investmentValue: value,
                           variation: variation,
-                          buyDate: date,
+                          expirationDate: date,
                         ));
                   }).toList();
                   return Column(children: investmentList);
