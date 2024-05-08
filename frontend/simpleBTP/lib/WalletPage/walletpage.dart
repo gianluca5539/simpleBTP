@@ -64,13 +64,32 @@ class _WalletPageState extends State<WalletPage> {
     Navigator.of(context).pop();
   }
 
-  double _getBTPProfitability(double value, double cedola, DateTime expirationDate) {
-    var finalValue = (100 - value) * 100 / value;
-    DateTime now = DateTime.now();
+  double _getBTPProfitabilityAtExpiration(double buyPrice, double cedola,
+      DateTime expirationDate, DateTime buyDate) {
+    var finalValue = (100 - buyPrice) * 100 / buyPrice;
     // check how many years are left
-    int yearsLeft = expirationDate.year - now.year;
+    int yearsLeft = expirationDate.year - buyDate.year;
     int cedolaPayments = yearsLeft * 2;
-    if (expirationDate.month < now.month || (expirationDate.month == now.month && expirationDate.day < now.day)) {
+    if (expirationDate.month < buyDate.month ||
+        (expirationDate.month == buyDate.month &&
+            expirationDate.day < buyDate.day)) {
+      cedolaPayments -= 1;
+    }
+    double totalCedola = cedolaPayments * cedola;
+    double totalProfit = totalCedola + finalValue;
+    return totalProfit;
+  }
+
+  double _getBTPProfitabilityNow(
+      double value, double buyPrice, double cedola, DateTime buyDate) {
+    var finalValue = (value - buyPrice) * value / buyPrice;
+    // check how many years are left
+    DateTime expirationDate = DateTime.now();
+    int yearsLeft = expirationDate.year - buyDate.year;
+    int cedolaPayments = yearsLeft * 2;
+    if (expirationDate.month < buyDate.month ||
+        (expirationDate.month == buyDate.month &&
+            expirationDate.day < buyDate.day)) {
       cedolaPayments -= 1;
     }
     double totalCedola = cedolaPayments * cedola;
@@ -389,28 +408,12 @@ class _WalletPageState extends State<WalletPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    getString('ExplorePageBTPInformationCoupon'),
+                                        getString(
+                                            'ExplorePageBTPInformationExpirationDate'),
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '${btp.cedola * 2}%',
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Divider(
-                                color: Colors.grey[200],
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    getString('ExplorePageBTPInformationExpirationDate'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
+                                        '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -423,28 +426,12 @@ class _WalletPageState extends State<WalletPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    getString('WalletPageBTPInformationBuyDate'),
+                                        getString(
+                                            'WalletPageBTPInformationBuyDate'),
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '${buyDate.day}/${buyDate.month}/${buyDate.year}',
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Divider(
-                                color: Colors.grey[200],
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    getString('ExplorePageBTPInformationISIN'),
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    btp.isin,
+                                        '${buyDate.day}/${buyDate.month}/${buyDate.year}',
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -457,19 +444,84 @@ class _WalletPageState extends State<WalletPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    getString('WalletPageBTPInformationProfitability'),
+                                        getString(
+                                            'ExplorePageBTPInformationISIN'),
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '${_getBTPProfitability(
-                                      btp.value,
-                                      btp.cedola,
-                                      btp.expirationDate,
-                                    ).toStringAsFixed(2)}%',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: _getBTPProfitability(btp.value, btp.cedola, btp.expirationDate) < 0 ? Colors.red : Colors.green,
+                                        btp.isin,
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey[200],
+                                thickness: 1,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                        getString(
+                                            'WalletPageBTPInformationProfitability'),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                        '${_getBTPProfitabilityAtExpiration(
+                                          buyPrice,
+                                          btp.cedola,
+                                          btp.expirationDate,
+                                          buyDate,
+                                        ).toStringAsFixed(2)}%',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              _getBTPProfitabilityAtExpiration(
+                                                          buyPrice,
+                                                          btp.cedola,
+                                                          btp.expirationDate,
+                                                          buyDate) <
+                                                      0
+                                                  ? Colors.red
+                                                  : Colors.green,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.grey[200],
+                                    thickness: 1,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        getString(
+                                            'WalletPageBTPInformationProfitabilityNow'),
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${_getBTPProfitabilityNow(
+                                          btp.value,
+                                          buyPrice,
+                                          btp.cedola,
+                                          buyDate,
+                                        ).toStringAsFixed(2)}%',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: _getBTPProfitabilityNow(
+                                                      btp.value,
+                                                      buyPrice,
+                                                      btp.cedola,
+                                                      buyDate) <
+                                                  0
+                                              ? Colors.red
+                                              : Colors.green,
                                     ),
                                   )
                                 ],

@@ -119,6 +119,7 @@ Map<String, String> englishLang = {
   'WalletPageBTPInformationBuyDate': 'Buy date',
   'WalletPageBTPInformationBuyPrice': 'Buy price',
   'WalletPageBTPInformationProfitability': 'Profit at expiration',
+  'WalletPageBTPInformationProfitabilityNow': 'Profit selling now',
   'ExplorePageBTPInformationDeleteButton': 'Delete from wallet',
   // explorepage
   'exploreSearchPlaceholder': 'Search for a BTP...',
