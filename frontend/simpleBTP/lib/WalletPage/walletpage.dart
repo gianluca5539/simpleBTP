@@ -108,7 +108,7 @@ class _WalletPageState extends State<WalletPage> {
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
                     // Provide a background color for the popup.
-                    color: isDarkMode ? darkModeColor : offWhiteColor,
+        color: isDarkMode ? darkModeColor : Colors.white,
                     // Use a SafeArea widget to avoid system overlaps.
                     child: SafeArea(
                       top: false,
@@ -228,6 +228,9 @@ class _WalletPageState extends State<WalletPage> {
                             elevation: 1,
                             borderRadius: BorderRadius.circular(10),
                             child: TextField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               onChanged: (value) => price = double.tryParse(value.replaceAll(',', '.')),
                               keyboardType: TextInputType.number,
                               // allow only numbers and one comma or dot with two decimal places (max)
@@ -277,6 +280,9 @@ class _WalletPageState extends State<WalletPage> {
                             elevation: 1,
                             borderRadius: BorderRadius.circular(10),
                             child: TextField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               onChanged: (value) => investment = int.tryParse(value),
                               keyboardType: TextInputType.number,
                               inputFormatters: [

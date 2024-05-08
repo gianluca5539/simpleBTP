@@ -343,6 +343,9 @@ class _ExplorePageSearchAndFilterComponentState
                     ],
                   ),
                   child: TextField(
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                     onChanged: (value) {
                       search = value;
                       widget.searchWithFilters(search, filters, ordering);
