@@ -15,6 +15,9 @@ String getString(String key) {
   if (selectedLang == 'ro') {
     return romanianLang[key] ?? key;
   }
+  if (selectedLang == 'es') {
+    return spanishLang[key] ?? key;
+  }
   return ''; // actually this should never happen
 }
 
@@ -23,6 +26,7 @@ Map<String, String> availableLanguages = {
   'en': 'English',
   'hi': 'हिन्दी',
   'ro': 'Română',
+  'es': 'Español',
 };
 
 Map<String, String> italianLang = {
@@ -391,4 +395,109 @@ Map<String, String> romanianLang = {
   'addBTPPageInvestmentSectionPlaceholder': 'Câte BTP-uri?',
   'addBTPPageAddButton': 'Adaugă la portofel',
   'addBTPSecondPageBackButton': 'Selectează BTP',
+};
+
+
+Map<String, String> spanishLang = {
+  // misc
+  'months': 'meses',
+  'and': 'y',
+  'days': 'días',
+  'cancel': 'Cancelar',
+  'MyBTPInformationDeleteError': 'Para eliminar un BTP, ve a la cartera.',
+  'ExplorePageBTPInformationDeleteErrorButton': 'Descartar',
+  // header
+  'appTopBarHome': 'simpleBTP',
+  'appTopBarExplore': 'Explorar',
+  'appTopBarWallet': 'Cartera',
+  'appTopBarSettings': 'Ajustes',
+  'appTopBarPickLanguage': 'Seleccionar idioma',
+  // footer
+  'appBottomBarHome': 'Inicio',
+  'appBottomBarExplore': 'Explorar',
+  'appBottomBarWallet': 'Cartera',
+  'appBottomBarSettings': 'Ajustes',
+  // homepage
+  'homeBalanceText': 'Tu inversión',
+  'homeMyAssets': 'Tus mejores BTP',
+  'homePageNoBTPsYet':
+      "Aún no has añadido ningún BTP. Ve a la cartera para añadir uno.",
+  'homeMyAssetsViewAllButton': 'Ver todos',
+  'homeBestBTPs': 'Mejores BTP',
+  'homeBestBTPsViewAllButton': 'Ver todos',
+  // walletpage
+  'walletBalanceText': 'Tu inversión',
+  'walletMyAssets': 'Tus activos',
+  'walletPaysWhat': 'Paga',
+  'walletPaysIn': 'en',
+  'walletPageNoBTPsYet':
+      'Para añadir un nuevo activo, pulsa el "+" en la esquina superior derecha de la pantalla.',
+  'walletBalanceGraphOneWeekText': 'Sem',
+  'walletBalanceGraphOneMonthText': 'Mes',
+  'walletBalanceGraphThreeMonthsText': '3M',
+  'walletBalanceGraphOneYearText': 'Año',
+  'walletBalanceGraphTenYearsText': '10A',
+  'WalletPageBTPInformationBuyDate': 'Fecha de compra',
+  'WalletPageBTPInformationBuyPrice': 'Precio de compra',
+  'WalletPageBTPInformationProfitability': 'Beneficio a la expiración',
+  'WalletPageBTPInformationProfitabilityNow': 'Beneficio vendiendo ahora',
+  'ExplorePageBTPInformationDeleteButton': 'Eliminar de la cartera',
+  // explorepage
+  'exploreSearchPlaceholder': 'Buscar un BTP...',
+  'explorePageResults': 'Resultados',
+  'explorePageOrder': 'Orden',
+  'explorePageOrderByValue': 'Precio',
+  'explorePageOrderByCedola': 'Cupón',
+  'explorePageOrderByExpirationDate': 'Expiración',
+  'explorePageOrderByValueButton': 'Precio de mercado',
+  'explorePageOrderByCedolaButton': 'Cupón anual',
+  'explorePageOrderByExpirationDateButton': 'Fecha de expiración',
+  'explorePageFilterTitle': 'Personaliza tu búsqueda',
+  'explorePageValueFilterTitle': 'Precio de mercado',
+  'explorePageCedolaFilterTitle': 'Cupón anual',
+  'explorePageExpirationDateFilterTitle': 'Fecha de expiración',
+  'explorePageApplyFiltersButton': 'Aplicar',
+  'ExplorePageBTPChartTitle': 'Datos históricos',
+  'ExplorePageBTPInformationTitle': 'Información BTP',
+  'ExplorePageBTPInformationPrice': 'Precio',
+  'ExplorePageBTPInformationCoupon': 'Cupón anual',
+  'ExplorePageBTPInformationExpirationDate': 'Fecha de expiración',
+  'ExplorePageBTPInformationISIN': 'Código ISIN',
+  'ExplorePageBTPInformationProfitability': 'Beneficio comprando ahora',
+  'ExplorePageBTPInformationDeleteConfirmationMessage':
+      '¿Estás seguro? Esta acción no se puede deshacer.',
+  'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Cancelar',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'Eliminar',
+  // settingspage
+  'settingsPageAccountTitle': 'Cuenta',
+  'settingsPageWalletBackupButton': 'Backup de la cartera',
+  'settingsPageWalletBackupRestoreButton': 'Restaurar backup de la cartera',
+  'settingsPageWalletDeleteButton': 'Eliminar cartera',
+  'settingsPagePersonalizationTitle': 'Personalización',
+  'settingsPageDarkModeButton': 'Modo oscuro',
+  'settingsPageLanguageButton': 'Seleccionar idioma',
+  // addBTP
+  'appTopBarAddBTP': 'Añadir BTP',
+  'addBTPSearchPlaceholder': 'Buscar un BTP...',
+  'addBTPPageResults': 'Resultados',
+  'addBTPPageOrder': 'Orden',
+  'addBTPPageOrderByValue': 'Precio',
+  'addBTPPageOrderByCedola': 'Cupón',
+  'addBTPPageOrderByExpirationDate': 'Expiración',
+  'addBTPPageOrderByValueButton': 'Precio de mercado',
+  'addBTPPageOrderByCedolaButton': 'Cupón anual',
+  'addBTPPageOrderByExpirationDateButton': 'Fecha de expiración',
+  'addBTPPageFilterTitle': 'Personaliza tu búsqueda',
+  'addBTPPageValueFilterTitle': 'Precio de mercado',
+  'addBTPPageCedolaFilterTitle': 'Cupón anual',
+  'addBTPPageExpirationDateFilterTitle': 'Expiración',
+  'addBTPPageApplyFiltersButton': 'Aplicar',
+  'addBTPPageDateSectionTitle': 'Fecha de compra',
+  'addBTPPageSelectDateButton': 'Seleccionar',
+  'addBTPPagePriceSectionTitle': 'Precio de compra (individual)',
+  'addBTPPagePriceSectionPlaceholder': 'Precio de compra...',
+  'addBTPPageInvestmentSectionTitle': 'Cantidad de BTP',
+  'addBTPPageInvestmentSectionPlaceholder': '¿Cuántos BTPs?',
+  'addBTPPageAddButton': 'Añadir a la cartera',
+  'addBTPSecondPageBackButton': 'Seleccionar BTP',
 };
