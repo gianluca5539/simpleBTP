@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "simpleBTP",
+            "cwd": "frontend/simpleBTP",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "simpleBTP (profile mode)",
+            "cwd": "frontend/simpleBTP",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "simpleBTP (release mode)",
+            "cwd": "frontend/simpleBTP",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
