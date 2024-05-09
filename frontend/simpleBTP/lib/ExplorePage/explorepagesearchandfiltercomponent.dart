@@ -85,7 +85,6 @@ class _ExplorePageSearchAndFilterComponentState
           context: context,
           isDismissible: true,
           builder: (BuildContext ctx) {
-            print('opening filter modal');
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
               return Container(
