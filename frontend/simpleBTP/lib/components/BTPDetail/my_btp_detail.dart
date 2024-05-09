@@ -467,7 +467,7 @@ void openMyBTPDetailModal(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
+                                      '${btp.expirationDate.day < 10 ? '0' : ''}${btp.expirationDate.day}/${btp.expirationDate.month < 10 ? '0' : ''}${btp.expirationDate.month}/${btp.expirationDate.year}',
                                       style: TextStyle(
                                           color: isDarkMode
                                               ? lightTextColor
@@ -498,7 +498,7 @@ void openMyBTPDetailModal(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '${buyDate.day}/${buyDate.month}/${buyDate.year}',
+                                      '${buyDate.day < 10 ? '0' : ''}${buyDate.day}/${buyDate.month < 10 ? '0' : ''}${buyDate.month}/${buyDate.year}',
                                       style: TextStyle(
                                           color: isDarkMode
                                               ? lightTextColor

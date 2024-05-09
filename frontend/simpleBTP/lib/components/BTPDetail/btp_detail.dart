@@ -437,7 +437,7 @@ void openBTPDetailModal(BuildContext context, isDarkMode, BTP btp) {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      '${btp.expirationDate.day}/${btp.expirationDate.month}/${btp.expirationDate.year}',
+                                      '${btp.expirationDate.day < 10 ? '0' : ''}${btp.expirationDate.day}/${btp.expirationDate.month < 10 ? '0' : ''}${btp.expirationDate.month}/${btp.expirationDate.year}',
                                       style: TextStyle(
                                           color: isDarkMode
                                               ? lightTextColor
