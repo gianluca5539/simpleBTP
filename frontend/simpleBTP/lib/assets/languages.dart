@@ -18,6 +18,12 @@ String getString(String key) {
   if (selectedLang == 'es') {
     return spanishLang[key] ?? key;
   }
+  if (selectedLang == 'ar') {
+    return arabLang[key] ?? key;
+  }
+  if (selectedLang == 'sq') {
+    return albanianLang[key] ?? key;
+  }
   return ''; // actually this should never happen
 }
 
@@ -27,6 +33,8 @@ Map<String, String> availableLanguages = {
   'hi': 'हिन्दी',
   'ro': 'Română',
   'es': 'Español',
+  'ar': 'عربى',
+  'sq': 'Shqip',
 };
 
 Map<String, String> italianLang = {
@@ -236,7 +244,6 @@ Map<String, String> englishLang = {
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
   'addBTPPageAddButton': 'Add to wallet',
   'addBTPSecondPageBackButton': 'Select BTP',
-  
 };
 
 Map<String, String> hindiLang = {
@@ -291,7 +298,6 @@ Map<String, String> hindiLang = {
   'settingsPageDarkModeButton': 'डार्क मोड',
   'settingsPageLanguageButton': 'भाषा चुनें',
 };
-
 
 Map<String, String> romanianLang = {
   // misc
@@ -397,7 +403,6 @@ Map<String, String> romanianLang = {
   'addBTPSecondPageBackButton': 'Selectează BTP',
 };
 
-
 Map<String, String> spanishLang = {
   // misc
   'months': 'meses',
@@ -500,4 +505,213 @@ Map<String, String> spanishLang = {
   'addBTPPageInvestmentSectionPlaceholder': '¿Cuántos BTPs?',
   'addBTPPageAddButton': 'Añadir a la cartera',
   'addBTPSecondPageBackButton': 'Seleccionar BTP',
+};
+
+Map<String, String> arabLang = {
+  // misc
+  'months': 'شهور',
+  'and': 'و',
+  'days': 'أيام',
+  'cancel': 'إلغاء',
+  'MyBTPInformationDeleteError': 'لحذف BTP ، انتقل إلى المحفظة.',
+  'ExplorePageBTPInformationDeleteErrorButton': 'تجاهل',
+  // header
+  'appTopBarHome': 'simpleBTP',
+  'appTopBarExplore': 'استكشاف',
+  'appTopBarWallet': 'محفظة',
+  'appTopBarSettings': 'الإعدادات',
+  'appTopBarPickLanguage': 'اختر اللغة',
+  // footer
+  'appBottomBarHome': 'الصفحة الرئيسية',
+  'appBottomBarExplore': 'استكشاف',
+  'appBottomBarWallet': 'محفظة',
+  'appBottomBarSettings': 'الإعدادات',
+  // homepage
+  'homeBalanceText': 'استثمارك',
+  'homeMyAssets': 'أفضل BTP الخاصة بك',
+  'homePageNoBTPsYet':
+      "لم تقم بإضافة أي BTP بعد. انتقل إلى المحفظة لإضافة واحد.",
+  'homeMyAssetsViewAllButton': 'عرض الكل',
+  'homeBestBTPs': 'أفضل BTP',
+  'homeBestBTPsViewAllButton': 'عرض الكل',
+  // walletpage
+  'walletBalanceText': 'استثمارك',
+  'walletMyAssets': 'أصولك',
+  'walletPaysWhat': 'يدفع',
+  'walletPaysIn': 'في',
+  'walletPageNoBTPsYet':
+      'لإضافة أصل جديد ، اضغط على "+" في الزاوية العلوية اليمنى من الشاشة.',
+  'walletBalanceGraphOneWeekText': 'أسبوع',
+  'walletBalanceGraphOneMonthText': 'شهر',
+  'walletBalanceGraphThreeMonthsText': '3M',
+  'walletBalanceGraphOneYearText': 'سنة',
+  'walletBalanceGraphTenYearsText': '10A',
+  'WalletPageBTPInformationBuyDate': 'تاريخ الشراء',
+  'WalletPageBTPInformationBuyPrice': 'سعر الشراء',
+  'WalletPageBTPInformationProfitability': 'الربح عند الانتهاء',
+  'WalletPageBTPInformationProfitabilityNow': 'الربح عند البيع الآن',
+  'ExplorePageBTPInformationDeleteButton': 'حذف من المحفظة',
+  // explorepage
+  'exploreSearchPlaceholder': 'ابحث عن BTP...',
+  'explorePageResults': 'النتائج',
+  'explorePageOrder': 'طلب',
+  'explorePageOrderByValue': 'السعر',
+  'explorePageOrderByCedola': 'كوبون',
+  'explorePageOrderByExpirationDate': 'انتهاء الصلاحية',
+  'explorePageOrderByValueButton': 'سعر السوق',
+  'explorePageOrderByCedolaButton': 'كوبون سنوي',
+  'explorePageOrderByExpirationDateButton': 'تاريخ الانتهاء',
+  'explorePageFilterTitle': 'تخصيص بحثك',
+  'explorePageValueFilterTitle': 'سعر السوق',
+  'explorePageCedolaFilterTitle': 'كوبون سنوي',
+  'explorePageExpirationDateFilterTitle': 'تاريخ الانتهاء',
+  'explorePageApplyFiltersButton': 'تطبيق',
+  'ExplorePageBTPChartTitle': 'البيانات التاريخية',
+  'ExplorePageBTPInformationTitle': 'معلومات BTP',
+  'ExplorePageBTPInformationPrice': 'السعر',
+  'ExplorePageBTPInformationCoupon': 'كوبون سنوي',
+  'ExplorePageBTPInformationExpirationDate': 'تاريخ الانتهاء',
+  'ExplorePageBTPInformationISIN': 'رمز ISIN',
+  'ExplorePageBTPInformationProfitability': 'الربح عند الشراء الآن',
+  'ExplorePageBTPInformationDeleteConfirmationMessage':
+      'هل أنت متأكد؟ لا يمكن التراجع عن هذا الإجراء.',
+  'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'إلغاء',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'حذف',
+  // settingspage
+  'settingsPageAccountTitle': 'حساب',
+
+  'settingsPageWalletBackupButton': 'نسخ احتياطي للمحفظة',
+  'settingsPageWalletBackupRestoreButton': 'استعادة نسخة احتياطية للمحفظة',
+  'settingsPageWalletDeleteButton': 'حذف المحفظة',
+  'settingsPagePersonalizationTitle': 'تخصيص',
+  'settingsPageDarkModeButton': 'الوضع الداكن',
+  'settingsPageLanguageButton': 'اختر اللغة',
+  // addBTP
+  'appTopBarAddBTP': 'إضافة BTP',
+  'addBTPSearchPlaceholder': 'ابحث عن BTP...',
+  'addBTPPageResults': 'النتائج',
+  'addBTPPageOrder': 'طلب',
+  'addBTPPageOrderByValue': 'السعر',
+  'addBTPPageOrderByCedola': 'كوبون',
+  'addBTPPageOrderByExpirationDate': 'انتهاء الصلاحية',
+  'addBTPPageOrderByValueButton': 'سعر السوق',
+  'addBTPPageOrderByCedolaButton': 'كوبون سنوي',
+  'addBTPPageOrderByExpirationDateButton': 'تاريخ الانتهاء',
+  'addBTPPageFilterTitle': 'تخصيص بحثك',
+  'addBTPPageValueFilterTitle': 'سعر السوق',
+  'addBTPPageCedolaFilterTitle': 'كوبون سنوي',
+  'addBTPPageExpirationDateFilterTitle': 'انتهاء الصلاحية',
+  'addBTPPageApplyFiltersButton': 'تطبيق',
+  'addBTPPageDateSectionTitle': 'تاريخ الشراء',
+  'addBTPPageSelectDateButton': 'اختر',
+  'addBTPPagePriceSectionTitle': 'سعر الشراء (فردي)',
+  'addBTPPagePriceSectionPlaceholder': 'سعر الشراء...',
+  'addBTPPageInvestmentSectionTitle': 'كمية BTP',
+  'addBTPPageInvestmentSectionPlaceholder': 'كم BTP؟',
+  'addBTPPageAddButton': 'إضافة إلى المحفظة',
+  'addBTPSecondPageBackButton': 'اختر BTP',
+};
+
+Map<String, String> albanianLang = {
+  // misc
+  'months': 'muaj',
+  'and': 'dhe',
+  'days': 'ditë',
+  'cancel': 'Anulo',
+  'MyBTPInformationDeleteError': 'Për të fshirë një BTP, shkoni në Portofol.',
+  'ExplorePageBTPInformationDeleteErrorButton': 'Heq dorë',
+  // header
+  'appTopBarHome': 'simpleBTP',
+  'appTopBarExplore': 'Eksploro',
+  'appTopBarWallet': 'Portofol',
+  'appTopBarSettings': 'Cilësimet',
+  'appTopBarPickLanguage': 'Zgjidhni gjuhën',
+  // footer
+  'appBottomBarHome': 'Kryefaqja',
+  'appBottomBarExplore': 'Eksploro',
+  'appBottomBarWallet': 'Portofol',
+  'appBottomBarSettings': 'Cilësimet',
+  // homepage
+  'homeBalanceText': 'Investimi juaj',
+  'homeMyAssets': 'BTP-të tuaja më të mira',
+  'homePageNoBTPsYet':
+      "Nuk keni shtuar ende asnjë BTP. Shkoni në Portofol për të shtuar një.",
+  'homeMyAssetsViewAllButton': 'Shiko të gjitha',
+  'homeBestBTPs': 'BTP-të më të mira',
+  'homeBestBTPsViewAllButton': 'Shiko të gjitha',
+  // walletpage
+  'walletBalanceText': 'Investimi juaj',
+  'walletMyAssets': 'Aktivet tuaja',
+  'walletPaysWhat': 'Paguan',
+  'walletPaysIn': 'në',
+  'walletPageNoBTPsYet':
+      'Për të shtuar një aktiv të ri, shtypni "+" në cepin e sipërm të djathtë të ekranit.',
+  'walletBalanceGraphOneWeekText': 'Javë',
+  'walletBalanceGraphOneMonthText': 'Muaj',
+  'walletBalanceGraphThreeMonthsText': '3M',
+  'walletBalanceGraphOneYearText': 'Vit',
+  'walletBalanceGraphTenYearsText': '10V',
+  'WalletPageBTPInformationBuyDate': 'Data e blerjes',
+  'WalletPageBTPInformationBuyPrice': 'Çmimi i blerjes',
+  'WalletPageBTPInformationProfitability': 'Fitimi në skadencë',
+  'WalletPageBTPInformationProfitabilityNow': 'Fitimi duke shitur tani',
+  'ExplorePageBTPInformationDeleteButton': 'Fshij nga portofoli',
+  // explorepage
+  'exploreSearchPlaceholder': 'Kërkoni për një BTP...',
+  'explorePageResults': 'Rezultatet',
+  'explorePageOrder': 'Rendit',
+  'explorePageOrderByValue': 'Çmimi',
+  'explorePageOrderByCedola': 'Kuponi',
+  'explorePageOrderByExpirationDate': 'Skadimi',
+  'explorePageOrderByValueButton': 'Çmimi i tregut',
+  'explorePageOrderByCedolaButton': 'Kuponi vjetor',
+  'explorePageOrderByExpirationDateButton': 'Data e skadimit',
+  'explorePageFilterTitle': 'Personalizoni kërkimin tuaj',
+  'explorePageValueFilterTitle': 'Çmimi i tregut',
+  'explorePageCedolaFilterTitle': 'Kuponi vjetor',
+  'explorePageExpirationDateFilterTitle': 'Data e skadimit',
+  'explorePageApplyFiltersButton': 'Apliko',
+  'ExplorePageBTPChartTitle': 'Të dhënat historike',
+  'ExplorePageBTPInformationTitle': 'Informacioni BTP',
+  'ExplorePageBTPInformationPrice': 'Çmimi',
+  'ExplorePageBTPInformationCoupon': 'Kuponi vjetor',
+  'ExplorePageBTPInformationExpirationDate': 'Data e skadimit',
+  'ExplorePageBTPInformationISIN': 'Kodi ISIN',
+  'ExplorePageBTPInformationProfitability': 'Fitimi duke blerë tani',
+  'ExplorePageBTPInformationDeleteConfirmationMessage':
+      'Jeni i sigurt? Ky veprim nuk mund të kthehet mbrapsht.',
+  'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Anulo',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'Fshij',
+  // settingspage
+  'settingsPageAccountTitle': 'Llogaria',
+  'settingsPageWalletBackupButton': 'Backup i portofolit',
+  'settingsPageWalletBackupRestoreButton': 'Rikthe backupin e portofolit',
+  'settingsPageWalletDeleteButton': 'Fshij portofolin',
+  'settingsPagePersonalizationTitle': 'Personalizimi',
+  'settingsPageDarkModeButton': 'Mënyra e errët',
+  'settingsPageLanguageButton': 'Zgjidhni gjuhën',
+  // addBTP
+  'appTopBarAddBTP': 'Shto BTP',
+  'addBTPSearchPlaceholder': 'Kërkoni për një BTP...',
+  'addBTPPageResults': 'Rezultatet',
+  'addBTPPageOrder': 'Rendit',
+  'addBTPPageOrderByValue': 'Çmimi',
+  'addBTPPageOrderByCedola': 'Kuponi',
+  'addBTPPageOrderByExpirationDate': 'Skadimi',
+  'addBTPPageOrderByValueButton': 'Çmimi i tregut',
+  'addBTPPageOrderByCedolaButton': 'Kuponi vjetor',
+  'addBTPPageOrderByExpirationDateButton': 'Data e skadimit',
+  'addBTPPageFilterTitle': 'Personalizoni kërkimin tuaj',
+  'addBTPPageValueFilterTitle': 'Çmimi i tregut',
+  'addBTPPageCedolaFilterTitle': 'Kuponi vjetor',
+  'addBTPPageExpirationDateFilterTitle': 'Data e skadimit',
+  'addBTPPageApplyFiltersButton': 'Apliko',
+  'addBTPPageDateSectionTitle': 'Data e blerjes',
+  'addBTPPageSelectDateButton': 'Zgjidh',
+  'addBTPPagePriceSectionTitle': 'Çmimi i blerjes (i vetëm)',
+  'addBTPPagePriceSectionPlaceholder': 'Çmimi i blerjes...',
+  'addBTPPageInvestmentSectionTitle': 'Sasia e BTP',
+  'addBTPPageInvestmentSectionPlaceholder': 'Sa BTP?',
+  'addBTPPageAddButton': 'Shto në portofol',
+  'addBTPSecondPageBackButton': 'Zgjidh BTP',
 };
