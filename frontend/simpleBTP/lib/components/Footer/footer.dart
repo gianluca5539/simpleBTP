@@ -36,6 +36,7 @@ class Footer extends StatelessWidget {
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return BottomAppBar(
+      height: 65,
       color: isDarkMode ? offBlackColor : offWhiteColor,
       padding: const EdgeInsets.only(top: 17),
       child: Row(

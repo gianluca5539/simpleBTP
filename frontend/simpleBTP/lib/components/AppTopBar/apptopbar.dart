@@ -6,6 +6,7 @@ PreferredSizeWidget appTopBar(title, Map<String, dynamic>? action) {
   Box box = Hive.box('settings');
   bool isDarkMode = box.get('darkMode', defaultValue: false);
   return AppBar(
+    toolbarHeight: 50,
     title: Text(title, style: const TextStyle(color: Colors.white)),
     iconTheme: const IconThemeData(color: Colors.white),
     actions: action != null
