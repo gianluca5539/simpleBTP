@@ -24,10 +24,11 @@ class Footer extends StatelessWidget {
   Footer(this.currentPage, {super.key});
 
   void navigateTo(BuildContext context, Widget page) {
-    // push the new page removing all history
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => page),
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => page,
+        ),
         (Route<dynamic> route) => false);
   }
 
@@ -66,8 +67,7 @@ class Footer extends StatelessWidget {
                 ),
                 Text(getString('appBottomBarHome'),
                     style: TextStyle(
-                        color:
-                            currentPage == 'home'
+                        color: currentPage == 'home'
                             ? primaryColorLight
                             : isDarkMode
                                 ? footerLightTextColor
