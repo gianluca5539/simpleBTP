@@ -43,7 +43,7 @@ Map<String, String> italianLang = {
   'and': 'e',
   'days': 'giorni',
   'cancel': 'Annulla',
-  'MyBTPInformationDeleteError': 'Per eliminare un BTP vai al portafoglio.',
+  'MyBTPInformationDeleteError': 'Per vendere un BTP vai al portafoglio.',
   'ExplorePageBTPInformationDeleteErrorButton': 'Chiudi',
   // header
   'appTopBarHome': 'simpleBTP',
@@ -60,7 +60,7 @@ Map<String, String> italianLang = {
   'homeBalanceText': 'Il tuo investimento',
   'homeMyAssets': 'I tuoi migliori BTP',
   'homePageNoBTPsYet':
-      "Non hai ancora aggiunto un BTP. Vai al portafoglio per aggiungerne uno.",
+      "Non hai ancora comprato un BTP. Vai al portafoglio per comprarne uno.",
   'homeMyAssetsViewAllButton': 'Vedi tutti',
   'homeBestBTPs': 'I BTP più performanti',
   'homeBestBTPsViewAllButton': 'Vedi tutti',
@@ -80,7 +80,7 @@ Map<String, String> italianLang = {
   'WalletPageBTPInformationBuyPrice': 'Prezzo di acquisto',
   'WalletPageBTPInformationProfitability': 'Profitto alla scadenza',
   'WalletPageBTPInformationProfitabilityNow': 'Profitto vendendo ora',
-  'ExplorePageBTPInformationDeleteButton': 'Elimina dal portafoglio',
+  'ExplorePageBTPInformationDeleteButton': 'Vendi questo BTP',
   // explorepage
   'exploreSearchPlaceholder': 'Cerca un BTP...',
   'explorePageResults': 'Risultati',
@@ -116,7 +116,7 @@ Map<String, String> italianLang = {
   'settingsPageDarkModeButton': 'Modalità scura',
   'settingsPageLanguageButton': 'Seleziona lingua',
   // addBTP
-  'appTopBarAddBTP': 'Aggiungi BTP',
+  'appTopBarAddBTP': 'Compra BTP',
   'addBTPSearchPlaceholder': 'Cerca un BTP...',
   'addBTPPageResults': 'Risultati',
   'addBTPPageOrder': 'Ordine',
@@ -163,7 +163,7 @@ Map<String, String> englishLang = {
   // homepage
   'homeBalanceText': 'Your investment',
   'homeMyAssets': 'Your best BTPs',
-  'homePageNoBTPsYet': "You didn't add any BTPs yet. Go to Wallet to add one.",
+  'homePageNoBTPsYet': "You didn't buy any BTPs yet. Go to Wallet to buy one.",
   'homeMyAssetsViewAllButton': 'View all',
   'homeBestBTPs': 'Best performing BTPs',
   'homeBestBTPsViewAllButton': 'View all',
@@ -175,7 +175,7 @@ Map<String, String> englishLang = {
   'walletPaysWhat': 'Pays',
   'walletPaysIn': 'in',
   'walletPageNoBTPsYet':
-      'To add a new asset, press the "+" on the top-right corner of the screen.',
+      'To buy a new asset, press the "+" on the top-right corner of the screen.',
   'walletBalanceGraphOneWeekText': 'Week',
   'walletBalanceGraphOneMonthText': 'Month',
   'walletBalanceGraphThreeMonthsText': '3M',
@@ -185,7 +185,7 @@ Map<String, String> englishLang = {
   'WalletPageBTPInformationBuyPrice': 'Buy price',
   'WalletPageBTPInformationProfitability': 'Profit at expiration',
   'WalletPageBTPInformationProfitabilityNow': 'Profit selling now',
-  'ExplorePageBTPInformationDeleteButton': 'Delete from wallet',
+  'ExplorePageBTPInformationDeleteButton': 'Sell this BTP',
   // explorepage
   'exploreSearchPlaceholder': 'Search for a BTP...',
   'explorePageResults': 'Results',
@@ -221,7 +221,7 @@ Map<String, String> englishLang = {
   'settingsPageDarkModeButton': 'Dark mode',
   'settingsPageLanguageButton': 'Select language',
   // addBTP
-  'appTopBarAddBTP': 'Add BTP',
+  'appTopBarAddBTP': 'Buy a BTP',
   'addBTPSearchPlaceholder': 'Search for a BTP...',
   'addBTPPageResults': 'Results',
   'addBTPPageOrder': 'Order',
