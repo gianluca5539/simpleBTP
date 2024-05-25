@@ -43,6 +43,7 @@ Map<String, String> italianLang = {
   'and': 'e',
   'days': 'giorni',
   'cancel': 'Annulla',
+  'total': 'Totale',
   'MyBTPInformationDeleteError': 'Per vendere un BTP vai al portafoglio.',
   'ExplorePageBTPInformationDeleteErrorButton': 'Chiudi',
   // header
@@ -76,8 +77,8 @@ Map<String, String> italianLang = {
   'walletBalanceGraphThreeMonthsText': '3M',
   'walletBalanceGraphOneYearText': 'Anno',
   'walletBalanceGraphTenYearsText': '10A',
-  'WalletPageBTPInformationBuyDate': 'Data di acquisto',
-  'WalletPageBTPInformationBuyPrice': 'Prezzo di acquisto',
+  'WalletPageBTPInformationBuyDate': 'Data di acquisto (debug)',
+  'WalletPageBTPInformationBuyPrice': 'Prezzo di acquisto (debug)',
   'WalletPageBTPInformationProfitability': 'Profitto alla scadenza',
   'WalletPageBTPInformationProfitabilityNow': 'Profitto vendendo ora',
   'ExplorePageBTPInformationDeleteButton': 'Vendi questo BTP',
@@ -137,7 +138,7 @@ Map<String, String> italianLang = {
   'addBTPPagePriceSectionPlaceholder': 'Prezzo di acquisto...',
   'addBTPPageInvestmentSectionTitle': 'Quantità di BTP',
   'addBTPPageInvestmentSectionPlaceholder': 'Quanti BTPs?',
-  'addBTPPageAddButton': 'Aggiungi al portafoglio',
+  'addBTPPageAddButton': 'Compra questo BTP',
   'addBTPSecondPageBackButton': 'Seleziona BTP',
 };
 
@@ -147,6 +148,7 @@ Map<String, String> englishLang = {
   'and': 'and',
   'days': 'days',
   'cancel': 'Cancel',
+  'total': 'Total',
   'MyBTPInformationDeleteError': 'To delete a BTP please go to Wallet.',
   'ExplorePageBTPInformationDeleteErrorButton': 'Dismiss',
   // header
@@ -236,13 +238,13 @@ Map<String, String> englishLang = {
   'addBTPPageCedolaFilterTitle': 'Yearly coupon',
   'addBTPPageExpirationDateFilterTitle': 'Expiration date',
   'addBTPPageApplyFiltersButton': 'Apply',
-  'addBTPPageDateSectionTitle': 'Purchase date',
+  'addBTPPageDateSectionTitle': 'Purchase date (debug)',
   'addBTPPageSelectDateButton': 'Select',
-  'addBTPPagePriceSectionTitle': 'Purchase price (single)',
+  'addBTPPagePriceSectionTitle': 'Purchase price (debug)',
   'addBTPPagePriceSectionPlaceholder': 'Purchase price...',
   'addBTPPageInvestmentSectionTitle': 'Investment quantity',
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
-  'addBTPPageAddButton': 'Add to wallet',
+  'addBTPPageAddButton': 'Compra BTP',
   'addBTPSecondPageBackButton': 'Select BTP',
 };
 
