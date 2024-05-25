@@ -18,7 +18,7 @@ import 'package:simpleBTP/db/hivemodels.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
-  
+
   @override
   State<WalletPage> createState() => _WalletPageState();
 }
@@ -41,16 +41,54 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   void _addBTPToWallet() {
-    addBTPToWallet(
-        btp!.isin, selectedDate ?? DateTime.now(), price, investment);
-    setState(() {
-      selectedDate = DateTime.now();
-      price = 0.0;
-      investment = 0;
-      btp = null;
+    // show cupertino sheet to choose payment method
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(getString('addBTPPagePaymentMethodTitle')),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(getString('addBTPPagePaymentMethodApplePay')),
+              ),
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(getString('addBTPPagePaymentMethodDebit')),
+              ),
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(getString('addBTPPagePaymentMethodPaypal')),
+              ),
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  getString('addBTPPagePaymentMethodCancel'),
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          );
+        }).then((value) {
+      addBTPToWallet(
+          btp!.isin, selectedDate ?? DateTime.now(), price, investment);
+      setState(() {
+        selectedDate = DateTime.now();
+        price = 0.0;
+        investment = 0;
+        btp = null;
+      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     });
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
   }
 
   getTotalInvestment() {
@@ -422,7 +460,11 @@ class _WalletPageState extends State<WalletPage> {
                       Column(
                         children: [
                           ElevatedButton(
-                            onPressed: () => _addBTPToWallet(),
+                            onPressed: () {
+                              if (price > 0 && investment > 0) {
+                                _addBTPToWallet();
+                              }
+                            },
                             style: ButtonStyle(
                               minimumSize: MaterialStateProperty.all(
                                   const Size(double.infinity, 45)),
@@ -467,7 +509,7 @@ class _WalletPageState extends State<WalletPage> {
           investment = 0;
           btp = null;
         });
-          });
+      });
     }
 
     void openAddBTPModal() {
