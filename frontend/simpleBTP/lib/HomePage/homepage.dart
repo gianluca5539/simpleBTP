@@ -153,7 +153,7 @@ class HomePage extends StatelessWidget {
 
                     return TextButton(
                         onPressed: () {
-                          openBTPDetailModal(context, isDarkMode, asset);
+                          openBTPDetailModal(context, isDarkMode, asset, null);
                         },
                         style: ButtonStyle(
                           backgroundColor:

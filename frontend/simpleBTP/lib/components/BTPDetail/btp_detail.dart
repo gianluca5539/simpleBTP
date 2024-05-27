@@ -58,7 +58,8 @@ List<FlSpot> _getSpots(Map<DateTime, double> data) {
       .toList();
 }
 
-void openBTPDetailModal(BuildContext context, isDarkMode, BTP btp) {
+void openBTPDetailModal(
+    BuildContext context, isDarkMode, BTP btp, Function? buttonCallback) {
   // Assume each label is about 60 pixels wide, change this based on your font size and style
   double labelWidth = 80;
   // Get the width of the chart
@@ -520,6 +521,35 @@ void openBTPDetailModal(BuildContext context, isDarkMode, BTP btp) {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    if (buttonCallback != null)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              buttonCallback();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10),
+                              child: Text(
+                                getString('ExplorePageBTPInformationBuyButton'),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ]),
             ),
           );

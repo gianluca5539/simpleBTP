@@ -108,6 +108,7 @@ Map<String, String> italianLang = {
       'Sei sicuro? Quest\'azione non può essere annullata.',
   'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Annulla',
   'ExplorePageBTPInformationDeleteConfirmationButton': 'Elimina',
+  'ExplorePageBTPInformationBuyButton': 'Compra questo BTP',
   // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup portafoglio',
@@ -223,6 +224,7 @@ Map<String, String> englishLang = {
       'Are you sure? This action cannot be undone.',
   'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Cancel',
   'ExplorePageBTPInformationDeleteConfirmationButton': 'Delete',
+  'ExplorePageBTPInformationBuyButton': 'Buy this BTP',
   // settingspage
   'settingsPageAccountTitle': 'Account',
   'settingsPageWalletBackupButton': 'Backup wallet',
