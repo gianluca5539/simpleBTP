@@ -253,7 +253,7 @@ class _WalletPageState extends State<WalletPage> {
                           const SizedBox(height: 12),
                           Center(
                             child: Text(
-                              btp!.name.toUpperCase(),
+                              btp?.name.toUpperCase() ?? "",
                               style: TextStyle(
                                   fontSize: 24,
                                   color:
