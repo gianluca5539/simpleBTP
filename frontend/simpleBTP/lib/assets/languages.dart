@@ -140,6 +140,15 @@ Map<String, String> italianLang = {
   'addBTPPageInvestmentSectionPlaceholder': 'Quanti BTPs?',
   'addBTPPageAddButton': 'Compra questo BTP',
   'addBTPSecondPageBackButton': 'Seleziona BTP',
+  'addBTPPageInvestmentTooLowError':
+      'L\'investimento totale deve essere almeno 1000.',
+  'addBTPPagePaymentMethodCancel': 'Annulla',
+  'addBTPPagePaymentMethodTitle': 'Seleziona metodo di pagamento',
+  'addBTPPagePaymentMethodMessage':
+      'Ci siamo quasi! Seleziona il metodo di pagamento per completare l\'acquisto.',
+  'addBTPPagePaymentMethodApplePay': 'Apple Pay',
+  'addBTPPagePaymentMethodDebit': 'Carta di debito',
+  'addBTPPagePaymentMethodPaypal': 'Paypal',
 };
 
 Map<String, String> englishLang = {
@@ -244,8 +253,16 @@ Map<String, String> englishLang = {
   'addBTPPagePriceSectionPlaceholder': 'Purchase price...',
   'addBTPPageInvestmentSectionTitle': 'Investment quantity',
   'addBTPPageInvestmentSectionPlaceholder': 'How many BTPs?',
-  'addBTPPageAddButton': 'Compra BTP',
+  'addBTPPageAddButton': 'Buy this BTP',
   'addBTPSecondPageBackButton': 'Select BTP',
+  'addBTPPageInvestmentTooLowError': 'Total investment must be at least 1000.',
+  'addBTPPagePaymentMethodCancel': 'Cancel',
+  'addBTPPagePaymentMethodTitle': 'Select payment method',
+  'addBTPPagePaymentMethodApplePay': 'Apple Pay',
+  'addBTPPagePaymentMethodDebit': 'Debit Card',
+  'addBTPPagePaymentMethodPaypal': 'Paypal',
+  'addBTPPagePaymentMethodMessage':
+      'Almost there! Select the payment method to complete the purchase.',
 };
 
 Map<String, String> hindiLang = {

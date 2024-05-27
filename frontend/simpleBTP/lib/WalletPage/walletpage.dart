@@ -32,6 +32,7 @@ class _WalletPageState extends State<WalletPage> {
   double price = 0.0;
   int investment = 0;
   BTP? btp;
+  bool showErrorInvestmentTooLow = true;
 
   String get purchaseDate {
     if (selectedDate == null) {
@@ -46,29 +47,67 @@ class _WalletPageState extends State<WalletPage> {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text(getString('addBTPPagePaymentMethodTitle')),
+            title: Text(getString('addBTPPagePaymentMethodTitle'),
+                style: const TextStyle(fontSize: 18)),
+            content: Text(
+              getString('addBTPPagePaymentMethodMessage'),
+              style: const TextStyle(fontSize: 14),
+            ),
             actions: [
               CupertinoDialogAction(
                 onPressed: () {
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
+                      price, investment);
                   Navigator.pop(context);
+                  setState(() {
+                    selectedDate = DateTime.now();
+                    price = 0.0;
+                    investment = 0;
+                    btp = null;
+                    showErrorInvestmentTooLow = true;
+                  });
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodApplePay')),
               ),
               CupertinoDialogAction(
                 onPressed: () {
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
+                      price, investment);
                   Navigator.pop(context);
+                  setState(() {
+                    selectedDate = DateTime.now();
+                    price = 0.0;
+                    investment = 0;
+                    btp = null;
+                    showErrorInvestmentTooLow = true;
+                  });
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodDebit')),
               ),
               CupertinoDialogAction(
                 onPressed: () {
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
+                      price, investment);
                   Navigator.pop(context);
+                  setState(() {
+                    selectedDate = DateTime.now();
+                    price = 0.0;
+                    investment = 0;
+                    btp = null;
+                    showErrorInvestmentTooLow = true;
+                  });
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodPaypal')),
               ),
               CupertinoDialogAction(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 child: Text(
                   getString('addBTPPagePaymentMethodCancel'),
@@ -77,18 +116,7 @@ class _WalletPageState extends State<WalletPage> {
               ),
             ],
           );
-        }).then((value) {
-      addBTPToWallet(
-          btp!.isin, selectedDate ?? DateTime.now(), price, investment);
-      setState(() {
-        selectedDate = DateTime.now();
-        price = 0.0;
-        investment = 0;
-        btp = null;
-      });
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-    });
+        });
   }
 
   getTotalInvestment() {
@@ -234,10 +262,8 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                           const SizedBox(height: 20),
                           Text(getString('addBTPPageDateSectionTitle'),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor)),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.grey)),
                           const SizedBox(height: 15),
                           Center(
                               child: ElevatedButton(
@@ -296,26 +322,28 @@ class _WalletPageState extends State<WalletPage> {
                           )),
                           const SizedBox(height: 30),
                           Text(getString('addBTPPagePriceSectionTitle'),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor)),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.grey)),
                           const SizedBox(height: 10),
                           // add textfield
                           Material(
                             elevation: 1,
                             borderRadius: BorderRadius.circular(10),
-                            child: TextField(
+                            child: TextFormField(
                               onTapOutside: (event) {
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
-                              controller: TextEditingController()
-                                ..text = price.toString(),
+                              initialValue: price.toString(),
                               onChanged: (value) {
                                 setModalState(() {
                                   price = double.tryParse(
                                           value.replaceAll(',', '.')) ??
                                       0.0;
+                                  if (price * investment < 1000) {
+                                    showErrorInvestmentTooLow = true;
+                                  } else {
+                                    showErrorInvestmentTooLow = false;
+                                  }
                                 });
                               },
                               keyboardType: TextInputType.number,
@@ -388,6 +416,11 @@ class _WalletPageState extends State<WalletPage> {
                               onChanged: (value) {
                                 setModalState(() {
                                   investment = int.tryParse(value) ?? 0;
+                                  if (price * investment < 1000) {
+                                    showErrorInvestmentTooLow = true;
+                                  } else {
+                                    showErrorInvestmentTooLow = false;
+                                  }
                                 });
                               },
                               keyboardType: TextInputType.number,
@@ -459,9 +492,21 @@ class _WalletPageState extends State<WalletPage> {
                       ),
                       Column(
                         children: [
+                          if (showErrorInvestmentTooLow)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                getString('addBTPPageInvestmentTooLowError'),
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           ElevatedButton(
                             onPressed: () {
-                              if (price > 0 && investment > 0) {
+                              if (price * investment >= 1000) {
                                 _addBTPToWallet();
                               }
                             },
@@ -470,9 +515,11 @@ class _WalletPageState extends State<WalletPage> {
                                   const Size(double.infinity, 45)),
                               elevation: MaterialStateProperty.all(1),
                               backgroundColor: MaterialStateProperty.all(
-                                  isDarkMode
-                                      ? primaryColorLight
-                                      : primaryColor),
+                                  investment * price < 1000
+                                      ? Colors.grey
+                                      : isDarkMode
+                                          ? primaryColorLight
+                                          : primaryColor),
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.white),
                               padding:
@@ -508,6 +555,7 @@ class _WalletPageState extends State<WalletPage> {
           price = 0.0;
           investment = 0;
           btp = null;
+          showErrorInvestmentTooLow = true;
         });
       });
     }
