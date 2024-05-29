@@ -105,9 +105,9 @@ Map<String, String> italianLang = {
   'ExplorePageBTPInformationISIN': 'Codice ISIN',
   'ExplorePageBTPInformationProfitability': 'Profitto acquistando ora',
   'ExplorePageBTPInformationDeleteConfirmationMessage':
-      'Sei sicuro? Quest\'azione non può essere annullata.',
+      'Sei sicuro di voler vendere questo BTP?',
   'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Annulla',
-  'ExplorePageBTPInformationDeleteConfirmationButton': 'Elimina',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'Vendi BTP',
   'ExplorePageBTPInformationBuyButton': 'Compra questo BTP',
   // settingspage
   'settingsPageAccountTitle': 'Account',
@@ -161,7 +161,7 @@ Map<String, String> englishLang = {
   'days': 'days',
   'cancel': 'Cancel',
   'total': 'Total',
-  'MyBTPInformationDeleteError': 'To delete a BTP please go to Wallet.',
+  'MyBTPInformationDeleteError': 'To sell a BTP please go to Wallet.',
   'ExplorePageBTPInformationDeleteErrorButton': 'Dismiss',
   // header
   'appTopBarHome': 'simpleBTP',
@@ -223,9 +223,9 @@ Map<String, String> englishLang = {
   'ExplorePageBTPInformationISIN': 'ISIN code',
   'ExplorePageBTPInformationProfitability': 'Profit buying now',
   'ExplorePageBTPInformationDeleteConfirmationMessage':
-      'Are you sure? This action cannot be undone.',
+      'Are you sure you want to sell this BTP?',
   'ExplorePageBTPInformationDeleteConfirmationCancelButton': 'Cancel',
-  'ExplorePageBTPInformationDeleteConfirmationButton': 'Delete',
+  'ExplorePageBTPInformationDeleteConfirmationButton': 'Sell this',
   'ExplorePageBTPInformationBuyButton': 'Buy this BTP',
   // settingspage
   'settingsPageAccountTitle': 'Account',

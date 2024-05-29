@@ -630,55 +630,63 @@ void openMyBTPDetailModal(
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Center(
-                      child: TextButton(
-                        onPressed: () {
-                          if (deleteBTPFromWallet != null) {
-                            deleteBTPFromWallet(key, context, isDarkMode);
-                          } else {
-                            // show a dialog that the user can't delete this BTP
-                            showCupertinoDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CupertinoTheme(
-                                    data: CupertinoThemeData(
-                                      brightness: isDarkMode
-                                          ? Brightness.dark
-                                          : Brightness.light,
-                                    ),
-                                    child: CupertinoAlertDialog(
-                                      title: Text(getString(
-                                          'MyBTPInformationDeleteError')),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: Text(
-                                            getString(
-                                                'ExplorePageBTPInformationDeleteErrorButton'),
-                                            style: const TextStyle(
-                                                color: primaryColor,
-                                                fontSize: 16),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (deleteBTPFromWallet != null) {
+                              deleteBTPFromWallet(key, context, isDarkMode);
+                            } else {
+                              // show a dialog that the user can't delete this BTP
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CupertinoTheme(
+                                      data: CupertinoThemeData(
+                                        brightness: isDarkMode
+                                            ? Brightness.dark
+                                            : Brightness.light,
+                                      ),
+                                      child: CupertinoAlertDialog(
+                                        title: Text(getString(
+                                            'MyBTPInformationDeleteError')),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: Text(
+                                              getString(
+                                                  'ExplorePageBTPInformationDeleteErrorButton'),
+                                              style: const TextStyle(
+                                                  color: primaryColor,
+                                                  fontSize: 16),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
-                          }
-                        },
-                        child: Text(
-                          getString('ExplorePageBTPInformationDeleteButton'),
-                          style: TextStyle(
+                                        ],
+                                      ),
+                                    );
+                                  });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            getString('ExplorePageBTPInformationDeleteButton'),
+                            style: const TextStyle(
                               fontSize: 16,
-                              color: deleteBTPFromWallet != null
-                                  ? Colors.red[700]
-                                  : Colors.grey),
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    )
                   ]),
             ),
           );
