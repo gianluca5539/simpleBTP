@@ -43,18 +43,18 @@ class _WalletPageState extends State<WalletPage> {
 
   void _addBTPToWallet() {
     // show cupertino sheet to choose payment method
-    showCupertinoDialog(
+    showCupertinoModalPopup(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
+          return CupertinoActionSheet(
             title: Text(getString('addBTPPagePaymentMethodTitle'),
                 style: const TextStyle(fontSize: 18)),
-            content: Text(
+            message: Text(
               getString('addBTPPagePaymentMethodMessage'),
               style: const TextStyle(fontSize: 14),
             ),
             actions: [
-              CupertinoDialogAction(
+              CupertinoActionSheetAction(
                 onPressed: () {
                   addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
                       price, investment);
@@ -71,7 +71,7 @@ class _WalletPageState extends State<WalletPage> {
                 },
                 child: Text(getString('addBTPPagePaymentMethodApplePay')),
               ),
-              CupertinoDialogAction(
+              CupertinoActionSheetAction(
                 onPressed: () {
                   addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
                       price, investment);
@@ -88,7 +88,7 @@ class _WalletPageState extends State<WalletPage> {
                 },
                 child: Text(getString('addBTPPagePaymentMethodDebit')),
               ),
-              CupertinoDialogAction(
+              CupertinoActionSheetAction(
                 onPressed: () {
                   addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
                       price, investment);
@@ -105,7 +105,7 @@ class _WalletPageState extends State<WalletPage> {
                 },
                 child: Text(getString('addBTPPagePaymentMethodPaypal')),
               ),
-              CupertinoDialogAction(
+              CupertinoActionSheetAction(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
