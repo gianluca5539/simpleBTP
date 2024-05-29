@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:simpleBTP/HomePage/homepage.dart';
+import 'package:simpleBTP/LoginPage/loginpage.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/db/db.dart';
@@ -16,6 +17,8 @@ void main() async {
 
   // load settings
   await Hive.openBox('settings');
+  // load credentials
+  await Hive.openBox('credentials');
   // set the default language to italian
   selectedLang = Hive.box('settings').get('language');
   if (selectedLang == null) {
@@ -57,10 +60,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Box credentialsBox = Hive.box('credentials');
+    bool logged = credentialsBox.get('username') != null;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'DIN Alternate'),
-      home: const HomePage(),
+      home: logged ? const HomePage() : const LoginPage(),
     );
   }
 }

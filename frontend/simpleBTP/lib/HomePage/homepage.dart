@@ -4,6 +4,7 @@ import 'package:simpleBTP/HomePage/homepagebalancecomponent.dart';
 import 'package:simpleBTP/HomePage/homebestbtpscomponent.dart';
 import 'package:simpleBTP/HomePage/homemyassetscomponent.dart';
 import 'package:simpleBTP/HomePage/homepageinvestmentcomponent.dart';
+import 'package:simpleBTP/LoginPage/loginpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
@@ -18,8 +19,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Box box = Hive.box('settings');
-    bool isDarkMode = box.get('darkMode', defaultValue: false);
+    Box settingsBox = Hive.box('settings');
+    bool isDarkMode = settingsBox.get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
       appBar: appTopBar(getString('appTopBarHome'), null),

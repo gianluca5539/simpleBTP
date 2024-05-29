@@ -150,6 +150,8 @@ Map<String, String> italianLang = {
   'addBTPPagePaymentMethodApplePay': 'Apple Pay',
   'addBTPPagePaymentMethodDebit': 'Carta di debito',
   'addBTPPagePaymentMethodPaypal': 'Paypal',
+  'loginButton': 'Log-in',
+  'loginText': 'Fai il log-in per iniziare a negoziare BTP!'
 };
 
 Map<String, String> englishLang = {
@@ -265,6 +267,8 @@ Map<String, String> englishLang = {
   'addBTPPagePaymentMethodPaypal': 'Paypal',
   'addBTPPagePaymentMethodMessage':
       'Almost there! Select the payment method to complete the purchase.',
+  'loginButton': 'Log-in',
+  'loginText': 'Please log-in to start trading BTPs!'
 };
 
 Map<String, String> hindiLang = {
