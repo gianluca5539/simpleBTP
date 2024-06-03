@@ -681,16 +681,34 @@ class _WalletPageState extends State<WalletPage> {
 
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: appTopBar(getString('appTopBarWallet'), {
-        'icon': Icons.add,
-        'onPressed': () {
-          openAddBTPModal();
-        }
-      }),
+      appBar: appTopBar(getString('simpleBTP'), [
+        {
+          'icon': Icons.settings_outlined,
+          'onPressed': () {
+            openAddBTPModal();
+          }
+        },
+        {
+          'icon': Icons.add,
+          'onPressed': () {
+            openAddBTPModal();
+          }
+        },
+      ]),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Text(
+                getString('walletBalanceText'),
+                style: TextStyle(
+                    fontSize: 24,
+                    color: isDarkMode ? lightTextColor : titleColor),
+              ),
+            ),
             Center(
               child: FutureBuilder<Map<String, double>>(
                   future: getWalletStats(),
@@ -711,7 +729,7 @@ class _WalletPageState extends State<WalletPage> {
                     return const Text('No data'); // Handle the case of no data
                   }),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
@@ -721,6 +739,7 @@ class _WalletPageState extends State<WalletPage> {
                     color: isDarkMode ? lightTextColor : titleColor),
               ),
             ),
+            const SizedBox(height: 15),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: getWalletPageMyBTPs(),
               builder: (context, snapshot) {
@@ -799,7 +818,18 @@ class _WalletPageState extends State<WalletPage> {
                           expirationDate: date,
                         ));
                   }).toList();
-                  return Column(children: investmentList);
+                  return Column(
+                      children: investmentList
+                          .map((e) => Column(
+                                children: [
+                                  e,
+                                  Divider(
+                                    height: 1,
+                                    color: Colors.grey[200],
+                                  )
+                                ],
+                              ))
+                          .toList());
                 } else {
                   return const Text('No data'); // Handle the case of no data
                 }
@@ -809,7 +839,6 @@ class _WalletPageState extends State<WalletPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Footer('wallet'),
     );
   }
 }

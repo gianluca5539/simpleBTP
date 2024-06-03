@@ -1,8 +1,8 @@
 // ignore_for_file: dead_code
 
 import 'package:flutter/material.dart';
-import 'package:simpleBTP/HomePage/homepage.dart';
 import 'package:simpleBTP/LoginPage/loginpage.dart';
+import 'package:simpleBTP/WalletPage/walletpage.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/db/db.dart';
@@ -64,8 +64,7 @@ class MainApp extends StatelessWidget {
     bool logged = credentialsBox.get('username') != null;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'DIN Alternate'),
-      home: logged ? const HomePage() : const LoginPage(),
+      home: logged ? const WalletPage() : const LoginPage(),
     );
   }
 }

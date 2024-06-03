@@ -74,27 +74,11 @@ class WalletPageInvestmentComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      child: Skeletonizer(
+    return Skeletonizer(
         enabled: investmentName == null,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: isDarkMode ? darkModeColor : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: isDarkMode
-                    ? Colors.transparent
-                    : Colors.grey.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 3,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
+      child: Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.fromLTRB(25, 13, 30, 13),
+        padding: const EdgeInsets.fromLTRB(25, 13, 10, 13),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -156,8 +140,14 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
-          ),
+            const SizedBox(
+              width: 17,
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey,
+            )
+          ],
         ),
       ),
     );
