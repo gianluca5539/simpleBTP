@@ -143,9 +143,9 @@ class WalletPageInvestmentComponent extends StatelessWidget {
             const SizedBox(
               width: 17,
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey,
+              color: Colors.grey[400],
             )
           ],
         ),

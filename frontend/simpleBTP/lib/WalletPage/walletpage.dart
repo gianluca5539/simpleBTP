@@ -655,13 +655,19 @@ class _WalletPageState extends State<WalletPage> {
                                           const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.zero)),
                                     ),
-                                    child: AddBTPInvestmentComponent(
-                                      investmentName: btpLess ?? "Unknown",
-                                      investmentDetail: "$withBtp",
-                                      cedola: "${cedola * 2}%",
-                                      investmentValue: value,
-                                      variation: variation,
-                                    ));
+                                    child: Column(children: [
+                                      AddBTPInvestmentComponent(
+                                        investmentName: btpLess ?? "Unknown",
+                                        investmentDetail: "$withBtp",
+                                        cedola: "${cedola * 2}%",
+                                        investmentValue: value,
+                                        variation: variation,
+                                      ),
+                                      Divider(
+                                        height: 1,
+                                        color: Colors.grey[200],
+                                      )
+                                    ]));
                               }).toList();
                               return Column(children: investmentList);
                             } else {

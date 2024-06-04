@@ -185,7 +185,7 @@ Map<String, String> englishLang = {
   'homePageExploreBTPSnackBar': 'To view all BTP information go to Explore.',
   // walletpage
   'walletBalanceText': 'Your investment',
-  'walletMyAssets': 'Your assets',
+  'walletMyAssets': 'Your current assets',
   'walletPaysWhat': 'Pays',
   'walletPaysIn': 'in',
   'walletPageNoBTPsYet':
