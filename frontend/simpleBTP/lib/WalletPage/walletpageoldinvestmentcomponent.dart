@@ -57,13 +57,13 @@ class WalletPageOldInvestmentComponent extends StatelessWidget {
                         : 'Sold on: ${investmentSoldDate!.day}/${investmentSoldDate!.month}/${investmentSoldDate!.year},',
                     style: TextStyle(
                         color: isDarkMode ? lightTextColor : textColor,
-                        fontSize: 16),
+                        fontSize: 15),
                   ),
                   Text(
                     'Profit: ${(investmentProfit ?? 0).toStringAsFixed(2)}%,',
                     style: TextStyle(
                         color: isDarkMode ? lightTextColor : textColor,
-                        fontSize: 16),
+                        fontSize: 15),
                   ),
                 ],
               ),
