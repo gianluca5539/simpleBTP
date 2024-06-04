@@ -238,9 +238,8 @@ Future<List<Map<String, dynamic>>> getWalletPageMyOldBTPs() async {
     };
   }).toList();
 
-  // sort by buy price
-  merged.sort((a, b) => ((b['btp'].value - b['buyPrice']) / b['buyPrice'] * 100)
-      .compareTo((a['btp'].value - a['buyPrice']) / a['buyPrice'] * 100));
+  // sort by sold date
+  merged.sort((a, b) => b['soldDate'].compareTo(a['soldDate']));
 
   return merged;
 }

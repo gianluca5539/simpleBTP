@@ -35,25 +35,16 @@ double getMyBTPProfitabilityAtExpiration(
 
 double getMyBTPProfitabilityNow(
     double value, double buyPrice, double cedola, DateTime buyDate) {
-  var finalValue = (value - buyPrice) * value / buyPrice;
-  // check how many years are left
-  DateTime expirationDate = DateTime.now();
-  int cedolaPayments =
-      -1; // -1 because now isn't a cedola payment like with expiration
-  while (buyDate.isBefore(expirationDate)) {
-    cedolaPayments++;
-    // take 6 months from the expiration date
-    if (expirationDate.month > 6) {
-      expirationDate = DateTime(
-          expirationDate.year, expirationDate.month - 6, expirationDate.day);
-    } else {
-      expirationDate = DateTime(expirationDate.year - 1,
-          expirationDate.month + 6, expirationDate.day);
-    }
+  double cedoleCount = -1;
+  DateTime now = DateTime.now();
+  while (buyDate.isBefore(now)) {
+    cedoleCount++;
+    now = now.subtract(const Duration(days: 365));
   }
-  double totalCedola = cedolaPayments * cedola;
-  double totalProfit = totalCedola + finalValue;
-  return totalProfit;
+
+  double cedoleProfit = cedoleCount * cedola;
+
+  return (((value * 1) + cedoleProfit) / (buyPrice * 1)) * 100 - 100;
 }
 
 Future<Map<DateTime, double>?> getCachedGraphData(

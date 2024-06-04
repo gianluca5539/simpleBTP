@@ -862,11 +862,9 @@ class _WalletPageState extends State<WalletPage> {
                       2,
                       (index) => const WalletPageOldInvestmentComponent(
                         investmentName: null,
-                        investmentDetail: null,
-                        cedola: null,
                         investmentValue: null,
-                        variation: null,
-                        expirationDate: null,
+                        investmentSoldDate: null,
+                        investmentProfit: null,
                       ),
                     ),
                   );
@@ -888,19 +886,27 @@ class _WalletPageState extends State<WalletPage> {
                   final assets = snapshot.data!;
                   final investmentList = assets.map((asset) {
                     final name = processString(asset['btp'].name);
-                    // final percentage = name[0];
-                    final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value =
-                        asset['btp'].value * asset['investment'];
-                    final double cedola = asset['btp'].cedola;
-                    double variation =
-                        (asset['btp'].value - asset['buyPrice']) /
-                            asset['buyPrice'] *
-                            100;
-                    // fix variation to have 3 decimal places
-                    variation = double.parse(variation.toStringAsFixed(2));
-                    final date = asset['btp'].expirationDate;
+                    DateTime soldDate = asset['soldDate'];
+                    double soldPrice = asset['soldPrice'];
+                    double buyPrice = asset['buyPrice'];
+
+                    int cedoleCount = 0;
+                    DateTime currentDate = soldDate;
+                    while (asset['buyDate'].isBefore(currentDate)) {
+                      cedoleCount++;
+                      currentDate =
+                          currentDate.subtract(const Duration(days: 365));
+                    }
+
+                    double profit =
+                        (soldPrice - buyPrice) * asset['investment'];
+
+                    double cedoleProfit = asset['btp'].cedola *
+                        (cedoleCount - 1) *
+                        asset['investment'];
+
+                    profit += cedoleProfit;
 
                     return TextButton(
                         onPressed: () => openMyBTPDetailModal(
@@ -922,13 +928,17 @@ class _WalletPageState extends State<WalletPage> {
                               const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.zero)),
                         ),
-                        child: WalletPageInvestmentComponent(
+                        child: WalletPageOldInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",
-                          investmentDetail: "$withBtp",
-                          cedola: "$cedola%",
-                          investmentValue: value,
-                          variation: variation,
-                          expirationDate: date,
+                          investmentValue: profit,
+                          investmentSoldDate: asset['soldDate'],
+                          investmentProfit:
+                              (((asset['soldPrice'] * asset['investment']) +
+                                              cedoleProfit) /
+                                          (asset['buyPrice'] *
+                                              asset['investment'])) *
+                                      100 -
+                                  100,
                         ));
                   }).toList();
                   return Column(
