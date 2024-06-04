@@ -6,6 +6,7 @@ import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.d
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
+import 'package:simpleBTP/WalletPage/walletpageoldinvestmentcomponent.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -772,6 +773,112 @@ class _WalletPageState extends State<WalletPage> {
                           horizontal: 30.0, vertical: 10),
                       child: Text(
                         getString('walletPageNoBTPsYet'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: isDarkMode ? lightTextColor : textColor),
+                      ),
+                    );
+                  }
+                  final assets = snapshot.data!;
+                  final investmentList = assets.map((asset) {
+                    final name = processString(asset['btp'].name);
+                    // final percentage = name[0];
+                    final withBtp = name[1];
+                    final btpLess = name[2];
+                    final double value =
+                        asset['btp'].value * asset['investment'];
+                    final double cedola = asset['btp'].cedola;
+                    double variation =
+                        (asset['btp'].value - asset['buyPrice']) /
+                            asset['buyPrice'] *
+                            100;
+                    // fix variation to have 3 decimal places
+                    variation = double.parse(variation.toStringAsFixed(2));
+                    final date = asset['btp'].expirationDate;
+
+                    return TextButton(
+                        onPressed: () => openMyBTPDetailModal(
+                              context,
+                              isDarkMode,
+                              asset['btp'],
+                              asset['buyPrice'],
+                              asset['buyDate'],
+                              asset['key'],
+                              _deleteBTPFromWallet,
+                            ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          overlayColor: MaterialStateProperty.all(
+                              primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(
+                              const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero)),
+                        ),
+                        child: WalletPageInvestmentComponent(
+                          investmentName: btpLess ?? "Unknown",
+                          investmentDetail: "$withBtp",
+                          cedola: "$cedola%",
+                          investmentValue: value,
+                          variation: variation,
+                          expirationDate: date,
+                        ));
+                  }).toList();
+                  return Column(
+                      children: investmentList
+                          .map((e) => Column(
+                                children: [
+                                  e,
+                                  Divider(
+                                    height: 1,
+                                    color: Colors.grey[200],
+                                  )
+                                ],
+                              ))
+                          .toList());
+                } else {
+                  return const Text('No data'); // Handle the case of no data
+                }
+              },
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Text(
+                getString('walletMyPastAssets'),
+                style: TextStyle(
+                    fontSize: 24,
+                    color: isDarkMode ? lightTextColor : titleColor),
+              ),
+            ),
+            const SizedBox(height: 15),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: getWalletPageMyOldBTPs(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Column(
+                    children: List.generate(
+                      2,
+                      (index) => const WalletPageOldInvestmentComponent(
+                        investmentName: null,
+                        investmentDetail: null,
+                        cedola: null,
+                        investmentValue: null,
+                        variation: null,
+                        expirationDate: null,
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // Handle errors
+                } else if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 10),
+                      child: Text(
+                        getString('walletPageNoPastBTPsYet'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: isDarkMode ? lightTextColor : textColor),

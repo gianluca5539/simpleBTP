@@ -79,7 +79,7 @@ class _WalletPageBalanceComponentState
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                     child: Text(
-                      "${(widget.variation ?? 0) > 0 ? "▲" : "▼"} ${widget.variation?.toStringAsFixed(2)}%",
+                      "${(widget.variation ?? 0) > 0 ? "▲" : "▼"} ${(widget.variation == null ? 0 : widget.variation!.isNaN ? 0 : widget.variation)!.toStringAsFixed(2)}%",
                       style: TextStyle(
                         color: (widget.variation ?? 0) > 0
                             ? Colors.green

@@ -186,6 +186,8 @@ Map<String, String> englishLang = {
   // walletpage
   'walletBalanceText': 'Your investment',
   'walletMyAssets': 'Your current assets',
+  'walletMyPastAssets': 'Your sold assets',
+  'walletPageNoPastBTPsYet': 'You have not sold any BTPs yet.',
   'walletPaysWhat': 'Pays',
   'walletPaysIn': 'in',
   'walletPageNoBTPsYet':

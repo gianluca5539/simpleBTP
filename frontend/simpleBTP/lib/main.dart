@@ -14,6 +14,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BTPAdapter());
   Hive.registerAdapter(MyBTPAdapter());
+  Hive.registerAdapter(MyOldBTPAdapter());
 
   // load settings
   await Hive.openBox('settings');
@@ -42,6 +43,7 @@ Future<void> loadData() async {
   }
 
   await Hive.openBox('mybtps');
+  await Hive.openBox('myoldbtps');
 
   if (DateTime.now().difference(lastFetch) > const Duration(hours: 3)) {
     utilsBox.put('lastFetch', DateTime.now());

@@ -56,3 +56,38 @@ class MyBTP extends HiveObject {
       required this.buyPrice,
       required this.isin});
 }
+
+@HiveType(typeId: 2)
+class MyOldBTP extends HiveObject {
+  @HiveField(0)
+  late int investment;
+  @HiveField(1)
+  late DateTime buyDate;
+  @HiveField(2)
+  late double buyPrice;
+  @HiveField(3)
+  late String isin;
+  @HiveField(4)
+  late double soldPrice;
+  @HiveField(5)
+  late DateTime soldDate;
+
+  MyOldBTP.fromData(this.investment, String buyDate, String buyPrice, this.isin,
+      String soldDate, String soldPrice) {
+    var date = buyDate.split('/');
+    this.buyDate = DateTime(int.parse(date[2]), int.parse(date[1]),
+        int.parse(date[0]), 0, 0, 0, 0, 0);
+    this.buyPrice = double.tryParse(buyPrice) ?? 0.0;
+    date = soldDate.split('/');
+    this.soldDate = DateTime(int.parse(date[2]), int.parse(date[1]),
+        int.parse(date[0]), 0, 0, 0, 0, 0);
+    this.soldPrice = double.tryParse(soldPrice) ?? 0.0;
+  }
+  MyOldBTP(
+      {required this.investment,
+      required this.buyDate,
+      required this.buyPrice,
+      required this.isin,
+      required this.soldDate,
+      required this.soldPrice});
+}

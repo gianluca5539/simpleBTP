@@ -94,3 +94,52 @@ class MyBTPAdapter extends TypeAdapter<MyBTP> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class MyOldBTPAdapter extends TypeAdapter<MyOldBTP> {
+  @override
+  final int typeId = 2;
+
+  @override
+  MyOldBTP read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MyOldBTP(
+      investment: fields[0] as int,
+      buyDate: fields[1] as DateTime,
+      buyPrice: fields[2] as double,
+      isin: fields[3] as String,
+      soldDate: fields[5] as DateTime,
+      soldPrice: fields[4] as double,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MyOldBTP obj) {
+    writer
+      ..writeByte(6)
+      ..writeByte(0)
+      ..write(obj.investment)
+      ..writeByte(1)
+      ..write(obj.buyDate)
+      ..writeByte(2)
+      ..write(obj.buyPrice)
+      ..writeByte(3)
+      ..write(obj.isin)
+      ..writeByte(4)
+      ..write(obj.soldPrice)
+      ..writeByte(5)
+      ..write(obj.soldDate);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MyOldBTPAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

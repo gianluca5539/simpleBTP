@@ -99,7 +99,23 @@ Future<void> addBTPToWallet(
 
 Future<void> removeBTPFromWallet(String key) async {
   var mybtpsBox = Hive.box('mybtps');
+  var btp = mybtpsBox.get(key);
 
+  var myoldbtpsBox = Hive.box('myoldbtps');
+
+  // get the current value of the BTP from the btps box by isin
+  var btpsBox = Hive.box('btps');
+  var btpValue = btpsBox.get(btp.isin).value;
+
+  MyOldBTP myoldbtp = MyOldBTP(
+      investment: btp.investment,
+      buyDate: btp.buyDate,
+      buyPrice: btp.buyPrice,
+      isin: btp.isin,
+      soldDate: DateTime.now(),
+      soldPrice: btpValue);
+
+  myoldbtpsBox.put(Random.secure().nextInt(10000000).toString(), myoldbtp);
   mybtpsBox.delete(key);
   return;
 }
@@ -185,6 +201,39 @@ Future<List<Map<String, dynamic>>> getWalletPageMyBTPs() async {
       'investment': mybtp.value.investment,
       'buyDate': mybtp.value.buyDate,
       'buyPrice': mybtp.value.buyPrice,
+      'key': mybtp.key,
+    };
+  }).toList();
+
+  // sort by buy price
+  merged.sort((a, b) => ((b['btp'].value - b['buyPrice']) / b['buyPrice'] * 100)
+      .compareTo((a['btp'].value - a['buyPrice']) / a['buyPrice'] * 100));
+
+  return merged;
+}
+
+Future<List<Map<String, dynamic>>> getWalletPageMyOldBTPs() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var mybtpsBox = Hive.box('myoldbtps');
+  var btpsBox = Hive.box('btps');
+
+  // get tuples (key, value) from mybtps
+  var mybtps = mybtpsBox.toMap().entries.toList();
+  var btps = btpsBox.toMap().entries.toList();
+
+  // merge the two lists by isin and retrieve only the attributes we need
+  List<Map<String, dynamic>> merged = mybtps.map((mybtp) {
+    var btp = btps.firstWhere((btp) => btp.value.isin == mybtp.value.isin);
+    return {
+      'btp': btp.value,
+      'investment': mybtp.value.investment,
+      'buyDate': mybtp.value.buyDate,
+      'buyPrice': mybtp.value.buyPrice,
+      'soldDate': mybtp.value.soldDate,
+      'soldPrice': mybtp.value.soldPrice,
       'key': mybtp.key,
     };
   }).toList();
