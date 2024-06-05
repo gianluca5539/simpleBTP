@@ -41,8 +41,7 @@ class _WalletPageBalanceComponentState
     Color negativeColor = Colors.red.shade100; // Lighter red for negative variation
 
     return Center(
-      child: Container(
-        color: Colors.white,
+      child: SizedBox(
         width: 0.9 * MediaQuery.of(context).size.width,
         child: Padding(
           padding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
