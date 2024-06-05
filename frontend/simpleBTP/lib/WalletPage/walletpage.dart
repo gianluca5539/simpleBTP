@@ -7,6 +7,7 @@ import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpageoldinvestmentcomponent.dart';
+import 'package:simpleBTP/SettingsPage/picklanguagepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -34,11 +35,33 @@ class _WalletPageState extends State<WalletPage> {
   int investment = 0;
   BTP? btp;
   bool showErrorInvestmentTooLow = true;
+  bool darkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Box settings = Hive.box('settings');
+    darkMode = settings.get('darkMode', defaultValue: false);
+  }
+
+  void toggleDarkMode(value) {
+    setState(() {
+      darkMode = value;
+      Box settings = Hive.box('settings');
+      settings.put('darkMode', value);
+    });
+  }
+
+  void openPickLanguagePage(BuildContext context) {
+    Navigator.push(
+        context,
+        (MaterialPageRoute(builder: (context) {
+          return const PickLanguagePage();
+        }))).then((value) => setState(() {}));
+  }
 
   String get purchaseDate {
-    if (selectedDate == null) {
-      selectedDate = DateTime.now();
-    }
+    selectedDate ??= DateTime.now();
     return "${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year}";
   }
 
@@ -560,6 +583,133 @@ class _WalletPageState extends State<WalletPage> {
         });
       });
     }
+    void openSettingsModal() {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return SizedBox(
+              width: double.infinity, // Make the bottom sheet span full width
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text(
+                        'Settings',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Account Settings',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        overlayColor: MaterialStateProperty.all(
+                            primaryColor.withOpacity(0)),
+                      ),
+                      onPressed: () {
+                        // Implement action for wallet backup
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Profile',
+                            style: TextStyle(color: textColor),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        overlayColor: MaterialStateProperty.all(
+                            primaryColor.withOpacity(0)),
+                      ),
+                      onPressed: () {
+                        // Implement action for wallet backup restore
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Withdrawal address',
+                            style: TextStyle(color: textColor),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        overlayColor: MaterialStateProperty.all(
+                            primaryColor.withOpacity(0)),
+                      ),
+                      onPressed: () {
+                        // Implement action for wallet delete
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Notification options',
+                            style: TextStyle(color: textColor),
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Personalization',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Dark Mode'),
+                        Switch.adaptive(
+                            value: darkMode,
+                            onChanged: (newValue) {
+                              toggleDarkMode(newValue);
+                              setModalState(() {});
+                            }),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+        },
+      );
+    }
 
     void openAddBTPModal() {
       showModalBottomSheet(
@@ -692,7 +842,7 @@ class _WalletPageState extends State<WalletPage> {
         {
           'icon': Icons.settings_outlined,
           'onPressed': () {
-            openAddBTPModal();
+            openSettingsModal();
           }
         },
         {
