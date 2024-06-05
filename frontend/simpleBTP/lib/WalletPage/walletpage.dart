@@ -45,11 +45,10 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   void toggleDarkMode(value) {
-    setState(() {
-      darkMode = value;
-      Box settings = Hive.box('settings');
-      settings.put('darkMode', value);
-    });
+    darkMode = value;
+    Box settings = Hive.box('settings');
+    settings.put('darkMode', value);
+    setState(() {});
   }
 
   void openPickLanguagePage(BuildContext context) {
@@ -583,13 +582,22 @@ class _WalletPageState extends State<WalletPage> {
         });
       });
     }
+
     void openSettingsModal() {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
-            return SizedBox(
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                color: isDarkMode ? darkModeColor : Colors.white,
+              ),
+
               width: double.infinity, // Make the bottom sheet span full width
               child: Container(
                 padding:
@@ -598,19 +606,21 @@ class _WalletPageState extends State<WalletPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
+                    Center(
                       child: Text(
                         'Settings',
                         style: TextStyle(
+                          color: isDarkMode ? lightTextColor : textColor,
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'Account Settings',
                       style: TextStyle(
+                        color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -625,18 +635,23 @@ class _WalletPageState extends State<WalletPage> {
                       onPressed: () {
                         // Implement action for wallet backup
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Profile',
-                            style: TextStyle(color: textColor),
+                            style: TextStyle(
+                              color: isDarkMode ? lightTextColor : textColor,
+                            ),
                           ),
-                          Icon(Icons.chevron_right),
+                          const Icon(Icons.chevron_right),
                         ],
                       ),
                     ),
-                    const Divider(height: 1),
+                    Divider(
+                      height: 1,
+                      color: isDarkMode ? Colors.grey[700] : Colors.grey[200],
+                    ),
                     TextButton(
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -646,18 +661,23 @@ class _WalletPageState extends State<WalletPage> {
                       onPressed: () {
                         // Implement action for wallet backup restore
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Withdrawal address',
-                            style: TextStyle(color: textColor),
+                            style: TextStyle(
+                              color: isDarkMode ? lightTextColor : textColor,
+                            ),
                           ),
-                          Icon(Icons.chevron_right),
+                          const Icon(Icons.chevron_right),
                         ],
                       ),
                     ),
-                    const Divider(height: 1),
+                    Divider(
+                      height: 1,
+                      color: isDarkMode ? Colors.grey[700] : Colors.grey[200],
+                    ),
                     TextButton(
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -667,21 +687,28 @@ class _WalletPageState extends State<WalletPage> {
                       onPressed: () {
                         // Implement action for wallet delete
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Notification options',
-                            style: TextStyle(color: textColor),
+                            style: TextStyle(
+                              color: isDarkMode ? lightTextColor : textColor,
+                            ),
                           ),
-                          Icon(Icons.chevron_right),
+                          const Icon(Icons.chevron_right),
                         ],
                       ),
                     ),
+                    Divider(
+                      height: 1,
+                      color: isDarkMode ? Colors.grey[700] : Colors.grey[200],
+                    ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'Personalization',
                       style: TextStyle(
+                        color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -690,12 +717,16 @@ class _WalletPageState extends State<WalletPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Dark Mode'),
+                        Text('Dark Mode',
+                            style: TextStyle(
+                              color: isDarkMode ? lightTextColor : textColor,
+                            )),
                         Switch.adaptive(
                             value: darkMode,
                             onChanged: (newValue) {
-                              toggleDarkMode(newValue);
-                              setModalState(() {});
+                              setModalState(() {
+                                toggleDarkMode(newValue);
+                              });
                             }),
                       ],
                     ),
@@ -816,7 +847,9 @@ class _WalletPageState extends State<WalletPage> {
                                       ),
                                       Divider(
                                         height: 1,
-                                        color: Colors.grey[200],
+                                        color: isDarkMode
+                                            ? Colors.grey[800]
+                                            : Colors.grey[200],
                                       )
                                     ]));
                               }).toList();
@@ -982,7 +1015,9 @@ class _WalletPageState extends State<WalletPage> {
                                   e,
                                   Divider(
                                     height: 1,
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[800]
+                                        : Colors.grey[200],
                                   )
                                 ],
                               ))
@@ -1098,7 +1133,9 @@ class _WalletPageState extends State<WalletPage> {
                                   e,
                                   Divider(
                                     height: 1,
-                                    color: Colors.grey[200],
+                                    color: isDarkMode
+                                        ? Colors.grey[800]
+                                        : Colors.grey[200],
                                   )
                                 ],
                               ))
