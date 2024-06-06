@@ -38,6 +38,8 @@ class _WalletPageState extends State<WalletPage> {
   bool showErrorInvestmentTooLow = true;
   bool darkMode = false;
 
+  int modalPageAdd = 0;
+
   @override
   void initState() {
     super.initState();
@@ -217,372 +219,17 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
-    void openAddBTPModal2() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setModalState) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: isDarkMode ? offBlackColor : offWhiteColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                height: MediaQuery.of(context).size.height * 0.92,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text('‹ ',
-                                        style: TextStyle(
-                                            fontFamily: 'Arial',
-                                            color: isDarkMode
-                                                ? primaryColorLight
-                                                : primaryColor,
-                                            fontSize: 30)),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 6.0),
-                                      child: Text(
-                                          getString(
-                                              'addBTPSecondPageBackButton'),
-                                          style: TextStyle(
-                                              color: isDarkMode
-                                                  ? primaryColorLight
-                                                  : primaryColor,
-                                              fontSize: 18)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Center(
-                            child: Text(
-                              btp?.name.toUpperCase() ?? "",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(getString('addBTPPageDateSectionTitle'),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.grey)),
-                          const SizedBox(height: 15),
-                          Center(
-                              child: ElevatedButton(
-                            onPressed: () => _showDatePickerDialog(
-                                CupertinoTheme(
-                                  data: CupertinoThemeData(
-                                    brightness: isDarkMode
-                                        ? Brightness.dark
-                                        : Brightness.light,
-                                  ),
-                                  child: CupertinoDatePicker(
-                                    backgroundColor: isDarkMode
-                                        ? darkModeColor
-                                        : Colors.white,
-                                    initialDateTime: DateTime.now(),
-                                    mode: CupertinoDatePickerMode.date,
-                                    use24hFormat: true,
-                                    onDateTimeChanged: (DateTime newDate) {
-                                      setModalState(() {
-                                        selectedDate = newDate;
-                                      });
-                                    },
-                                    maximumYear: DateTime.now().year,
-                                    minimumYear: 1950,
-                                  ),
-                                ),
-                                isDarkMode),
-                            style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.all(
-                                  const Size(double.infinity, 45)),
-                              elevation: MaterialStateProperty.all(1),
-                              surfaceTintColor: MaterialStateProperty.all(
-                                  isDarkMode ? darkModeColor : Colors.white),
-                              backgroundColor: MaterialStateProperty.all(
-                                  isDarkMode ? darkModeColor : Colors.white),
-                              foregroundColor: isDarkMode
-                                  ? MaterialStateProperty.all(lightTextColor)
-                                  : MaterialStateProperty.all(textColor),
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
-                              overlayColor: MaterialStateProperty.all(
-                                  primaryColor.withOpacity(0.3)),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10)))),
-                            ),
-                            child: Text(
-                              purchaseDate,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor),
-                            ),
-                          )),
-                          const SizedBox(height: 30),
-                          Text(getString('addBTPPagePriceSectionTitle'),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.grey)),
-                          const SizedBox(height: 10),
-                          // add textfield
-                          Material(
-                            elevation: 1,
-                            borderRadius: BorderRadius.circular(10),
-                            child: TextFormField(
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              initialValue: price.toString(),
-                              onChanged: (value) {
-                                setModalState(() {
-                                  price = double.tryParse(
-                                          value.replaceAll(',', '.')) ??
-                                      0.0;
-                                  if (price * investment < 1000) {
-                                    showErrorInvestmentTooLow = true;
-                                  } else {
-                                    showErrorInvestmentTooLow = false;
-                                  }
-                                });
-                              },
-                              keyboardType: TextInputType.number,
-                              // allow only numbers and one comma or dot with two decimal places (max)
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+[,.]?\d{0,2}')),
-                              ],
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: isDarkMode
-                                      ? lightTextColor
-                                      : isDarkMode
-                                          ? lightTextColor
-                                          : textColor),
-                              textCapitalization: TextCapitalization.characters,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    isDarkMode ? darkModeColor : Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                hintText: getString(
-                                    'addBTPPagePriceSectionPlaceholder'),
-                                hintStyle: TextStyle(
-                                    fontSize: 18,
-                                    color: isDarkMode
-                                        ? lightTextColor
-                                        : isDarkMode
-                                            ? lightTextColor
-                                            : textColor),
-                                contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          Text(getString('addBTPPageInvestmentSectionTitle'),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor)),
-                          const SizedBox(height: 10),
-                          // add textfield
-                          Material(
-                            elevation: 1,
-                            borderRadius: BorderRadius.circular(10),
-                            child: TextField(
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              onChanged: (value) {
-                                setModalState(() {
-                                  investment = int.tryParse(value) ?? 0;
-                                  if (price * investment < 1000) {
-                                    showErrorInvestmentTooLow = true;
-                                  } else {
-                                    showErrorInvestmentTooLow = false;
-                                  }
-                                });
-                              },
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+')),
-                              ],
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: isDarkMode
-                                      ? lightTextColor
-                                      : isDarkMode
-                                          ? lightTextColor
-                                          : textColor),
-                              textCapitalization: TextCapitalization.characters,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    isDarkMode ? darkModeColor : Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                hintText: getString(
-                                    'addBTPPageInvestmentSectionPlaceholder'),
-                                hintStyle: TextStyle(
-                                    fontSize: 18,
-                                    color: isDarkMode
-                                        ? lightTextColor
-                                        : isDarkMode
-                                            ? lightTextColor
-                                            : textColor),
-                                contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          Text(getString('total'),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor)),
-                          const SizedBox(height: 10),
-                          Text(getTotalInvestment(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 26,
-                                  color:
-                                      isDarkMode ? lightTextColor : textColor)),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          if (showErrorInvestmentTooLow)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                getString('addBTPPageInvestmentTooLowError'),
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (price * investment >= 1000) {
-                                _addBTPToWallet();
-                              }
-                            },
-                            style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.all(
-                                  const Size(double.infinity, 45)),
-                              elevation: MaterialStateProperty.all(1),
-                              backgroundColor: MaterialStateProperty.all(
-                                  investment * price < 1000
-                                      ? Colors.grey
-                                      : isDarkMode
-                                          ? primaryColorLight
-                                          : primaryColor),
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
-                              overlayColor: MaterialStateProperty.all(
-                                  primaryColor.withOpacity(0.3)),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10)))),
-                            ),
-                            child: Text(
-                              getString('addBTPPageAddButton'),
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: lightTextColor),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            });
-          }).then((value) {
-        setState(() {
-          selectedDate = DateTime.now();
-          price = 0.0;
-          investment = 0;
-          btp = null;
-          showErrorInvestmentTooLow = true;
-        });
-      });
-    }
+    // void openAddBTPModal2() {
+    //   showModalBottomSheet(
+    //       isScrollControlled: true,
+    //       context: context,
+    //       builder: (context) {
+    //         return StatefulBuilder(
+    //             builder: (BuildContext context, StateSetter setModalState) {
+    //           return
+    //         });
+    // })
+    // }
 
     void openSettingsModal() {
       showModalBottomSheet(
@@ -760,114 +407,506 @@ class _WalletPageState extends State<WalletPage> {
                 });
               }
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: isDarkMode ? offBlackColor : offWhiteColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                height: MediaQuery.of(context).size.height * 0.92,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 80,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: isDarkMode ? darkModeColor : Colors.grey[400],
-                          borderRadius: BorderRadius.circular(10),
+              return modalPageAdd == 0
+                  ? Container(
+                      decoration: BoxDecoration(
+                        color: isDarkMode ? offBlackColor : Colors.white54,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
                       ),
-                    ),
-                    AddBTPSearch(searchWithFilters),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.74,
-                      child: SingleChildScrollView(
-                        child: FutureBuilder<List<BTP>>(
-                          future: getAddBTPPageBTPs(search, filters, ordering),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Column(
-                                  children: List.generate(
-                                      5,
-                                      (index) =>
-                                          const AddBTPInvestmentComponent(
-                                              investmentName: null,
-                                              investmentDetail: null,
-                                              cedola: null,
-                                              investmentValue: null,
-                                              variation: null)));
-                            } else if (snapshot.hasError) {
-                              return Text(
-                                  'Error: ${snapshot.error}'); // Handle errors
-                            } else if (snapshot.hasData) {
-                              final assets = snapshot.data!;
-                              final investmentList = assets.map((asset) {
-                                final name = processString(asset.name);
-                                // final percentage = name[0];
-                                final withBtp = name[1];
-                                final btpLess = name[2];
-                                final double value = asset.value;
-                                final double cedola = asset.cedola;
-                                var variation = (value - 100);
-                                // make it have 3 decimal places
-                                variation =
-                                    double.parse(variation.toStringAsFixed(3));
+                      height: MediaQuery.of(context).size.height * 0.92,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 80,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: isDarkMode
+                                    ? darkModeColor
+                                    : Colors.grey[400],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          AddBTPSearch(searchWithFilters),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.74,
+                            child: SingleChildScrollView(
+                              child: FutureBuilder<List<BTP>>(
+                                future: getAddBTPPageBTPs(
+                                    search, filters, ordering),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Column(
+                                        children: List.generate(
+                                            5,
+                                            (index) =>
+                                                const AddBTPInvestmentComponent(
+                                                    investmentName: null,
+                                                    investmentDetail: null,
+                                                    cedola: null,
+                                                    investmentValue: null,
+                                                    variation: null)));
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        'Error: ${snapshot.error}'); // Handle errors
+                                  } else if (snapshot.hasData) {
+                                    final assets = snapshot.data!;
+                                    final investmentList = assets.map((asset) {
+                                      final name = processString(asset.name);
+                                      // final percentage = name[0];
+                                      final withBtp = name[1];
+                                      final btpLess = name[2];
+                                      final double value = asset.value;
+                                      final double cedola = asset.cedola;
+                                      var variation = (value - 100);
+                                      // make it have 3 decimal places
+                                      variation = double.parse(
+                                          variation.toStringAsFixed(3));
 
-                                return TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        btp = asset;
-                                        price = asset.value;
-                                      });
-                                      openAddBTPModal2();
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.transparent),
-                                      padding: MaterialStateProperty.all(
-                                          EdgeInsets.zero),
-                                      overlayColor: MaterialStateProperty.all(
-                                          primaryColor.withOpacity(0.3)),
-                                      shape: MaterialStateProperty.all(
-                                          const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.zero)),
-                                    ),
-                                    child: Column(children: [
-                                      AddBTPInvestmentComponent(
-                                        investmentName: btpLess ?? "Unknown",
-                                        investmentDetail: "$withBtp",
-                                        cedola: "${cedola * 2}%",
-                                        investmentValue: value,
-                                        variation: variation,
-                                      ),
-                                      Divider(
-                                        height: 1,
-                                        color: isDarkMode
-                                            ? Colors.grey[800]
-                                            : Colors.grey[200],
-                                      )
-                                    ]));
-                              }).toList();
-                              return Column(children: investmentList);
-                            } else {
-                              return const Text(
-                                  'No data'); // Handle the case of no data
-                            }
-                          },
+                                      return TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              btp = asset;
+                                              price = asset.value;
+                                            });
+                                            setModalState(() {
+                                              modalPageAdd = 1;
+                                            });
+                                            // openAddBTPModal2();
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.transparent),
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsets.zero),
+                                            overlayColor:
+                                                MaterialStateProperty.all(
+                                                    primaryColor
+                                                        .withOpacity(0.3)),
+                                            shape: MaterialStateProperty.all(
+                                                const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.zero)),
+                                          ),
+                                          child: Column(children: [
+                                            AddBTPInvestmentComponent(
+                                              investmentName:
+                                                  btpLess ?? "Unknown",
+                                              investmentDetail: "$withBtp",
+                                              cedola: "${cedola * 2}%",
+                                              investmentValue: value,
+                                              variation: variation,
+                                            ),
+                                            Divider(
+                                              height: 1,
+                                              color: isDarkMode
+                                                  ? Colors.grey[800]
+                                                  : Colors.grey[200],
+                                            )
+                                          ]));
+                                    }).toList();
+                                    return Column(children: investmentList);
+                                  } else {
+                                    return const Text(
+                                        'No data'); // Handle the case of no data
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        color: isDarkMode ? offBlackColor : Colors.white54,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
+                      height: MediaQuery.of(context).size.height * 0.92,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        setModalState(() {
+                                          modalPageAdd = 0;
+                                        });
+                                      },
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text('‹ ',
+                                              style: TextStyle(
+                                                  fontFamily: 'Arial',
+                                                  color: isDarkMode
+                                                      ? primaryColorLight
+                                                      : primaryColor,
+                                                  fontSize: 30)),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 6.0),
+                                            child: Text(
+                                                getString(
+                                                    'addBTPSecondPageBackButton'),
+                                                style: TextStyle(
+                                                    color: isDarkMode
+                                                        ? primaryColorLight
+                                                        : primaryColor,
+                                                    fontSize: 18)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                  ],
+                                ),
+                                const SizedBox(height: 18),
+                                Center(
+                                  child: Text(
+                                    btp?.name.toUpperCase() ?? "",
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(getString('addBTPPageDateSectionTitle'),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.grey)),
+                                const SizedBox(height: 15),
+                                Center(
+                                    child: ElevatedButton(
+                                  onPressed: () => _showDatePickerDialog(
+                                      CupertinoTheme(
+                                        data: CupertinoThemeData(
+                                          brightness: isDarkMode
+                                              ? Brightness.dark
+                                              : Brightness.light,
+                                        ),
+                                        child: CupertinoDatePicker(
+                                          backgroundColor: isDarkMode
+                                              ? darkModeColor
+                                              : Colors.white,
+                                          initialDateTime: DateTime.now(),
+                                          mode: CupertinoDatePickerMode.date,
+                                          use24hFormat: true,
+                                          onDateTimeChanged:
+                                              (DateTime newDate) {
+                                            setModalState(() {
+                                              selectedDate = newDate;
+                                            });
+                                          },
+                                          maximumYear: DateTime.now().year,
+                                          minimumYear: 1950,
+                                        ),
+                                      ),
+                                      isDarkMode),
+                                  style: ButtonStyle(
+                                    minimumSize: MaterialStateProperty.all(
+                                        const Size(double.infinity, 45)),
+                                    elevation: MaterialStateProperty.all(1),
+                                    surfaceTintColor: MaterialStateProperty.all(
+                                        isDarkMode
+                                            ? darkModeColor
+                                            : Colors.white),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        isDarkMode
+                                            ? darkModeColor
+                                            : Colors.white),
+                                    foregroundColor: isDarkMode
+                                        ? MaterialStateProperty.all(
+                                            lightTextColor)
+                                        : MaterialStateProperty.all(textColor),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.zero),
+                                    overlayColor: MaterialStateProperty.all(
+                                        primaryColor.withOpacity(0.3)),
+                                    shape: MaterialStateProperty.all(
+                                        const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)))),
+                                  ),
+                                  child: Text(
+                                    purchaseDate,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : textColor),
+                                  ),
+                                )),
+                                const SizedBox(height: 30),
+                                Text(getString('addBTPPagePriceSectionTitle'),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.grey)),
+                                const SizedBox(height: 10),
+                                // add textfield
+                                Material(
+                                  elevation: 1,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: TextFormField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    initialValue: price.toString(),
+                                    onChanged: (value) {
+                                      setModalState(() {
+                                        price = double.tryParse(
+                                                value.replaceAll(',', '.')) ??
+                                            0.0;
+                                        if (price * investment < 1000) {
+                                          showErrorInvestmentTooLow = true;
+                                        } else {
+                                          showErrorInvestmentTooLow = false;
+                                        }
+                                      });
+                                    },
+                                    keyboardType: TextInputType.number,
+                                    // allow only numbers and one comma or dot with two decimal places (max)
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+[,.]?\d{0,2}')),
+                                    ],
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : isDarkMode
+                                                ? lightTextColor
+                                                : textColor),
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: isDarkMode
+                                          ? darkModeColor
+                                          : Colors.white,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: isDarkMode
+                                                ? darkModeColor
+                                                : Colors.white),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: isDarkMode
+                                                ? darkModeColor
+                                                : Colors.white),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      hintText: getString(
+                                          'addBTPPagePriceSectionPlaceholder'),
+                                      hintStyle: TextStyle(
+                                          fontSize: 18,
+                                          color: isDarkMode
+                                              ? lightTextColor
+                                              : isDarkMode
+                                                  ? lightTextColor
+                                                  : textColor),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 15),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                Text(
+                                    getString(
+                                        'addBTPPageInvestmentSectionTitle'),
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : textColor)),
+                                const SizedBox(height: 10),
+                                // add textfield
+                                Material(
+                                  elevation: 1,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: TextField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    onChanged: (value) {
+                                      setModalState(() {
+                                        investment = int.tryParse(value) ?? 0;
+                                        if (price * investment < 1000) {
+                                          showErrorInvestmentTooLow = true;
+                                        } else {
+                                          showErrorInvestmentTooLow = false;
+                                        }
+                                      });
+                                    },
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+')),
+                                    ],
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : isDarkMode
+                                                ? lightTextColor
+                                                : textColor),
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: isDarkMode
+                                          ? darkModeColor
+                                          : Colors.white,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: isDarkMode
+                                                ? darkModeColor
+                                                : Colors.white),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: isDarkMode
+                                                ? darkModeColor
+                                                : Colors.white),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      hintText: getString(
+                                          'addBTPPageInvestmentSectionPlaceholder'),
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: isDarkMode
+                                              ? lightTextColor
+                                              : isDarkMode
+                                                  ? lightTextColor
+                                                  : textColor),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 15),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                Text(getString('total'),
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : textColor)),
+                                const SizedBox(height: 10),
+                                Text(getTotalInvestment(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 26,
+                                        color: isDarkMode
+                                            ? lightTextColor
+                                            : textColor)),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                if (showErrorInvestmentTooLow)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text(
+                                      getString(
+                                          'addBTPPageInvestmentTooLowError'),
+                                      style: const TextStyle(
+                                          color: Colors.red, fontSize: 15),
+                                    ),
+                                  ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (price * investment >= 1000) {
+                                      _addBTPToWallet();
+                                    }
+                                  },
+                                  style: ButtonStyle(
+                                    minimumSize: MaterialStateProperty.all(
+                                        const Size(double.infinity, 45)),
+                                    elevation: MaterialStateProperty.all(1),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        investment * price < 1000
+                                            ? Colors.grey
+                                            : isDarkMode
+                                                ? primaryColorLight
+                                                : primaryColor),
+                                    foregroundColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.zero),
+                                    overlayColor: MaterialStateProperty.all(
+                                        primaryColor.withOpacity(0.3)),
+                                    shape: MaterialStateProperty.all(
+                                        const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)))),
+                                  ),
+                                  child: Text(
+                                    getString('addBTPPageAddButton'),
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: lightTextColor),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
             });
-          });
+          }).then((value) {
+        setState(() {
+          selectedDate = DateTime.now();
+          price = 0.0;
+          investment = 0;
+          btp = null;
+          showErrorInvestmentTooLow = true;
+          modalPageAdd = 0;
+        });
+      });
+      
     }
 
     return Scaffold(
@@ -1098,16 +1137,15 @@ class _WalletPageState extends State<WalletPage> {
 
                     return TextButton(
                         onPressed: () => openMyOldBTPDetailModal(
-                              context,
-                              isDarkMode,
-                              asset['btp'],
-                              asset['buyPrice'],
+                            context,
+                            isDarkMode,
+                            asset['btp'],
+                            asset['buyPrice'],
                             asset['soldPrice'],
                             asset['investment'],
-                              asset['buyDate'],
+                            asset['buyDate'],
                             asset['soldDate'],
-                            cedoleProfit
-                            ),
+                            cedoleProfit),
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.transparent),

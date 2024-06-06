@@ -329,7 +329,7 @@ void openMyOldBTPDetailModal(
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '€${investment * soldPrice + cedole}',
+                                  '€${(investment * soldPrice + cedole).toStringAsFixed(2)}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
