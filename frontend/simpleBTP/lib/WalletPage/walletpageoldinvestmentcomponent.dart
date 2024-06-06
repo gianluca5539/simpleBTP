@@ -72,7 +72,7 @@ class WalletPageOldInvestmentComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "${(investmentValue ?? 0) > 0 ? '+' : '-'}€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                  "${(investmentValue ?? 0) > 0 ? '+' : '-'}€${investmentValue?.abs().toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
                   style: TextStyle(
                       color: (investmentValue ?? 0) > 0
                           ? Colors.green
