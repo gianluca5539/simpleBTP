@@ -55,6 +55,11 @@ Future<void> loadData() async {
     await initializeBTPData();
     databaseInitialized = true;
   }
+
+  Box credentialsBox = Hive.box('credentials');
+  if (credentialsBox.get('iban') == null || credentialsBox.get('iban') == '') {
+    credentialsBox.put('iban', 'IT00A0000000000000000000000');
+  }
 }
 
 class MainApp extends StatelessWidget {
@@ -64,6 +69,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Box credentialsBox = Hive.box('credentials');
     bool logged = credentialsBox.get('username') != null;
+    if (credentialsBox.get('iban') == null) {
+      credentialsBox.put('iban', 'IT00A0000000000000000000000');
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: logged ? const WalletPage() : const LoginPage(),

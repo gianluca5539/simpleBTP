@@ -93,7 +93,6 @@ class _WalletPageState extends State<WalletPage> {
                     showErrorInvestmentTooLow = true;
                   });
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodApplePay')),
               ),
@@ -110,7 +109,6 @@ class _WalletPageState extends State<WalletPage> {
                     showErrorInvestmentTooLow = true;
                   });
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodDebit')),
               ),
@@ -126,7 +124,6 @@ class _WalletPageState extends State<WalletPage> {
                     btp = null;
                     showErrorInvestmentTooLow = true;
                   });
-                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
                 child: Text(getString('addBTPPagePaymentMethodPaypal')),
@@ -149,48 +146,57 @@ class _WalletPageState extends State<WalletPage> {
     return '€${(price * investment).toStringAsFixed(2)}';
   }
 
-  void _deleteBTPFromWallet(String key, BuildContext context, bool isDarkMode) {
+  void _deleteBTPFromWallet(
+      String key, BuildContext context, bool isDarkMode, amount) {
     // show a dialog to confirm the deletion
     showCupertinoModalPopup(
         context: context,
-        builder: (BuildContext context) => CupertinoTheme(
-              data: CupertinoThemeData(
-                brightness: isDarkMode ? Brightness.dark : Brightness.light,
+        builder: (BuildContext context) {
+          Box box = Hive.box('credentials');
+          String iban =
+              box.get('iban', defaultValue: 'IT00A0000000000000000000000');
+          return CupertinoTheme(
+            data: CupertinoThemeData(
+              brightness: isDarkMode ? Brightness.dark : Brightness.light,
+            ),
+            child: CupertinoActionSheet(
+              title: const Text(
+                'Are you sure you want to sell this BTP?',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              child: CupertinoActionSheet(
-                message: Text(
-                  getString(
-                      'ExplorePageBTPInformationDeleteConfirmationMessage'),
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                actions: [
-                  CupertinoActionSheetAction(
-                    onPressed: () {
-                      removeBTPFromWallet(key);
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    },
-                    child: Text(
-                      getString(
-                          'ExplorePageBTPInformationDeleteConfirmationButton'),
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ],
-                cancelButton: CupertinoActionSheetAction(
+              message: Text(
+                'You will receive €$amount on your IBAN: \n $iban',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
                   onPressed: () {
+                    removeBTPFromWallet(key);
                     Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    setState(() {});
                   },
                   child: Text(
                     getString(
-                        'ExplorePageBTPInformationDeleteConfirmationCancelButton'),
-                    style: const TextStyle(color: primaryColor),
+                        'ExplorePageBTPInformationDeleteConfirmationButton'),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  getString(
+                      'ExplorePageBTPInformationDeleteConfirmationCancelButton'),
+                  style: const TextStyle(color: primaryColor),
+                ),
               ),
-            ));
+            ),
+          );
+        });
   }
 
   void _showDatePickerDialog(Widget child, bool isDarkMode) {
@@ -906,7 +912,6 @@ class _WalletPageState extends State<WalletPage> {
           modalPageAdd = 0;
         });
       });
-      
     }
 
     return Scaffold(
@@ -1028,6 +1033,7 @@ class _WalletPageState extends State<WalletPage> {
                               asset['buyPrice'],
                               asset['buyDate'],
                               asset['key'],
+                              asset['investment'],
                               _deleteBTPFromWallet,
                             ),
                         style: ButtonStyle(

@@ -96,8 +96,10 @@ class HomePage extends StatelessWidget {
                               asset['btp'],
                               asset['buyPrice'],
                               asset['buyDate'],
-                              null,
-                              null);
+                            null,
+                            1,
+                            null,
+                          );
                         },
                         style: ButtonStyle(
                           backgroundColor:

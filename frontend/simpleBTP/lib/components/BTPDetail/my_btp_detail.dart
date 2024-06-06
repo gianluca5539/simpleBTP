@@ -79,6 +79,7 @@ void openMyBTPDetailModal(
     double buyPrice,
     DateTime buyDate,
     String? key,
+    int investment,
     Function? deleteBTPFromWallet) {
   // Assume each label is about 60 pixels wide, change this based on your font size and style
   double labelWidth = 80;
@@ -628,7 +629,8 @@ void openMyBTPDetailModal(
                         child: ElevatedButton(
                           onPressed: () {
                             if (deleteBTPFromWallet != null) {
-                              deleteBTPFromWallet(key, context, isDarkMode);
+                              deleteBTPFromWallet(key, context, isDarkMode,
+                                  (investment * btp.value));
                             } else {
                               // show a dialog that the user can't delete this BTP
                               showCupertinoDialog(
