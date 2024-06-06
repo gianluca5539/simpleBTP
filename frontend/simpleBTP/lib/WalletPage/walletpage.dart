@@ -12,6 +12,7 @@ import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
+import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
 import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/BTPDetail/my_btp_detail.dart';
 import 'package:simpleBTP/components/Footer/footer.dart';
@@ -944,6 +945,7 @@ class _WalletPageState extends State<WalletPage> {
                         investmentValue: null,
                         variation: null,
                         expirationDate: null,
+                        investmentAmount: null,
                       ),
                     ),
                   );
@@ -1002,10 +1004,11 @@ class _WalletPageState extends State<WalletPage> {
                         child: WalletPageInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",
                           investmentDetail: "$withBtp",
-                          cedola: "$cedola%",
+                          cedola: cedola,
                           investmentValue: value,
                           variation: variation,
                           expirationDate: date,
+                          investmentAmount: asset['investment'],
                         ));
                   }).toList();
                   return Column(
@@ -1094,14 +1097,16 @@ class _WalletPageState extends State<WalletPage> {
                     profit += cedoleProfit;
 
                     return TextButton(
-                        onPressed: () => openMyBTPDetailModal(
+                        onPressed: () => openMyOldBTPDetailModal(
                               context,
                               isDarkMode,
                               asset['btp'],
                               asset['buyPrice'],
+                            asset['soldPrice'],
+                            asset['investment'],
                               asset['buyDate'],
-                              asset['key'],
-                              _deleteBTPFromWallet,
+                            asset['soldDate'],
+                            cedoleProfit
                             ),
                         style: ButtonStyle(
                           backgroundColor:
@@ -1118,12 +1123,8 @@ class _WalletPageState extends State<WalletPage> {
                           investmentValue: profit,
                           investmentSoldDate: asset['soldDate'],
                           investmentProfit:
-                              (((asset['soldPrice'] * asset['investment']) +
-                                              cedoleProfit) /
-                                          (asset['buyPrice'] *
-                                              asset['investment'])) *
-                                      100 -
-                                  100,
+                              ((asset['soldPrice'] * asset['investment']) +
+                                  cedoleProfit),
                         ));
                   }).toList();
                   return Column(

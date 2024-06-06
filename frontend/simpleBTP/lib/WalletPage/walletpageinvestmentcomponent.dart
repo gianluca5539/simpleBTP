@@ -7,10 +7,11 @@ import 'package:skeletonizer/skeletonizer.dart';
 class WalletPageInvestmentComponent extends StatelessWidget {
   final String? investmentName;
   final String? investmentDetail;
-  final String? cedola;
+  final double? cedola;
   final double? investmentValue;
   final double? variation;
   final DateTime? expirationDate;
+  final int? investmentAmount;
 
   const WalletPageInvestmentComponent(
       {super.key,
@@ -19,7 +20,8 @@ class WalletPageInvestmentComponent extends StatelessWidget {
       required this.cedola,
       required this.investmentValue,
       required this.variation,
-      required this.expirationDate});
+      required this.expirationDate,
+      required this.investmentAmount});
 
   String get cedolaRemainingDays {
     final DateTime now = DateTime.now();
@@ -52,22 +54,10 @@ class WalletPageInvestmentComponent extends StatelessWidget {
       cedolaDate2
     ]; // next 3 cedole dates sorted
 
-    Duration remainingTime = cedoleDates
-        .where((element) => element.isAfter(now))
-        .first
-        .difference(now);
+    DateTime remainingTime =
+        cedoleDates.where((element) => element.isAfter(now)).first;
 
-    return formatRemainingTime(remainingTime);
-  }
-
-  String formatRemainingTime(Duration remainingTime) {
-    int diffMonths = remainingTime.inDays ~/ 30;
-    int diffDays = remainingTime.inDays % 30;
-    return diffMonths > 0
-        ? '$diffMonths ${getString(
-            'months',
-          )} ${getString('and')} $diffDays ${getString('days')}'
-        : '$diffDays ${getString('days')}';
+    return '${remainingTime.day > 10 ? remainingTime.day : "0${remainingTime.day}"}/${remainingTime.month > 10 ? remainingTime.month : "0${remainingTime.month}"}/${remainingTime.year}';
   }
 
   @override
@@ -75,71 +65,70 @@ class WalletPageInvestmentComponent extends StatelessWidget {
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     return Skeletonizer(
-        enabled: investmentName == null,
+      enabled: investmentName == null,
       child: Container(
-          width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(25, 13, 10, 13),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      constraints:
-                          const BoxConstraints(minWidth: 40, minHeight: 10),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4.0),
-                      decoration: BoxDecoration(
-                        color:
-                            primaryColor, // This color should match the background of the label in your image.
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        investmentName?.toUpperCase() ?? "",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 14),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                    ),
-                    Text(
-                      cedola != null
-                          ? '${getString('walletPaysWhat')} $cedola ${getString('walletPaysIn')}:'
-                          : '----',
-                      style: TextStyle(
-                          color: isDarkMode ? lightTextColor : textColor,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      cedolaRemainingDays,
-                      style: TextStyle(
-                          color: isDarkMode ? lightTextColor : textColor,
-                          fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
-                    style: TextStyle(
-                        color: isDarkMode ? lightTextColor : textColor,
-                        fontSize: 22),
+                  Container(
+                    constraints:
+                        const BoxConstraints(minWidth: 40, minHeight: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color:
+                          primaryColor, // This color should match the background of the label in your image.
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      investmentName?.toUpperCase() ?? "",
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4.0),
                   ),
                   Text(
-                    "${(variation ?? 0) > 0 ? "▲" : "▼"} $variation%",
+                    cedola != null && investmentAmount != null
+                        ? '${getString('walletPaysWhat')} €${cedola! * investmentAmount!} on:'
+                        : '----',
                     style: TextStyle(
-                      color: (variation ?? 0) > 0 ? Colors.green : Colors.red,
-                      fontSize: 18,
-                    ),
+                        color: isDarkMode ? lightTextColor : textColor,
+                        fontSize: 16),
+                  ),
+                  Text(
+                    cedolaRemainingDays,
+                    style: TextStyle(
+                        color: isDarkMode ? lightTextColor : textColor,
+                        fontSize: 16),
                   ),
                 ],
               ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                  style: TextStyle(
+                      color: isDarkMode ? lightTextColor : textColor,
+                      fontSize: 22),
+                ),
+                Text(
+                  "${(variation ?? 0) > 0 ? "▲" : "▼"} $variation%",
+                  style: TextStyle(
+                    color: (variation ?? 0) > 0 ? Colors.green : Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(
               width: 17,
             ),

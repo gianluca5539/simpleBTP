@@ -54,13 +54,13 @@ class WalletPageOldInvestmentComponent extends StatelessWidget {
                   Text(
                     investmentSoldDate == null
                         ? '----'
-                        : 'Sold on: ${investmentSoldDate!.day}/${investmentSoldDate!.month}/${investmentSoldDate!.year},',
+                        : 'Sold on: ${investmentSoldDate!.day > 10 ? "${investmentSoldDate!.day}" : "0${investmentSoldDate!.day}"}/${investmentSoldDate!.month > 10 ? "${investmentSoldDate!.month}" : "0${investmentSoldDate!.month}"}/${investmentSoldDate!.year},',
                     style: TextStyle(
                         color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 15),
                   ),
                   Text(
-                    'Profit: ${(investmentProfit ?? 0).toStringAsFixed(2)}%,',
+                    'Final value: €${(investmentProfit ?? 0).toStringAsFixed(2)}',
                     style: TextStyle(
                         color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 15),
@@ -72,7 +72,7 @@ class WalletPageOldInvestmentComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
+                  "${(investmentValue ?? 0) > 0 ? '+' : '-'}€${investmentValue?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
                   style: TextStyle(
                       color: (investmentValue ?? 0) > 0
                           ? Colors.green
