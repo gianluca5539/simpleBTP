@@ -28,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = false;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,

@@ -12,7 +12,6 @@ import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
-import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/BTPDetail/my_btp_detail.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
