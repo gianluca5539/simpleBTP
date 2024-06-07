@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
+import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AddBTPInvestmentComponent extends StatelessWidget {
   final String? investmentName;
   final String? investmentDetail;
-  final String? cedola;
+  final double? cedola;
   final double? investmentValue;
   final double? variation;
+  final DateTime? expirationDate;
 
   const AddBTPInvestmentComponent({
     super.key,
@@ -17,6 +19,7 @@ class AddBTPInvestmentComponent extends StatelessWidget {
     required this.cedola,
     required this.investmentValue,
     required this.variation,
+    required this.expirationDate,
   });
 
   @override
@@ -37,12 +40,14 @@ class AddBTPInvestmentComponent extends StatelessWidget {
                 children: [
                   Text(
                     investmentDetail?.toUpperCase() ?? '----------',
-                    style: TextStyle(
-                        color: isDarkMode ? lightTextColor : textColor,
-                        fontSize: 16),
+                    style: const TextStyle(
+                        color: primaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    cedola ?? '----',
+                    "${cedola != null ? cedola! * 2 : '-'}%",
+                    
                     style: TextStyle(
                         color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 16),
@@ -59,13 +64,27 @@ class AddBTPInvestmentComponent extends StatelessWidget {
                       color: isDarkMode ? lightTextColor : textColor,
                       fontSize: 20),
                 ),
-                Text(
-                  "${(variation ?? 0) > 0 ? "▲" : "▼"} $variation%",
-                  style: TextStyle(
-                    color: (variation ?? 0) > 0 ? Colors.green : Colors.red,
-                    fontSize: 15,
-                  ),
-                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Profit: ',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      cedola != null
+                          ? '${getMyBTPProfitabilityAtExpiration(investmentValue!, cedola!, expirationDate!, DateTime.now()).toStringAsFixed(2)}%'
+                          : '',
+                      style: TextStyle(
+                        color: Colors.green[700],
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
             const SizedBox(width: 15),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
+import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class WalletPageInvestmentComponent extends StatelessWidget {
@@ -12,6 +13,8 @@ class WalletPageInvestmentComponent extends StatelessWidget {
   final double? variation;
   final DateTime? expirationDate;
   final int? investmentAmount;
+  final double? buyPrice;
+  final DateTime? buyDate;
 
   const WalletPageInvestmentComponent(
       {super.key,
@@ -21,7 +24,9 @@ class WalletPageInvestmentComponent extends StatelessWidget {
       required this.investmentValue,
       required this.variation,
       required this.expirationDate,
-      required this.investmentAmount});
+      required this.investmentAmount,
+      required this.buyPrice,
+      required this.buyDate});
 
   String get cedolaRemainingDays {
     final DateTime now = DateTime.now();
@@ -60,6 +65,17 @@ class WalletPageInvestmentComponent extends StatelessWidget {
     return '${remainingTime.day > 10 ? remainingTime.day : "0${remainingTime.day}"}/${remainingTime.month > 10 ? remainingTime.month : "0${remainingTime.month}"}/${remainingTime.year}';
   }
 
+  bool get timeToSell {
+    if (cedola == null) {
+      return false;
+    }
+    return getMyBTPProfitabilityNow(investmentValue! / investmentAmount!,
+                buyPrice!, cedola!, buyDate!) /
+            getMyBTPProfitabilityAtExpiration(
+                buyPrice!, cedola!, expirationDate!, buyDate!) >
+        0.4;
+  }
+
   @override
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
@@ -91,8 +107,8 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                       style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 4.0),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Text(
                     cedola != null && investmentAmount != null
@@ -108,6 +124,14 @@ class WalletPageInvestmentComponent extends StatelessWidget {
                         color: isDarkMode ? lightTextColor : textColor,
                         fontSize: 16),
                   ),
+                  if (timeToSell)
+                    const Text(
+                      "Consider selling",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
+                      ),
+                    ),
                 ],
               ),
             ),

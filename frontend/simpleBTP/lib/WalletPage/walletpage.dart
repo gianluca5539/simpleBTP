@@ -446,7 +446,8 @@ class _WalletPageState extends State<WalletPage> {
                                                     investmentDetail: null,
                                                     cedola: null,
                                                     investmentValue: null,
-                                                    variation: null)));
+                                                    variation: null,
+                                                    expirationDate: null)));
                                   } else if (snapshot.hasError) {
                                     return Text(
                                         'Error: ${snapshot.error}'); // Handle errors
@@ -495,9 +496,11 @@ class _WalletPageState extends State<WalletPage> {
                                               investmentName:
                                                   btpLess ?? "Unknown",
                                               investmentDetail: "$withBtp",
-                                              cedola: "${cedola * 2}%",
+                                              cedola: cedola,
                                               investmentValue: value,
                                               variation: variation,
+                                              expirationDate:
+                                                  asset.expirationDate,
                                             ),
                                             Divider(
                                               height: 1,
@@ -998,6 +1001,8 @@ class _WalletPageState extends State<WalletPage> {
                         variation: null,
                         expirationDate: null,
                         investmentAmount: null,
+                        buyDate: null,
+                        buyPrice: null,
                       ),
                     ),
                   );
@@ -1062,6 +1067,8 @@ class _WalletPageState extends State<WalletPage> {
                           variation: variation,
                           expirationDate: date,
                           investmentAmount: asset['investment'],
+                          buyDate: asset['buyDate'],
+                          buyPrice: asset['buyPrice'],
                         ));
                   }).toList();
                   return Column(
