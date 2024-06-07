@@ -1,13 +1,7 @@
-import 'dart:math';
-
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:simpleBTP/assets/colors.dart';
-import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -29,12 +23,6 @@ class _WalletPageBalanceComponentState
   
   @override
   Widget build(BuildContext context) {
-    // Assume each label is about 60 pixels wide, change this based on your font size and style
-    double labelWidth = 80;
-    // Get the width of the chart
-    double chartWidth = MediaQuery.of(context).size.width * 0.9; // Since you're using 0.9 of screen width
-    // Calculate the number of labels that could fit
-    int numLabelsThatFit = chartWidth ~/ labelWidth;
     Box box = Hive.box('settings');
     bool isDarkMode = box.get('darkMode', defaultValue: false);
     Color positiveColor = Colors.green.shade100; // Lighter green for positive variation
@@ -94,10 +82,5 @@ class _WalletPageBalanceComponentState
         ),
       ),
     );
-  }
-
-  List<FlSpot> _getSpots(Map<DateTime, double> data) {
-    final dates = data.keys.toList()..sort(); // Ensure the dates are sorted
-    return dates.asMap().entries.map((entry) => FlSpot(entry.key.toDouble(), data[entry.value]!)).toList();
   }
 }

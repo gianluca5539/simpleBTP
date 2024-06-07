@@ -1,8 +1,5 @@
-import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/btp_scraper.dart';
@@ -82,11 +79,7 @@ void openMyOldBTPDetailModal(
     DateTime buyDate,
     DateTime soldDate,
     double cedole) {
-  // Assume each label is about 60 pixels wide, change this based on your font size and style
-  double labelWidth = 80;
-  // Get the width of the chart
-  double chartWidth = MediaQuery.of(context).size.width *
-      0.9; // Since you're using 0.9 of screen width
+
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,

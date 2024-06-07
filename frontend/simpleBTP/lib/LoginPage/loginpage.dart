@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:simpleBTP/HomePage/homepage.dart';
+import 'package:simpleBTP/WalletPage/walletpage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/languages.dart';
-import 'package:simpleBTP/components/AppTopBar/apptopbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
       box.put('username', username);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const WalletPage()),
           (route) => false);
     }
   }
@@ -29,8 +28,26 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = false;
     return Scaffold(
-      appBar: appTopBar('simpleBTP', null),
+      appBar: AppBar(
+        toolbarHeight: 50,
+        centerTitle: true,
+        title: const Text('simpleBTP', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                primaryColor,
+                secondaryColor,
+              ],
+            ),
+          ),
+        ),
+      ),
       backgroundColor: offWhiteColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 80.0, horizontal: 16),

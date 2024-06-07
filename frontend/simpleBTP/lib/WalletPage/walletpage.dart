@@ -7,7 +7,6 @@ import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpagebalancecomponent.dart';
 import 'package:simpleBTP/WalletPage/walletpageoldinvestmentcomponent.dart';
-import 'package:simpleBTP/SettingsPage/picklanguagepage.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:simpleBTP/assets/defaults.dart';
 import 'package:simpleBTP/assets/languages.dart';
@@ -15,7 +14,6 @@ import 'package:simpleBTP/btp_scraper.dart';
 import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
 import 'package:simpleBTP/components/appTopBar/apptopbar.dart';
 import 'package:simpleBTP/components/BTPDetail/my_btp_detail.dart';
-import 'package:simpleBTP/components/Footer/footer.dart';
 import 'package:simpleBTP/db/db.dart';
 import 'package:simpleBTP/db/hivemodels.dart';
 
@@ -52,14 +50,6 @@ class _WalletPageState extends State<WalletPage> {
     Box settings = Hive.box('settings');
     settings.put('darkMode', value);
     setState(() {});
-  }
-
-  void openPickLanguagePage(BuildContext context) {
-    Navigator.push(
-        context,
-        (MaterialPageRoute(builder: (context) {
-          return const PickLanguagePage();
-        }))).then((value) => setState(() {}));
   }
 
   String get purchaseDate {
@@ -916,20 +906,39 @@ class _WalletPageState extends State<WalletPage> {
 
     return Scaffold(
       backgroundColor: isDarkMode ? offBlackColor : offWhiteColor,
-      appBar: appTopBar(getString('simpleBTP'), [
-        {
-          'icon': Icons.settings_outlined,
-          'onPressed': () {
-            openSettingsModal();
-          }
-        },
-        {
-          'icon': Icons.add,
-          'onPressed': () {
-            openAddBTPModal();
-          }
-        },
-      ]),
+      appBar: AppBar(
+        toolbarHeight: 50,
+        centerTitle: true,
+        title: const Text('simpleBTP', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.settings_outlined,
+              size: 30,
+            ),
+            onPressed: () => openSettingsModal(),
+          ),
+          IconButton(
+              icon: const Icon(
+                Icons.add,
+                size: 30,
+              ),
+              onPressed: () => openAddBTPModal()),
+        ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                primaryColor,
+                isDarkMode ? secondaryColorDark : secondaryColor,
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

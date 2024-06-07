@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
-import 'package:simpleBTP/assets/languages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class WalletPageOldInvestmentComponent extends StatelessWidget {
