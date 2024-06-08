@@ -38,7 +38,7 @@ class TransactionComponent extends StatelessWidget {
       enabled: name == null,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(25, 13, 10, 13),
+        padding: const EdgeInsets.fromLTRB(25, 16, 10, 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -63,15 +63,13 @@ class TransactionComponent extends StatelessWidget {
                     isBuy ? 'Bought on: $formattedDate' : 'Sold on: $formattedDate',
                     style: TextStyle(
                       color: isDarkMode ? lightTextColor : textColor,
-                      fontSize: 16,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     'Amount: ${amount ?? "----"}',
-                    style: TextStyle(
-                      color: isDarkMode ? lightTextColor : textColor,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -80,19 +78,18 @@ class TransactionComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  isBuy ? '-€${price?.toStringAsFixed(2).replaceAll(".", ",") ?? "----"}' : '€${price?.toStringAsFixed(2).replaceAll(".", ",") ?? "----"}',
+                  isBuy
+                      ? '-€${price?.toStringAsFixed(2).replaceAll(".", ",") ?? "----"}'
+                      : '+€${price?.toStringAsFixed(2).replaceAll(".", ",") ?? "----"}',
                   style: TextStyle(
                     color: priceColor,
                     fontSize: 22,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 17),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey[400],
-            ),
+            const SizedBox(width: 16),
           ],
         ),
       ),
