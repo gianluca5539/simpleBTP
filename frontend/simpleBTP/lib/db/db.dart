@@ -83,6 +83,9 @@ Future<void> initializeBTPData() {
 Future<void> addBTPToWallet(
     String isin, DateTime purchaseDate, double price, int investment) async {
   var mybtpsBox = Hive.box('mybtps');
+  var btpsBox = Hive.box('btps');
+
+  String name = btpsBox.get(isin).name;
 
   String key = isin;
   key = '$isin-${Random().nextInt(100000)}';
@@ -93,8 +96,44 @@ Future<void> addBTPToWallet(
       buyPrice: price,
       isin: isin);
 
+  addTransaction(isin, name, 'buy', price, investment);
+
   mybtpsBox.put(key, mybtp);
   return;
+}
+
+Future<void> addTransaction(String isin, String name, String type, double price, int amount) async {
+  var transactionsBox = Hive.box('transactions');
+  String key = DateTime.now().toString() + Random().nextInt(100000).toString();
+  transactionsBox.put(key, {
+    'date': DateTime.now(),
+    'isin': isin,
+    'name': name,
+    'price': price,
+    'amount': amount,
+    'type': type[0].toUpperCase() + type.substring(1),
+  });
+}
+
+// get all transactions
+Future<List<Map<String, dynamic>>> getTransactions() async {
+  while (!databaseInitialized) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  var transactionsBox = Hive.box('transactions');
+  var transactions = transactionsBox.values.toList();
+
+  return transactions.map((transaction) {
+    return {
+      'date': transaction['date'],
+      'isin': transaction['isin'],
+      'name': transaction['name'],
+      'price': transaction['price'],
+      'amount': transaction['amount'],
+      'type': transaction['type'],
+    };
+  }).toList();
 }
 
 Future<void> removeBTPFromWallet(String key) async {
@@ -106,6 +145,9 @@ Future<void> removeBTPFromWallet(String key) async {
   // get the current value of the BTP from the btps box by isin
   var btpsBox = Hive.box('btps');
   var btpValue = btpsBox.get(btp.isin).value;
+
+  var btpName = btpsBox.get(btp.isin).name;
+  addTransaction(btp.isin, btpName, 'sell', btpValue, btp.investment);
 
   MyOldBTP myoldbtp = MyOldBTP(
       investment: btp.investment,

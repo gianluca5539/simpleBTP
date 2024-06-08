@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:simpleBTP/TransactionPage/transactionpage.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpinvestmentcomponent.dart';
 import 'package:simpleBTP/WalletPage/AddBTPFirstPage/addbtpsearch.dart';
 import 'package:simpleBTP/WalletPage/walletpageinvestmentcomponent.dart';
@@ -62,8 +63,7 @@ class _WalletPageState extends State<WalletPage> {
         context: context,
         builder: (context) {
           return CupertinoActionSheet(
-            title: Text(getString('addBTPPagePaymentMethodTitle'),
-                style: const TextStyle(fontSize: 18)),
+            title: Text(getString('addBTPPagePaymentMethodTitle'), style: const TextStyle(fontSize: 18)),
             message: Text(
               getString('addBTPPagePaymentMethodMessage'),
               style: const TextStyle(fontSize: 14),
@@ -71,8 +71,7 @@ class _WalletPageState extends State<WalletPage> {
             actions: [
               CupertinoActionSheetAction(
                 onPressed: () {
-                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
-                      price, investment);
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(), price, investment);
                   Navigator.pop(context);
                   setState(() {
                     selectedDate = DateTime.now();
@@ -87,8 +86,7 @@ class _WalletPageState extends State<WalletPage> {
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
-                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
-                      price, investment);
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(), price, investment);
                   Navigator.pop(context);
                   setState(() {
                     selectedDate = DateTime.now();
@@ -103,8 +101,7 @@ class _WalletPageState extends State<WalletPage> {
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
-                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(),
-                      price, investment);
+                  addBTPToWallet(btp!.isin, selectedDate ?? DateTime.now(), price, investment);
                   Navigator.pop(context);
                   setState(() {
                     selectedDate = DateTime.now();
@@ -135,15 +132,13 @@ class _WalletPageState extends State<WalletPage> {
     return '€${(price * investment).toStringAsFixed(2)}';
   }
 
-  void _deleteBTPFromWallet(
-      String key, BuildContext context, bool isDarkMode, amount) {
+  void _deleteBTPFromWallet(String key, BuildContext context, bool isDarkMode, amount) {
     // show a dialog to confirm the deletion
     showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) {
           Box box = Hive.box('credentials');
-          String iban =
-              box.get('iban', defaultValue: 'IT00A0000000000000000000000');
+          String iban = box.get('iban', defaultValue: 'IT00A0000000000000000000000');
           return CupertinoTheme(
             data: CupertinoThemeData(
               brightness: isDarkMode ? Brightness.dark : Brightness.light,
@@ -155,8 +150,7 @@ class _WalletPageState extends State<WalletPage> {
               ),
               message: Text(
                 'You will receive €$amount on your IBAN: \n $iban',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               actions: [
                 CupertinoActionSheetAction(
@@ -167,8 +161,7 @@ class _WalletPageState extends State<WalletPage> {
                     setState(() {});
                   },
                   child: Text(
-                    getString(
-                        'ExplorePageBTPInformationDeleteConfirmationButton'),
+                    getString('ExplorePageBTPInformationDeleteConfirmationButton'),
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
@@ -178,8 +171,7 @@ class _WalletPageState extends State<WalletPage> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  getString(
-                      'ExplorePageBTPInformationDeleteConfirmationCancelButton'),
+                  getString('ExplorePageBTPInformationDeleteConfirmationCancelButton'),
                   style: const TextStyle(color: primaryColor),
                 ),
               ),
@@ -230,8 +222,7 @@ class _WalletPageState extends State<WalletPage> {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setModalState) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
             return Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -243,8 +234,7 @@ class _WalletPageState extends State<WalletPage> {
 
               width: double.infinity, // Make the bottom sheet span full width
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,8 +262,7 @@ class _WalletPageState extends State<WalletPage> {
                     TextButton(
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        overlayColor: MaterialStateProperty.all(
-                            primaryColor.withOpacity(0)),
+                        overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0)),
                       ),
                       onPressed: () {
                         // Implement action for wallet backup
@@ -298,8 +287,7 @@ class _WalletPageState extends State<WalletPage> {
                     TextButton(
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        overlayColor: MaterialStateProperty.all(
-                            primaryColor.withOpacity(0)),
+                        overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0)),
                       ),
                       onPressed: () {
                         // Implement action for wallet backup restore
@@ -324,8 +312,7 @@ class _WalletPageState extends State<WalletPage> {
                     TextButton(
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        overlayColor: MaterialStateProperty.all(
-                            primaryColor.withOpacity(0)),
+                        overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0)),
                       ),
                       onPressed: () {
                         // Implement action for wallet delete
@@ -390,10 +377,8 @@ class _WalletPageState extends State<WalletPage> {
           isScrollControlled: true,
           context: context,
           builder: (context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setModalState) {
-              void searchWithFilters(String search,
-                  Map<String, dynamic> filters, Map<String, dynamic> ordering) {
+            return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
+              void searchWithFilters(String search, Map<String, dynamic> filters, Map<String, dynamic> ordering) {
                 // update the state with the new search and filters
                 setModalState(() {
                   this.search = search;
@@ -420,9 +405,7 @@ class _WalletPageState extends State<WalletPage> {
                               width: 80,
                               height: 5,
                               decoration: BoxDecoration(
-                                color: isDarkMode
-                                    ? darkModeColor
-                                    : Colors.grey[400],
+                                color: isDarkMode ? darkModeColor : Colors.grey[400],
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
@@ -432,25 +415,21 @@ class _WalletPageState extends State<WalletPage> {
                             height: MediaQuery.of(context).size.height * 0.74,
                             child: SingleChildScrollView(
                               child: FutureBuilder<List<BTP>>(
-                                future: getAddBTPPageBTPs(
-                                    search, filters, ordering),
+                                future: getAddBTPPageBTPs(search, filters, ordering),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
                                     return Column(
                                         children: List.generate(
                                             5,
-                                            (index) =>
-                                                const AddBTPInvestmentComponent(
-                                                    investmentName: null,
-                                                    investmentDetail: null,
-                                                    cedola: null,
-                                                    investmentValue: null,
-                                                    variation: null,
-                                                    expirationDate: null)));
+                                            (index) => const AddBTPInvestmentComponent(
+                                                investmentName: null,
+                                                investmentDetail: null,
+                                                cedola: null,
+                                                investmentValue: null,
+                                                variation: null,
+                                                expirationDate: null)));
                                   } else if (snapshot.hasError) {
-                                    return Text(
-                                        'Error: ${snapshot.error}'); // Handle errors
+                                    return Text('Error: ${snapshot.error}'); // Handle errors
                                   } else if (snapshot.hasData) {
                                     final assets = snapshot.data!;
                                     final investmentList = assets.map((asset) {
@@ -462,8 +441,7 @@ class _WalletPageState extends State<WalletPage> {
                                       final double cedola = asset.cedola;
                                       var variation = (value - 100);
                                       // make it have 3 decimal places
-                                      variation = double.parse(
-                                          variation.toStringAsFixed(3));
+                                      variation = double.parse(variation.toStringAsFixed(3));
 
                                       return TextButton(
                                           onPressed: () {
@@ -477,43 +455,29 @@ class _WalletPageState extends State<WalletPage> {
                                             // openAddBTPModal2();
                                           },
                                           style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            padding: MaterialStateProperty.all(
-                                                EdgeInsets.zero),
-                                            overlayColor:
-                                                MaterialStateProperty.all(
-                                                    primaryColor
-                                                        .withOpacity(0.3)),
-                                            shape: MaterialStateProperty.all(
-                                                const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.zero)),
+                                            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                            overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                                            shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                           ),
                                           child: Column(children: [
                                             AddBTPInvestmentComponent(
-                                              investmentName:
-                                                  btpLess ?? "Unknown",
+                                              investmentName: btpLess ?? "Unknown",
                                               investmentDetail: "$withBtp",
                                               cedola: cedola,
                                               investmentValue: value,
                                               variation: variation,
-                                              expirationDate:
-                                                  asset.expirationDate,
+                                              expirationDate: asset.expirationDate,
                                             ),
                                             Divider(
                                               height: 1,
-                                              color: isDarkMode
-                                                  ? Colors.grey[800]
-                                                  : Colors.grey[200],
+                                              color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                                             )
                                           ]));
                                     }).toList();
                                     return Column(children: investmentList);
                                   } else {
-                                    return const Text(
-                                        'No data'); // Handle the case of no data
+                                    return const Text('No data'); // Handle the case of no data
                                   }
                                 },
                               ),
@@ -548,27 +512,15 @@ class _WalletPageState extends State<WalletPage> {
                                         });
                                       },
                                       child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Text('‹ ',
-                                              style: TextStyle(
-                                                  fontFamily: 'Arial',
-                                                  color: isDarkMode
-                                                      ? primaryColorLight
-                                                      : primaryColor,
-                                                  fontSize: 30)),
+                                              style:
+                                                  TextStyle(fontFamily: 'Arial', color: isDarkMode ? primaryColorLight : primaryColor, fontSize: 30)),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 6.0),
-                                            child: Text(
-                                                getString(
-                                                    'addBTPSecondPageBackButton'),
-                                                style: TextStyle(
-                                                    color: isDarkMode
-                                                        ? primaryColorLight
-                                                        : primaryColor,
-                                                    fontSize: 18)),
+                                            padding: const EdgeInsets.only(top: 6.0),
+                                            child: Text(getString('addBTPSecondPageBackButton'),
+                                                style: TextStyle(color: isDarkMode ? primaryColorLight : primaryColor, fontSize: 18)),
                                           ),
                                         ],
                                       ),
@@ -580,35 +532,25 @@ class _WalletPageState extends State<WalletPage> {
                                 Center(
                                   child: Text(
                                     btp?.name.toUpperCase() ?? "",
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 24, color: primaryColor, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-                                Text(getString('addBTPPageDateSectionTitle'),
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.grey)),
+                                Text(getString('addBTPPageDateSectionTitle'), style: const TextStyle(fontSize: 20, color: Colors.grey)),
                                 const SizedBox(height: 15),
                                 Center(
                                     child: ElevatedButton(
                                   onPressed: () => _showDatePickerDialog(
                                       CupertinoTheme(
                                         data: CupertinoThemeData(
-                                          brightness: isDarkMode
-                                              ? Brightness.dark
-                                              : Brightness.light,
+                                          brightness: isDarkMode ? Brightness.dark : Brightness.light,
                                         ),
                                         child: CupertinoDatePicker(
-                                          backgroundColor: isDarkMode
-                                              ? darkModeColor
-                                              : Colors.white,
+                                          backgroundColor: isDarkMode ? darkModeColor : Colors.white,
                                           initialDateTime: DateTime.now(),
                                           mode: CupertinoDatePickerMode.date,
                                           use24hFormat: true,
-                                          onDateTimeChanged:
-                                              (DateTime newDate) {
+                                          onDateTimeChanged: (DateTime newDate) {
                                             setModalState(() {
                                               selectedDate = newDate;
                                             });
@@ -619,44 +561,23 @@ class _WalletPageState extends State<WalletPage> {
                                       ),
                                       isDarkMode),
                                   style: ButtonStyle(
-                                    minimumSize: MaterialStateProperty.all(
-                                        const Size(double.infinity, 45)),
+                                    minimumSize: MaterialStateProperty.all(const Size(double.infinity, 45)),
                                     elevation: MaterialStateProperty.all(1),
-                                    surfaceTintColor: MaterialStateProperty.all(
-                                        isDarkMode
-                                            ? darkModeColor
-                                            : Colors.white),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        isDarkMode
-                                            ? darkModeColor
-                                            : Colors.white),
-                                    foregroundColor: isDarkMode
-                                        ? MaterialStateProperty.all(
-                                            lightTextColor)
-                                        : MaterialStateProperty.all(textColor),
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.zero),
-                                    overlayColor: MaterialStateProperty.all(
-                                        primaryColor.withOpacity(0.3)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
+                                    surfaceTintColor: MaterialStateProperty.all(isDarkMode ? darkModeColor : Colors.white),
+                                    backgroundColor: MaterialStateProperty.all(isDarkMode ? darkModeColor : Colors.white),
+                                    foregroundColor: isDarkMode ? MaterialStateProperty.all(lightTextColor) : MaterialStateProperty.all(textColor),
+                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                    overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                                    shape:
+                                        MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                                   ),
                                   child: Text(
                                     purchaseDate,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: isDarkMode
-                                            ? lightTextColor
-                                            : textColor),
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDarkMode ? lightTextColor : textColor),
                                   ),
                                 )),
                                 const SizedBox(height: 30),
-                                Text(getString('addBTPPagePriceSectionTitle'),
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.grey)),
+                                Text(getString('addBTPPagePriceSectionTitle'), style: const TextStyle(fontSize: 20, color: Colors.grey)),
                                 const SizedBox(height: 10),
                                 // add textfield
                                 Material(
@@ -664,15 +585,12 @@ class _WalletPageState extends State<WalletPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: TextFormField(
                                     onTapOutside: (event) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
+                                      FocusManager.instance.primaryFocus?.unfocus();
                                     },
                                     initialValue: price.toString(),
                                     onChanged: (value) {
                                       setModalState(() {
-                                        price = double.tryParse(
-                                                value.replaceAll(',', '.')) ??
-                                            0.0;
+                                        price = double.tryParse(value.replaceAll(',', '.')) ?? 0.0;
                                         if (price * investment < 1000) {
                                           showErrorInvestmentTooLow = true;
                                         } else {
@@ -683,8 +601,7 @@ class _WalletPageState extends State<WalletPage> {
                                     keyboardType: TextInputType.number,
                                     // allow only numbers and one comma or dot with two decimal places (max)
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'^\d+[,.]?\d{0,2}')),
+                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+[,.]?\d{0,2}')),
                                     ],
                                     style: TextStyle(
                                         fontSize: 18,
@@ -693,31 +610,19 @@ class _WalletPageState extends State<WalletPage> {
                                             : isDarkMode
                                                 ? lightTextColor
                                                 : textColor),
-                                    textCapitalization:
-                                        TextCapitalization.characters,
+                                    textCapitalization: TextCapitalization.characters,
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white,
+                                      fillColor: isDarkMode ? darkModeColor : Colors.white,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDarkMode
-                                                ? darkModeColor
-                                                : Colors.white),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderSide: BorderSide(color: isDarkMode ? darkModeColor : Colors.white),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDarkMode
-                                                ? darkModeColor
-                                                : Colors.white),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderSide: BorderSide(color: isDarkMode ? darkModeColor : Colors.white),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
-                                      hintText: getString(
-                                          'addBTPPagePriceSectionPlaceholder'),
+                                      hintText: getString('addBTPPagePriceSectionPlaceholder'),
                                       hintStyle: TextStyle(
                                           fontSize: 18,
                                           color: isDarkMode
@@ -725,25 +630,16 @@ class _WalletPageState extends State<WalletPage> {
                                               : isDarkMode
                                                   ? lightTextColor
                                                   : textColor),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 15),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                                       border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
                                       ),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 30),
-                                Text(
-                                    getString(
-                                        'addBTPPageInvestmentSectionTitle'),
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: isDarkMode
-                                            ? lightTextColor
-                                            : textColor)),
+                                Text(getString('addBTPPageInvestmentSectionTitle'),
+                                    style: TextStyle(fontSize: 20, color: isDarkMode ? lightTextColor : textColor)),
                                 const SizedBox(height: 10),
                                 // add textfield
                                 Material(
@@ -751,8 +647,7 @@ class _WalletPageState extends State<WalletPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: TextField(
                                     onTapOutside: (event) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
+                                      FocusManager.instance.primaryFocus?.unfocus();
                                     },
                                     onChanged: (value) {
                                       setModalState(() {
@@ -766,8 +661,7 @@ class _WalletPageState extends State<WalletPage> {
                                     },
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'^\d+')),
+                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+')),
                                     ],
                                     style: TextStyle(
                                         fontSize: 18,
@@ -776,31 +670,19 @@ class _WalletPageState extends State<WalletPage> {
                                             : isDarkMode
                                                 ? lightTextColor
                                                 : textColor),
-                                    textCapitalization:
-                                        TextCapitalization.characters,
+                                    textCapitalization: TextCapitalization.characters,
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: isDarkMode
-                                          ? darkModeColor
-                                          : Colors.white,
+                                      fillColor: isDarkMode ? darkModeColor : Colors.white,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDarkMode
-                                                ? darkModeColor
-                                                : Colors.white),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderSide: BorderSide(color: isDarkMode ? darkModeColor : Colors.white),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDarkMode
-                                                ? darkModeColor
-                                                : Colors.white),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderSide: BorderSide(color: isDarkMode ? darkModeColor : Colors.white),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
-                                      hintText: getString(
-                                          'addBTPPageInvestmentSectionPlaceholder'),
+                                      hintText: getString('addBTPPageInvestmentSectionPlaceholder'),
                                       hintStyle: TextStyle(
                                           fontSize: 16,
                                           color: isDarkMode
@@ -808,31 +690,18 @@ class _WalletPageState extends State<WalletPage> {
                                               : isDarkMode
                                                   ? lightTextColor
                                                   : textColor),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 15),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                                       border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
+                                        borderRadius: BorderRadius.all(Radius.circular(15)),
                                       ),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 30),
-                                Text(getString('total'),
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: isDarkMode
-                                            ? lightTextColor
-                                            : textColor)),
+                                Text(getString('total'), style: TextStyle(fontSize: 20, color: isDarkMode ? lightTextColor : textColor)),
                                 const SizedBox(height: 10),
                                 Text(getTotalInvestment(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 26,
-                                        color: isDarkMode
-                                            ? lightTextColor
-                                            : textColor)),
+                                    textAlign: TextAlign.center, style: TextStyle(fontSize: 26, color: isDarkMode ? lightTextColor : textColor)),
                                 const SizedBox(height: 10),
                               ],
                             ),
@@ -840,13 +709,10 @@ class _WalletPageState extends State<WalletPage> {
                               children: [
                                 if (showErrorInvestmentTooLow)
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                     child: Text(
-                                      getString(
-                                          'addBTPPageInvestmentTooLowError'),
-                                      style: const TextStyle(
-                                          color: Colors.red, fontSize: 15),
+                                      getString('addBTPPageInvestmentTooLowError'),
+                                      style: const TextStyle(color: Colors.red, fontSize: 15),
                                     ),
                                   ),
                                 ElevatedButton(
@@ -856,32 +722,22 @@ class _WalletPageState extends State<WalletPage> {
                                     }
                                   },
                                   style: ButtonStyle(
-                                    minimumSize: MaterialStateProperty.all(
-                                        const Size(double.infinity, 45)),
+                                    minimumSize: MaterialStateProperty.all(const Size(double.infinity, 45)),
                                     elevation: MaterialStateProperty.all(1),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        investment * price < 1000
-                                            ? Colors.grey
-                                            : isDarkMode
-                                                ? primaryColorLight
-                                                : primaryColor),
-                                    foregroundColor:
-                                        MaterialStateProperty.all(Colors.white),
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.zero),
-                                    overlayColor: MaterialStateProperty.all(
-                                        primaryColor.withOpacity(0.3)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
+                                    backgroundColor: MaterialStateProperty.all(investment * price < 1000
+                                        ? Colors.grey
+                                        : isDarkMode
+                                            ? primaryColorLight
+                                            : primaryColor),
+                                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                    overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                                    shape:
+                                        MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                                   ),
                                   child: Text(
                                     getString('addBTPPageAddButton'),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: lightTextColor),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: lightTextColor),
                                   ),
                                 ),
                                 const SizedBox(
@@ -950,9 +806,7 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 getString('walletBalanceText'),
-                style: TextStyle(
-                    fontSize: 24,
-                    color: isDarkMode ? lightTextColor : titleColor),
+                style: TextStyle(fontSize: 24, color: isDarkMode ? lightTextColor : titleColor),
               ),
             ),
             Center(
@@ -960,8 +814,7 @@ class _WalletPageState extends State<WalletPage> {
                   future: getWalletStats(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const WalletPageBalanceComponent(
-                          balance: null, variation: null);
+                      return const WalletPageBalanceComponent(balance: null, variation: null);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}'); // Handle errors
                     } else if (snapshot.hasData) {
@@ -969,8 +822,7 @@ class _WalletPageState extends State<WalletPage> {
                       double variation = snapshot.data!['variation']!;
                       // limit variation to 3 decimal places
                       variation = double.parse(variation.toStringAsFixed(2));
-                      return WalletPageBalanceComponent(
-                          balance: balance, variation: variation);
+                      return WalletPageBalanceComponent(balance: balance, variation: variation);
                     }
                     return const Text('No data'); // Handle the case of no data
                   }),
@@ -980,9 +832,7 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 getString('walletMyAssets'),
-                style: TextStyle(
-                    fontSize: 24,
-                    color: isDarkMode ? lightTextColor : titleColor),
+                style: TextStyle(fontSize: 24, color: isDarkMode ? lightTextColor : titleColor),
               ),
             ),
             const SizedBox(height: 15),
@@ -1011,13 +861,11 @@ class _WalletPageState extends State<WalletPage> {
                 } else if (snapshot.hasData) {
                   if (snapshot.data!.isEmpty) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
                       child: Text(
                         getString('walletPageNoBTPsYet'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: isDarkMode ? lightTextColor : textColor),
+                        style: TextStyle(color: isDarkMode ? lightTextColor : textColor),
                       ),
                     );
                   }
@@ -1027,13 +875,9 @@ class _WalletPageState extends State<WalletPage> {
                     // final percentage = name[0];
                     final withBtp = name[1];
                     final btpLess = name[2];
-                    final double value =
-                        asset['btp'].value * asset['investment'];
+                    final double value = asset['btp'].value * asset['investment'];
                     final double cedola = asset['btp'].cedola;
-                    double variation =
-                        (asset['btp'].value - asset['buyPrice']) /
-                            asset['buyPrice'] *
-                            100;
+                    double variation = (asset['btp'].value - asset['buyPrice']) / asset['buyPrice'] * 100;
                     // fix variation to have 3 decimal places
                     variation = double.parse(variation.toStringAsFixed(2));
                     final date = asset['btp'].expirationDate;
@@ -1050,14 +894,10 @@ class _WalletPageState extends State<WalletPage> {
                               _deleteBTPFromWallet,
                             ),
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all(Colors.transparent),
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(
-                              primaryColor.withOpacity(0.3)),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero)),
+                          overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                         ),
                         child: WalletPageInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",
@@ -1078,9 +918,7 @@ class _WalletPageState extends State<WalletPage> {
                                   e,
                                   Divider(
                                     height: 1,
-                                    color: isDarkMode
-                                        ? Colors.grey[800]
-                                        : Colors.grey[200],
+                                    color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                                   )
                                 ],
                               ))
@@ -1091,13 +929,25 @@ class _WalletPageState extends State<WalletPage> {
               },
             ),
             const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Text(
-                getString('walletMyPastAssets'),
-                style: TextStyle(
+            // Assuming this is within a build method or a widget's context
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TransactionPage(),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Text(
+                  getString('walletMyPastAssets'),
+                  style: TextStyle(
                     fontSize: 24,
-                    color: isDarkMode ? lightTextColor : titleColor),
+                    color: isDarkMode ? lightTextColor : titleColor,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -1121,13 +971,11 @@ class _WalletPageState extends State<WalletPage> {
                 } else if (snapshot.hasData) {
                   if (snapshot.data!.isEmpty) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
                       child: Text(
                         getString('walletPageNoPastBTPsYet'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: isDarkMode ? lightTextColor : textColor),
+                        style: TextStyle(color: isDarkMode ? lightTextColor : textColor),
                       ),
                     );
                   }
@@ -1143,47 +991,29 @@ class _WalletPageState extends State<WalletPage> {
                     DateTime currentDate = soldDate;
                     while (asset['buyDate'].isBefore(currentDate)) {
                       cedoleCount++;
-                      currentDate =
-                          currentDate.subtract(const Duration(days: 365));
+                      currentDate = currentDate.subtract(const Duration(days: 365));
                     }
 
-                    double profit =
-                        (soldPrice - buyPrice) * asset['investment'];
+                    double profit = (soldPrice - buyPrice) * asset['investment'];
 
-                    double cedoleProfit = asset['btp'].cedola *
-                        (cedoleCount - 1) *
-                        asset['investment'];
+                    double cedoleProfit = asset['btp'].cedola * (cedoleCount - 1) * asset['investment'];
 
                     profit += cedoleProfit;
 
                     return TextButton(
-                        onPressed: () => openMyOldBTPDetailModal(
-                            context,
-                            isDarkMode,
-                            asset['btp'],
-                            asset['buyPrice'],
-                            asset['soldPrice'],
-                            asset['investment'],
-                            asset['buyDate'],
-                            asset['soldDate'],
-                            cedoleProfit),
+                        onPressed: () => openMyOldBTPDetailModal(context, isDarkMode, asset['btp'], asset['buyPrice'], asset['soldPrice'],
+                            asset['investment'], asset['buyDate'], asset['soldDate'], cedoleProfit),
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all(Colors.transparent),
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          overlayColor: MaterialStateProperty.all(
-                              primaryColor.withOpacity(0.3)),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero)),
+                          overlayColor: MaterialStateProperty.all(primaryColor.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                         ),
                         child: WalletPageOldInvestmentComponent(
                           investmentName: btpLess ?? "Unknown",
                           investmentValue: profit,
                           investmentSoldDate: asset['soldDate'],
-                          investmentProfit:
-                              ((asset['soldPrice'] * asset['investment']) +
-                                  cedoleProfit),
+                          investmentProfit: ((asset['soldPrice'] * asset['investment']) + cedoleProfit),
                         ));
                   }).toList();
                   return Column(
@@ -1193,9 +1023,7 @@ class _WalletPageState extends State<WalletPage> {
                                   e,
                                   Divider(
                                     height: 1,
-                                    color: isDarkMode
-                                        ? Colors.grey[800]
-                                        : Colors.grey[200],
+                                    color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                                   )
                                 ],
                               ))

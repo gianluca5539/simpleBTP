@@ -18,6 +18,7 @@ void main() async {
 
   // load settings
   await Hive.openBox('settings');
+  await Hive.openBox('transactions');
   // load credentials
   await Hive.openBox('credentials');
   // set the default language to italian
