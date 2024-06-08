@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:simpleBTP/assets/colors.dart'; // Adjust the path if necessary
-import 'package:simpleBTP/assets/languages.dart'; // Adjust the path if necessary
+
+String getDateNamedMonth(DateTime date) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return "${date.day < 10 ? "0${date.day}" : date.day.toString()} ${months[date.month - 1]} '${date.year.toString().substring(2)}";
+}
 
 class TransactionComponent extends StatelessWidget {
   final String? isin;
@@ -60,7 +64,7 @@ class TransactionComponent extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    isBuy ? 'Bought on: $formattedDate' : 'Sold on: $formattedDate',
+                    isBuy ? 'Bought on: ${getDateNamedMonth(date!)}' : 'Sold on: ${getDateNamedMonth(date!)}',
                     style: TextStyle(
                       color: isDarkMode ? lightTextColor : textColor,
                       fontSize: 15,

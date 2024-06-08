@@ -12,15 +12,12 @@ class WalletPageBalanceComponent extends StatefulWidget {
   const WalletPageBalanceComponent({super.key, required this.balance, required this.variation});
 
   @override
-  State<WalletPageBalanceComponent> createState() =>
-      _WalletPageBalanceComponentState();
+  State<WalletPageBalanceComponent> createState() => _WalletPageBalanceComponentState();
 }
 
-class _WalletPageBalanceComponentState
-    extends State<WalletPageBalanceComponent> {
+class _WalletPageBalanceComponentState extends State<WalletPageBalanceComponent> {
   TimeWindow timeWindow = TimeWindow.oneWeek;
-  
-  
+
   @override
   Widget build(BuildContext context) {
     Box box = Hive.box('settings');
@@ -38,16 +35,12 @@ class _WalletPageBalanceComponentState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
+                padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
                 child: Skeletonizer(
                     enabled: widget.balance == null,
                     child: Text(
                       "€${widget.balance == null ? '----' : ''}${widget.balance?.toStringAsFixed(2).replaceAll(".", ",").replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]}.")}",
-                      style: TextStyle(
-                          color: isDarkMode ? lightTextColor : textColor,
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 34, fontWeight: FontWeight.bold),
                     )),
               ),
               const SizedBox(height: 5),
@@ -57,20 +50,14 @@ class _WalletPageBalanceComponentState
                   enabled: widget.variation == null,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: (widget.variation ?? 0) > 0
-                          ? positiveColor
-                          : negativeColor,
-                      borderRadius:
-                          BorderRadius.circular(12), // Rounded corners
+                      color: (widget.variation ?? 0) > 0 ? positiveColor : negativeColor,
+                      borderRadius: BorderRadius.circular(12), // Rounded corners
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                     child: Text(
                       "${(widget.variation ?? 0) > 0 ? "▲" : "▼"} ${(widget.variation == null ? 0 : widget.variation!.isNaN ? 0 : widget.variation)!.toStringAsFixed(2)}%",
                       style: TextStyle(
-                        color: (widget.variation ?? 0) > 0
-                            ? Colors.green
-                            : Colors.red,
+                        color: (widget.variation ?? 0) > 0 ? Colors.green : Colors.red,
                         fontSize: 18,
                       ),
                     ),

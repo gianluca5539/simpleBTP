@@ -3,6 +3,11 @@ import 'package:hive/hive.dart';
 import 'package:simpleBTP/assets/colors.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+String getDateNamedMonth(DateTime date) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return "${date.day < 10 ? "0${date.day}" : date.day.toString()} ${months[date.month - 1]} '${date.year.toString().substring(2)}";
+}
+
 class WalletPageOldInvestmentComponent extends StatelessWidget {
   final String? investmentName;
   final double? investmentValue;
@@ -46,7 +51,7 @@ class WalletPageOldInvestmentComponent extends StatelessWidget {
                   Text(
                     investmentSoldDate == null
                         ? '----'
-                        : 'Sold on: ${investmentSoldDate!.day > 10 ? "${investmentSoldDate!.day}" : "0${investmentSoldDate!.day}"}/${investmentSoldDate!.month > 10 ? "${investmentSoldDate!.month}" : "0${investmentSoldDate!.month}"}/${investmentSoldDate!.year},',
+                        : 'Sold on: ${getDateNamedMonth(investmentSoldDate!)}',
                     style: TextStyle(color: isDarkMode ? lightTextColor : textColor, fontSize: 15),
                   ),
                   Text(

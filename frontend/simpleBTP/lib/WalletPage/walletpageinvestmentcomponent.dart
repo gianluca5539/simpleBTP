@@ -5,6 +5,11 @@ import 'package:simpleBTP/assets/languages.dart';
 import 'package:simpleBTP/components/OldBTPDetail/my_old_btp_detail.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+String getDateNamedMonth(DateTime date) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return "${date.day < 10 ? "0${date.day}" : date.day.toString()} ${months[date.month - 1]} ${date.year.toString().substring(2)}";
+}
+
 class WalletPageInvestmentComponent extends StatelessWidget {
   final String? investmentName;
   final String? investmentDetail;
@@ -52,7 +57,8 @@ class WalletPageInvestmentComponent extends StatelessWidget {
 
     DateTime remainingTime = cedoleDates.where((element) => element.isAfter(now)).first;
 
-    return '${remainingTime.day > 10 ? remainingTime.day : "0${remainingTime.day}"}/${remainingTime.month > 10 ? remainingTime.month : "0${remainingTime.month}"}/${remainingTime.year.toString().substring(2)}';
+    return getDateNamedMonth(remainingTime);
+    // return '${remainingTime.day > 10 ? remainingTime.day : "0${remainingTime.day}"}/${remainingTime.month > 10 ? remainingTime.month : "0${remainingTime.month}"}/${remainingTime.year.toString().substring(2)}';
   }
 
   bool get timeToSell {
