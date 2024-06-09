@@ -751,14 +751,12 @@ class _WalletPageState extends State<WalletPage> {
                     );
             });
           }).then((value) {
-        setState(() {
-          selectedDate = DateTime.now();
-          price = 0.0;
-          investment = 0;
-          btp = null;
-          showErrorInvestmentTooLow = true;
-          modalPageAdd = 0;
-        });
+        selectedDate = DateTime.now();
+        price = 0.0;
+        investment = 0;
+        btp = null;
+        showErrorInvestmentTooLow = true;
+        modalPageAdd = 0;
       });
     }
 
